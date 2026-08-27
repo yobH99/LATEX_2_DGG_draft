@@ -1,0 +1,327 @@
+\section{Results and discussion for the Boussinesq approximation}
+\label{sec:boussinesq}
+
+\subsection{Verification of the method against direct numerical simulations}
+\label{subsec:dns_verification}
+Having described the framework, we now present the results of our analysis, beginning with the
+Boussinesq model. Given the novelty and stochastic character of
+the framework, we first validate the formulation by comparing the predicted mean energy growth
+with ensembles of three-dimensional direct numerical simulations.
+The simulations are performed using the triply periodic pseudospectral solver
+PsDNS\footnote{\url{https://github.com/lanl/PsDNS.git}}, developed at LANL to solve the
+incompressible Navier-Stokes equations with buoyancy forcing. All simulations use
+\(\Sch=\Rey=1\) and \(\delta_0=1\), with the velocity field initially set to
+zero. The triply periodic domain has dimensions
+\(L_x\times L_y\times L_z=80\pi\times80\pi\times20\pi\) and is discretized using
+\(N_x\times N_y\times N_z=256\times256\times256\) Fourier modes and a time step
+\(\Delta t=0.008\). Time advancement uses an explicit fourth-order Runge-Kutta scheme. The
+computational grid is chosen to represent all modes within \(2k_{\min}\leq k\leq k_{\max}\),
+where \(k_{\min}=0.025\) and \(k_{\max}=2\), and to capture their evolution during the linear
+stage. The simulations are stopped well before the fully nonlinear regime is reached, given the limited
+computational grid.
+
+The simulations are initialized by prescribing an interface perturbation
+\(z_i(x,y)=L_z/2+\eta(x,y)\), where
+\begin{equation}
+  \eta(x,y)
+  =
+  \sum_{(p,q)\in\mathcal{I}}
+  A_{pq}
+  \cos\!\left(\frac{2\pi p}{L_x}x+\varphi_{pq}\right)
+  \cos\!\left(\frac{2\pi q}{L_y}y+\psi_{pq}\right).
+  \label{eq:dns_eta_construction}
+\end{equation}
+Here, \(\mathcal{I}\) denotes the set of index pairs associated with the wavenumbers represented on
+the horizontal grid,
+\begin{equation}
+  \mathcal{I}
+  =
+  \left\{
+    (p,q)\in\mathbb{Z}^2:
+    k_{\min}^2
+    \leq
+    \left(\frac{2\pi p}{L_x}\right)^2
+    +
+    \left(\frac{2\pi q}{L_y}\right)^2
+    \leq k_{\max}^2
+  \right\}.
+  \label{eq:dns_retained_wavevectors}
+\end{equation}
+The phases \(\varphi_{pq}\) and \(\psi_{pq}\) are
+independently sampled from \(\mathcal{U}[0,2\pi)\), while the modal amplitudes \(A_{pq}\) are
+zero-mean Gaussian random variables satisfying
+\begin{equation}
+  \mean{A_{pq}A_{p'q'}}
+  =
+  \mean{A_{pq}^{2}}\,\delta_{pp'}\delta_{qq'}.
+  \label{eq:dns_uncorrelated_amplitudes}
+\end{equation}
+Both the phases and the amplitudes are sampled independently for every realization, and therefore
+the two-point correlation in space can be shown to be
+\begin{equation}
+  C_{\eta\eta}(r_x,r_y)
+  =
+  \frac{1}{4}
+  \sum_{(p,q)\in\mathcal{I}}
+  \mean{A_{pq}^{2}}
+  \cos\!\left(\frac{2\pi p}{L_x}r_x\right)
+  \cos\!\left(\frac{2\pi q}{L_y}r_y\right),
+  \label{eq:dns_eta_correlation}
+\end{equation}
+which depends only on the separation \((r_x,r_y)\).
+\begin{figure}[t]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/compare_finale_dns_predictions.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_Gmean.tex}
+  \end{minipage}
+  \caption{Mean energy growth in the Boussinesq limit for different Gaussian reference lengths
+  \(\lambda_0\). (a)~Comparison between the DNS ensemble mean (\solidlegend) and the SSTE
+  prediction (\circlegendfilled), using ten independent realizations for each ensemble.
+  (b)~Representative evolution at \(\delta_0=2\) showing the
+  minimum \(\Gm_{\min}\) and the critical time \(t_c\) at which the mean energy returns to its
+  initial value.}
+  \label{fig:compare_dns}
+\end{figure}
+The variance of the interface displacement is related to the modal amplitudes through
+\begin{equation}
+  \mean{\eta_0^{2}}
+  =
+  \frac{1}{4}
+  \sum_{(p,q)\in\mathcal{I}}
+  \mean{A_{pq}^{2}}.
+  \label{eq:dns_variance_sum_rule}
+\end{equation}
+Given the relation between the correlation in space and the spectrum discussed in
+\cref{sec:statistics_of_the_initial_perturbations}, we can build a strategy in which the
+initialization of the DNS is equivalent to the computation of the mean energy growth. Denoting the
+radial wavenumber of a mode by \(k_{p,q}=[(2\pi p/L_x)^2+(2\pi q/L_y)^2]^{1/2}\), we distribute
+the retained modes over \(N_b\) radial bins, so that
+\begin{subequations}
+\label{eq:dns_radial_bins}
+\begin{align}
+  \Delta k
+  &= \frac{k_{\max}-k_{\min}}{N_b},
+  \label{eq:dns_radial_bin_width}
+  \\
+  k_\ell
+  &= k_{\min}+\left(\ell-\frac{1}{2}\right)\Delta k,
+  \qquad \ell=1,\ldots,N_b,
+  \label{eq:dns_radial_bin_centers}
+  \\
+  \mathcal{I}_\ell
+  &=
+  \left\{
+    (p,q)\in\mathcal{I}:
+    \left|k_{p,q}-k_\ell\right|\leq\frac{\Delta k}{2}
+  \right\}.
+  \label{eq:dns_radial_bin_index_set}
+\end{align}
+\end{subequations}
+Assuming that every Fourier mode in the bin \(\mathcal{I}_\ell\) carries the same amplitude
+\(A_\ell\), a midpoint approximation of the energy integral gives
+\begin{equation}
+  \int_0^\infty E_{\eta}(k)\,\mathrm{d}k
+  \approx
+  \sum_{\ell=1}^{N_b} E_{\eta}(k_\ell)\Delta k
+  \approx
+  \sum_{\ell=1}^{N_b}\frac{A_\ell^2}{4}\,\left|\mathcal{I}_\ell\right| ,
+  \label{eq:dns_midpoint_energy_integral}
+\end{equation}
+so that
+\begin{equation}
+  A_\ell
+  =
+  2\sqrt{\frac{E_{\eta}(k_\ell)\Delta k}{\left|\mathcal{I}_\ell\right|}} .
+  \label{eq:dns_continuous_shell_amplitude}
+\end{equation}
+Letting \(\Delta k_x\) and \(\Delta k_y\) denote the Cartesian Fourier-grid spacings, the
+number of grid points in a thin annulus is approximated by
+\begin{equation}
+  \left|\mathcal{I}_\ell\right|
+  \approx
+  \frac{2\pi k_\ell\Delta k}{\Delta k_x\Delta k_y},
+  \label{eq:dns_shell_mode_count}
+\end{equation}
+and therefore
+\begin{equation}
+  A_\ell
+  =
+  \frac{2\sqrt{\Delta k_x\Delta k_y}}{\Delta k}
+  \sqrt{\frac{E_{\eta}(k_\ell)}{2\pi k_\ell}} .
+  \label{eq:dns_discrete_shell_amplitude}
+\end{equation}
+Choosing \(\Delta k=\sqrt{\Delta k_x\Delta k_y}\) gives
+\begin{equation}
+  \frac{A_\ell^{2}}{4}
+  =
+  \frac{E_{\eta}(k_\ell)}{2\pi k_\ell},
+  \label{eq:dns_final_mode_amplitude}
+\end{equation}
+which defines the discrete mode amplitudes in terms of the prescribed spectrum. Thereby, for each
+realization the amplitudes within each bin are assigned as discussed above, while the phases of
+each mode are generated using different seeds across different realizations.
+
+For the simulations, we use the \(n=1\) member of the family defined in
+\eqref{eq:eta_spectrum_family}, which is
+\begin{equation}
+  E_{\eta,1}(k)
+  =
+  \frac{2\mean{\eta_0^2}}{k_0}
+  \left(\frac{k}{k_0}\right)
+  \exp\!\left[-2\left(\frac{k}{k_0}\right)^2\right],
+  \qquad
+  k_0=\frac{2\sqrt{2}}{\lambda_0}.
+  \label{eq:dns_initial_spectrum}
+\end{equation}
+The amplitudes are normalized so that the ensemble variance satisfies
+\(\mean{\eta_0^2}=10^{-2}\), which is sufficiently small for the interface displacement to remain
+within the linear regime over the observation interval.
+
+
+\Cref{fig:compare_dns}(a) shows good agreement between the mean energy growth predicted by the
+stochastic theory and the DNS ensemble mean for all four values of \(\lambda_0\). The agreement
+extends through both the initial decay and the subsequent growth, indicating that the statistical
+formulation captures not only the late-time amplification but also the transient energy loss
+preceding it.
+
+\subsection{Characterisation of the transient instability}
+\label{subsec:transient_characterisation}
+Having validated the method and its numerical implementation, we proceed to characterise the
+transient instability according to this stochastic approach. We define
+\begin{equation}
+  k_\ast(t)=\underset{k}{\operatorname{arg\,max}}\;\overline{\sigma}_{1D}(k,t),
+  \qquad
+  \overline{\sigma}_\ast(t)=\underset{k}{\max}\;\overline{\sigma}_{1D}(k,t).
+  \label{eq:maximum_growth_definitions}
+\end{equation}
+Accordingly, \(k_\ast(t)\) is the wavenumber that maximises the mean growth-rate field, and
+\(\overline{\sigma}_\ast(t)\) is the corresponding maximum value.
+
+We do not restrict ourselves to the per-wavenumber description, but also consider the
+three-dimensional mean growth, and define
+\begin{equation}
+  \Gm_{\min}=\min_{t\in[0,T]}\Gm(t),
+  \qquad
+  t_c=\min\left\{t\in(0,T]\mid\Gm(t)=1\right\}.
+  \label{eq:minimum_growth_critical_time_definitions}
+\end{equation}
+Thus, \(\Gm_{\min}\) is the lowest mean energy growth reached during the observation interval,
+while \(t_c\) is the first nonzero time at which the mean energy returns to its initial value. A
+representative evolution is shown in \cref{fig:compare_dns}(b), together with \(\Gm_{\min}\) and
+\(t_c\).
+
+The first comparison is against the QSSA, reported in \cref{fig:BQ_P3_sigma_map}.
+\Cref{fig:BQ_P3_sigma_map}(a) reports the non-autonomous mean growth-rate field
+\(\overline{\sigma}_{1D}(k,t)\), whereas \cref{fig:BQ_P3_sigma_map}(b) reports the QSSA
+growth rate obtained by solving the generalized eigenvalue problem for a base-state profile frozen
+at the same time. During the early evolution, the non-autonomous mean growth rate is negative for
+all wavenumbers and increases monotonically until the neutral contour is crossed around
+\(t\sim0.5\). It then becomes positive, continues to increase to a maximum around \(t\sim2\),
+and subsequently decays towards a slowly varying value. The comparison with the QSSA reveals two principal differences. First, the QSSA predicts an
+unstable low-wavenumber band from the earliest time considered and therefore misses the initial
+stable transient. Second, after crossing neutrality, the non-autonomous growth rate rises above the
+QSSA prediction. Thus, during this stage, the instability is stronger than predicted by a classical
+frozen-base-state eigenvalue analysis. At later times, as the diffusive layer broadens and the
+relative variation of the base state slows, the non-autonomous growth rates tend towards the QSSA
+prediction, as expected~\citep{tan-homsy-1986}.
+
+\begin{figure}[t]
+  \centering
+  \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_sigma_map.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_sigma_map_qssa.tex}
+  \end{minipage}
+
+  \medskip
+  \input{figures/BQ_P3_sigma_map_colorbar.tex}
+  \caption{Per-wavenumber growth-rate fields in the Boussinesq limit for \(\Sch=1\) and
+  \(\delta_0=2\). (a)~Non-autonomous mean growth rate \(\overline{\sigma}_{1D}(k,t)\), with the
+  early-time window \(t\leq2\) shown in the inset. (b)~QSSA growth rate
+  \(\sigma_{\mathrm{QSSA}}(k,t_0)\).}
+  \label{fig:BQ_P3_sigma_map}
+\end{figure}
+
+
+
+
+
+
+\subsection{Three-dimensional perturbation growth}
+From the family of spectra introduced in~\cref{sec:statistics_of_the_initial_perturbations}, we fix
+\(n=1\), the simplest member, which corresponds to a Gaussian spatial correlation. The
+higher-order spectra produce the same qualitative behaviour and are therefore omitted here so that
+we can isolate the effect of the horizontal correlation length. Keeping the initial variance
+\(\mean{\eta_0^2}\) fixed, we vary the integral correlation length \(\lambda\) of the \(n=1\)
+spectrum defined in~\eqref{eq:eta_spectrum_family}. For this spectrum,
+\(\lambda_0=2\lambda/\sqrt{\pi}\), where \(\lambda_0\) is the Gaussian reference scale defined in
+\eqref{eq:lambda0_k0_relation}. The mean energy growth defined in~\eqref{eq:gmean_eta_spectrum}
+therefore reduces, after switching to polar coordinates \((k,\theta)\) and integrating by parts, to
+\begin{equation}
+    \label{eq:bq_gmean_isotropic}
+    \Gm(t)
+    =
+    g(0,t)
+    +
+    \int_{0}^{\infty}
+    \frac{\partial g(k,t)}{\partial k}
+    \exp\!\left(-\frac{\lambda^{2}k^{2}}{\pi}\right)\mathrm{d}k.
+\end{equation}
+
+\Cref{fig:compare_dns}(b) shows a representative evolution of \(\Gm(t)\) for a
+fixed correlation length. The mean energy initially decays, reflecting the dominance of stable
+contributions at early times. This decay continues until the minimum \(\Gm_{\min}(\lambda)\) is
+reached. Beyond this point, the trajectory reverses and exhibits growth driven by the unstable
+modes represented in the spectrum. A key feature of this behaviour is the delay before the mean
+energy returns to its initial level. In terms of the quantities defined in
+\eqref{eq:minimum_growth_critical_time_definitions}, \(\Gm_{\min}\) measures the maximum transient
+energy loss, whereas \(t_c\) measures how long the perturbation takes to recover its initial mean
+energy.
+
+\begin{figure}
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_Gmean_lambda.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_tc_Gmin.tex}
+  \end{minipage}
+  \caption{Three-dimensional mean energy growth in the Boussinesq limit for the \(n=1\) initial
+  spectrum. (a)~Evolution of \(\Gm(t)\) for 20 logarithmically spaced integral correlation
+  lengths \(0.5\leq\lambda\leq20\). The curves progress from light gray to black as \(\lambda\)
+  increases. The horizontal dashed line marks \(\Gm=1\), and the small red markers identify
+  \(\Gm_{\min}\) for each history. (b)~Critical time \(t_c\) as a function of \(\lambda\);
+  the inset shows the corresponding minimum \(\Gm_{\min}\).}
+  \label{fig:BQ_P3_Gmean_analysis}
+\end{figure}
+
+The light-to-dark family in \cref{fig:BQ_P3_Gmean_analysis}(a) shows that changing
+\(\lambda\) modifies both the depth of the initial decay and the time required for the mean energy
+to recover. The red markers trace the non-monotonic variation of \(\Gm_{\min}\) across
+the family. The physical mechanisms responsible for this behaviour can be
+understood directly from the structure of~\eqref{eq:bq_gmean_isotropic}. For the \(n=1\) spectrum,
+increasing the integral correlation length is equivalent to increasing the Gaussian reference scale
+in that equation. The exponential kernel acts as a low-pass filter on the wavenumber contributions
+to \(\Gm\). As \(\lambda\) increases from zero, the strongly damped
+large-\(k\) contributions are progressively filtered out, causing \(\Gm_{\min}\) to increase until
+a maximum is reached. Beyond this optimal \(\lambda\), amplifying contributions at lower
+wavenumbers are also suppressed, leading to a subsequent decrease in \(\Gm_{\min}\). This
+non-monotonic behaviour highlights the sensitivity of the mean energy growth to the horizontal
+correlation length. Correspondingly, \cref{fig:BQ_P3_Gmean_analysis}(b) shows that \(t_c\) reaches
+a minimum at an intermediate correlation length. Perturbations recover most rapidly when the initial
+spectrum reduces the strongly damped small-scale content without concentrating all of its energy
+at the largest scales. The inset confirms that the same intermediate range of \(\lambda\) also
+produces the shallowest transient energy loss.

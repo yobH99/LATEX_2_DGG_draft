@@ -1,0 +1,78 @@
+\subsubsection{Complex Ginzburg--Landau}
+\label{sec:appendix_verification_gl}
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/GL_eig_vs_hutch_slowSpectrum_mu0_0.39.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/GL_eig_vs_hutch_fastSpectrum_mu0_0.39.tex}
+    \end{minipage}
+    \caption{Ginzburg--Landau relative error versus stepper calls for \((a)\) slow and \((b)\) fast covariance-spectrum decay. (\solidlegend) deterministic truncation; (\dashlegend\circlegend) SSTE; dotted line: \(\epsilon_{\mathrm{rel}}=10^{-2}\).}
+    \label{fig:GL_eig_vs_sste}
+\end{figure}
+We compare the cost of SSTE against the deterministic truncation strategy on the linear complex Ginzburg--Landau system used in the numerical experiments. As discussed by \citet{frame-towne-2024}, this model provides a useful canonical setting for transient-growth and time-stepping studies. In continuous form, the governing equation is
+\begin{equation}
+  \frac{\partial q}{\partial t}
+  =
+  -\nu\frac{\partial q}{\partial x}
+  +
+  \gamma\frac{\partial^2 q}{\partial x^2}
+  +
+  \mu(x)q,
+  \label{eq:GL_continuous_equation_sste_necessity}
+\end{equation}
+where \(q(x,t)\) is a complex amplitude, \(\nu\) is the convection coefficient, \(\gamma\) is the complex diffusion coefficient, and \(\mu(x)\) is a spatially varying growth-rate profile. In the present computations, the latter is taken in quadratic form,
+\begin{equation}
+  \mu(x)
+  =
+  \mu_0+\mu_2x^2,
+  \label{eq:GL_mu_profile_sste_necessity}
+\end{equation}
+with parameter values
+\begin{equation}
+  \nu = 2+0.4\mathrm{i},
+  \qquad
+  \gamma = 1-\mathrm{i},
+  \qquad
+  \mu_2 = -0.01,
+  \qquad
+  \mu_0 = 0.39.
+  \label{eq:GL_parameters_sste_necessity}
+\end{equation}
+We use \(n_x=80\), \(\Delta t=0.08\), and \(2\leq T\leq20\); higher-order Hermite discretizations are poorly conditioned.
+The initial covariance is generated through
+\begin{equation}
+  \mathsfbi{C}_{00}^{z}
+  =
+  \mathsfbi{Q}
+  \operatorname{diag}
+  \left(
+    \lambda_1,\dots,\lambda_n
+  \right)
+  \mathsfbi{Q}^{*},
+  \label{eq:GL_covariance_construction_sste_necessity}
+\end{equation}
+where \(\mathsfbi{Q}\) is a fixed orthonormal basis and the eigenvalues \(\lambda_j\) are chosen to impose a prescribed spectral decay. We consider two representative cases. The first is a slow algebraic decay,
+\begin{equation}
+  \lambda_j
+  \propto
+  j^{-1/10},
+  \label{eq:GL_slow_covariance_decay}
+\end{equation}
+and the second is a fast exponential decay,
+\begin{equation}
+  \lambda_j
+  \propto
+  \exp
+  \left[
+    -0.25(j-1)
+  \right].
+  \label{eq:GL_fast_covariance_decay}
+\end{equation}
+Both spectra have the same total variance. The slow case is deliberately near-flat and full-rank, delaying deterministic convergence until most of the 80 directions are propagated.

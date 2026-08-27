@@ -1,0 +1,40 @@
+# Local assistant, editor, and reference-library state
+/.agents/
+/.claude/
+/.codex/
+/documents/
+
+# LaTeX build directories and externalization caches
+/.auxiliary/
+/figures_pdf/*
+!/figures_pdf/README.txt
+/tikz-cache/
+
+# Compiled manuscript output stays local. The 93 active externalized figure
+# triples (.pdf/.md5/.dpth) are explicitly force-added when refreshed; every
+# other file in figures_pdf stays ignored by the rules above and below.
+/main.pdf
+
+# LaTeX intermediate files
+*.aux
+*.auxlock
+*.bbl
+*.blg
+*.dpth
+*.fdb_latexmk
+*.fls
+*.log
+*.lof
+*.lot
+*.md5
+*.out
+*.bcf
+*.run.xml
+*.synctex.gz
+*.toc
+
+# Editor and operating-system debris
+*~
+*.swp
+*.swo
+.DS_Store

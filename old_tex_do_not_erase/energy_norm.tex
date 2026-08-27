@@ -1,0 +1,85 @@
+\section{Instantaneous perturbations energy}%
+\label{sec:energy_norm}
+
+As shown in~\eqref{eq:lti_dz_k_boussinesq}, the linearized dynamics for a given wavenumber \(k\) are governed by the vertical velocity and concentration perturbations \(\hat{w}\) and \(\hat{c}\) alone. This raises a difficulty when defining the kinetic energy associated with the disturbance velocity, since the kinetic energy must account for all three velocity components,
+\begin{equation}
+    \label{eq:bq_kinetic_energy_dz_k}
+    2\mathcal{K}_k(t) = \int_{-L_z}^{L_z}\left(|\hat{u}|^{2}+|\hat{v}|^{2}+|\hat{w}|^{2}\right)\mathrm{d}z.
+\end{equation}
+It is therefore necessary, once \(\hat{w}\) is known, to recover the horizontal velocity components \(\hat{u}\) and \(\hat{v}\). One relation follows directly from Fourier transforming the incompressibility constraint in the horizontal directions,
+\begin{equation}
+    \label{eq:bq_divergence_dz_k}
+    ik_{x}\hat{u}+ik_{y}\hat{v}+\partial_{z}\hat{w} = 0.
+\end{equation}
+An additional condition on the horizontal velocity components is required. We choose the condition that the vertical vorticity component vanishes, \(\partial_{x}v-\partial_{y}u=0\), which in Fourier space reads
+\begin{equation}
+    \label{eq:bq_vorticity_dz_k}
+    ik_{x}\hat{v}-ik_{y}\hat{u} = 0.
+\end{equation}
+Together,~\eqref{eq:bq_divergence_dz_k} and~\eqref{eq:bq_vorticity_dz_k} are equivalent to seeking the horizontal velocity components \(\hat{u}\) and \(\hat{v}\), with \(\hat{w}\) prescribed by~\eqref{eq:lti_dz_k_boussinesq}, that solve the constrained optimization problem
+\[
+\begin{aligned}
+    \min_{\hat{u},\hat{v}}\quad & \left(|\hat{u}|^{2}+|\hat{v}|^{2}\right) \\
+    \text{subject to} \quad & ik_{x}\hat{u}+ik_{y}\hat{v}+\partial_{z}\hat{w} = 0,
+\end{aligned}
+\]
+Since \(|\hat{w}|^{2}\) is fixed, minimizing the horizontal contribution is equivalent to minimizing \(2\mathcal{K}_k(t)\) itself, so that \(\mathcal{K}_k(t)\) measures the lowest kinetic energy among all in-plane velocity perturbations compatible with a prescribed \(\hat{w}\). From this minimization, it follows directly that
+\begin{equation}
+    \label{eq:bq_kinetic_energy_reduced_dz_k}
+    2\mathcal{K}_k(t) = \int_{-L_z}^{L_z}\left(|\hat{w}|^{2} - \frac{1}{k^{2}}\left|\partial_{z}\hat{w}\right|^{2}\right)\mathrm{d}z.
+\end{equation}
+Having introduced the kinetic energy, we now turn to the more delicate question of how to define the energy of the disturbance as a whole. Defining a disturbance energy for a flow field traces back to \citet{chu-1965}, who established two requirements: the disturbance energy must be (i) a positive-definite quantity with the physical dimensions of energy, and (ii) monotonically decaying in time in the absence of external forcing. These criteria underlie the classical energy norm for linearized fluid disturbances, still used in modern studies such as \citet{schmidt-et-al-2018} and \citet{towne-schmidt-colonious-2018}. For the Rayleigh--Taylor instability considered here, this framework can be adapted by relaxing the requirement of vanishing external forcing. Following an approach similar to that of \citet{hanifi-schmidt-henningson-1996}, and requiring that the buoyancy production term balance the vertical transport of the mean density, the evolution of the disturbance energy for a Boussinesq flow can be written as
+\begin{equation}
+  \frac{dE}{dt}
+  = \frac{d}{dt}\int_{V}
+    \Biggl(
+      \frac{\boldsymbol{u}\bcdot\boldsymbol{u}}{2}
+      - \frac{\Atw}{\partial_{z}c_{0}}\,c^{2}
+    \Biggr)\mathrm{d}V
+  = -\int_{V}
+      \left\|\bnabla\boldsymbol{u}\right\|^{2}\,\mathrm{d}V
+    + \frac{2\,\Atw}{\Sch\,\partial_{z}c_{0}}\int_{V}
+      \bnabla c\bcdot\bnabla c\,\mathrm{d}V.
+  \label{eq:energy_evolution}
+\end{equation}
+in which the background concentration gradient \(\partial_{z}c_{0}\) appears as a weighting factor in the quadratic form of the concentration perturbation. This expression is positive definite and nonincreasing in time only when \(\partial_{z}c_{0}<0\), so a proper energy norm in this sense exists only for a stably stratified flow. This limitation is not an artifact of relaxing the forcing constraint. \citet{holliday-mcintyre-1981} obtained an analogous result through an entirely different derivation, and \citet{shepherd-1993}, \citet{winters-et-al-1995} and \citet{roullet-klein-2009} confirm that no quadratic, positive-definite energy norm exists for an unstably stratified flow. We therefore forgo a uniquely derived physical energy and instead adopt, for the scalar contribution, a prescribed positive-definite quadratic measure of concentration amplitude. The kinetic contribution is retained in its standard form, while the concentration contribution is represented by a quadratic scalar term, similar in spirit to pragmatic definitions used in transient-growth studies of variable-density or concentration-driven flows, where the scalar contribution quantifies perturbation amplification rather than a thermodynamically unique energy \citep{don-nils-amir-2013}.
+
+We therefore define the disturbance energy for the Boussinesq formulation, for a given horizontal wavenumber, as
+\begin{equation}
+    \label{eq:bq_energy_norm_dz_k}
+    \mathcal{E}_k^{BQ}(t) = \int_{-L_z}^{L_z}\left(|\hat{w}|^{2}+\frac{1}{k^{2}}\left|\partial_{z}\hat{w}\right|^{2}+\gamma_c|\hat{c}|^{2}\right)\mathrm{d}z,
+\end{equation}
+where \(\gamma_c>0\) is the scalar weight used to set the relative contribution of concentration fluctuations. The scalar part of the norm should therefore be viewed as a modelling choice. It retains the dynamical role of concentration fluctuations in Rayleigh--Taylor instability while avoiding an available-potential-energy construction based on a stable reference profile. In the stable-stratification limit, such constructions recover the usual interpretation in terms of available potential energy \citep{shepherd-1993,winters-et-al-1995,roullet-klein-2009}; in the present unstable configuration, however, no such unique physical interpretation is implied.
+With the same argument, the energy norm for the variable-density formulation follows directly. The only modification is in the kinematic relation used to recover the horizontal velocity components from \(\hat{w}\). In place of the divergence-free condition~\eqref{eq:bq_divergence_dz_k}, the horizontal velocity components are now constrained by the linearized divergence relation~\eqref{eq:linearized_divergence}, which at wavenumber \(k\) reads
+\begin{equation}
+    \label{eq:vd_divergence_dz_k}
+    ik_{x}\hat{u}+ik_{y}\hat{v}+\partial_{z}\hat{w} = \mathscr{L}_{\rho}\hat{\rho},
+\end{equation}
+where \(\mathscr{L}_{\rho}\) is the operator defined in~\eqref{eq:linearized_divergence}. Repeating the same constrained minimization with~\eqref{eq:vd_divergence_dz_k} in place of~\eqref{eq:bq_divergence_dz_k} as the divergence constraint yields
+\begin{equation}
+    \label{eq:vd_kinetic_energy_reduced_dz_k}
+    2\mathcal{K}_k(t) = \int_{-L_z}^{L_z}\left(|\hat{w}|^{2}+\frac{1}{k^{2}}\left|\partial_{z}\hat{w}-\mathscr{L}_{\rho}\hat{\rho}\right|^{2}\right)\mathrm{d}z.
+\end{equation}
+The disturbance energy for the variable-density formulation is then
+\begin{equation}
+    \label{eq:vd_energy_norm_dz_k}
+    \mathcal{E}_k^{IVD}(t) = \int_{-L_z}^{L_z}\left(|\hat{w}|^{2}+\frac{1}{k^{2}}\left|\partial_{z}\hat{w}-\mathscr{L}_{\rho}\hat{\rho}\right|^{2}+\gamma_\rho|\hat{\rho}|^{2}\right)\mathrm{d}z,
+\end{equation}
+where the density perturbation \(\hat{\rho}\) replaces the concentration perturbation \(\hat{c}\), consistent with the state vector \(\boldsymbol{q}'=[w,\rho]^{\top}\) in~\eqref{eq:vd_lin_continuous}, and \(\gamma_\rho>0\) is a scalar weight, analogous to \(\gamma_c\) in~\eqref{eq:bq_energy_norm_dz_k} but not necessarily equal to it, used to set the relative contribution of density fluctuations.
+
+Upon discretizing the vertical direction with \(N_z\) grid points, the continuous energy expressions \eqref{eq:bq_energy_norm_dz_k} and \eqref{eq:vd_energy_norm_dz_k} are each encoded by a Hermitian positive-definite weight matrix \(\mathsfbi{W}_{k}\in\mathbb{C}^{2N_z\times 2N_z}\), which induces the \(\mathsfbi{W}_k\)-weighted inner product \(\left\langle\mathbf{a},\mathbf{b}\right\rangle_{W_k}=\mathbf{a}^{*}\mathsfbi{W}_{k}\mathbf{b}\) on the discrete state vector \(\hat{\mathbf{q}}_k(t)\in\mathbb{C}^{2N_z}\),
+\begin{equation}
+    \mathcal{E}_k(t)
+    =
+    \left\langle\hat{\mathbf{q}}_k(t),\hat{\mathbf{q}}_k(t)\right\rangle_{W_k}
+    =
+    \hat{\mathbf{q}}_k^{*}(t)\mathsfbi{W}_{k}\hat{\mathbf{q}}_k(t)
+    =
+    \tr
+    \left\{
+      \hat{\mathbf{q}}_k(t)\hat{\mathbf{q}}_k^{*}(t)\mathsfbi{W}_{k}
+    \right\}.
+    \label{eq:instantaneous_energy}
+\end{equation}
+Since no such notation is universal, we fix it here. The subscripted bracket \(\left\langle\cdot,\cdot\right\rangle_{W_k}\) denotes the \(\mathsfbi{W}_k\)-weighted inner product, whereas the unsubscripted bracket \(\langle\cdot\rangle\), used throughout \S~\ref{sec:mean_energy_growth}, denotes the ensemble average over random initial conditions.
+

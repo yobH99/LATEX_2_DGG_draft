@@ -1,0 +1,268 @@
+\section{Statistics of the initial perturbations}
+\label{sec:statistics_of_the_initial_perturbations}
+
+Having introduced the governing equations in \cref{sec:governing_equation}, we now turn our attention to the statistical description of the initial conditions. Our objective is to relate their spatial covariance to a physically realizable perturbation that can be imposed in a controlled experiment or numerical simulation. In fact, one contribution made here is to overcome an apparent limitation in the formulation introduced by \citet{frame-towne-2024} for Poiseuille flow, where the initial covariance was treated primarily as a mathematical model and did not necessarily correspond to a directly measurable experimental quantity. Here, instead, we show that the methodology is considerably more general and that the initial correlation has a precise physical meaning.
+
+In physical space, the covariance of the initial perturbation field is
+\begin{equation}
+    \mathsfbi{C}_{00}(\boldsymbol{x},\boldsymbol{r})
+    =
+    \mean{
+        \boldsymbol{q}'(\boldsymbol{x}),
+        \boldsymbol{q}'(\boldsymbol{x}+\boldsymbol{r})
+    }
+    =
+    \begin{pmatrix}
+        C_{00}^{ww}(\boldsymbol{x},\boldsymbol{r})
+        &
+        C_{00}^{w\rho}(\boldsymbol{x},\boldsymbol{r})
+        \\[4pt]
+        C_{00}^{\rho w}(\boldsymbol{x},\boldsymbol{r})
+        &
+        C_{00}^{\rho\rho}(\boldsymbol{x},\boldsymbol{r})
+    \end{pmatrix}.
+    \label{eq:physical_covariance_general}
+\end{equation}
+For the initial conditions that we wish to describe here, we assume that they can be represented through a perturbation of the interface separating the two fluids \citep{cook-dimotakis-2001,wei-livescu-2012}, and that they are homogeneous and isotropic. In principle, this is not the only possibility, since the disturbance may also be introduced through the vertical velocity, as discussed by \citet{mueschke-schilling-2009}, and need not necessarily be isotropic \citep{dalziel-linden-youngs-1999}. Even though these assumptions do not encompass all possible initial conditions that may arise in experiments or numerical initializations, they still provide a physically relevant setting that captures the fundamental nature of the problem, as reflected by the large number of studies that have adopted them \citep{kord-capecelatro-2019}; moreover, the framework that we develop can readily accommodate more general prescriptions. The hypotheses we adopt are intended solely to keep the exposition clear from additional cumbersome notations, without sacrificing the physical interpretation of the prescribed statistics of the initial conditions. Under these assumptions, the initial vertical-velocity perturbation is set to zero, so that all covariance components involving \(w\) vanish and only the density-density component remains nonzero, namely
+\begin{equation}
+    \mathsfbi{C}_{00}(\boldsymbol{x},\boldsymbol{r})
+    =
+    \mean{
+        \boldsymbol{q}'(\boldsymbol{x}),
+        \boldsymbol{q}'(\boldsymbol{x}+\boldsymbol{r})
+    }
+    =
+    \begin{pmatrix}
+        0 & 0
+        \\[4pt]
+        0 & C_{00}^{\rho\rho}(\boldsymbol{x},\boldsymbol{r})
+    \end{pmatrix}.
+    \label{eq:physical_covariance_density_only}
+\end{equation}
+Denoting the horizontal coordinate by \(\boldsymbol{x}_h=(x,y)\) and the local displacement of the interface by \(\eta(\boldsymbol{x}_h)\), the displaced base density profile admits the expansion
+\begin{equation}
+    \rho_0(z-\eta)
+    =
+    \rho_0(z)
+    -
+    \rho_{0,z}(z)\,\eta(\boldsymbol{x}_h)
+    +
+    O\!\left(\eta^2\right).
+    \label{eq:initial_density_displacement}
+\end{equation}
+Consequently, at leading order, the initial density perturbation is determined directly by the local displacement of the base density profile according to
+\begin{equation}
+    \rho'(\boldsymbol{x},0)
+    =
+    -
+    \rho_{0,z}(z)\,\eta(\boldsymbol{x}_h).
+    \label{eq:initial_density_perturbation_eta}
+\end{equation}
+Substitution of \eqref{eq:initial_density_perturbation_eta} into the density covariance then gives
+\begin{equation}
+    C_{00}^{\rho\rho}(\boldsymbol{x}_h,\boldsymbol{r}_h,z,z')
+    =
+    \underbrace{
+        \rho_{0,z}(z)\,\rho_{0,z}(z')
+    }_{
+        C_{00}^{z}(z,z')
+    }
+    \underbrace{
+        \mean{
+            \eta(\boldsymbol{x}_h)
+            \eta(\boldsymbol{x}_h+\boldsymbol{r}_h)
+        }
+    }_{
+        C_{00}^{xy}(\boldsymbol{x}_h,\boldsymbol{r}_h)
+    }.
+    \label{eq:initial_density_covariance_separable}
+\end{equation}
+Equation \eqref{eq:initial_density_covariance_separable} separates the initial density covariance into two physically distinct contributions. The vertical factor is determined entirely by the base state, whereas the horizontal factor contains the prescribed statistics of the interface displacement. In particular, \(C_{00}^{z}\) is fixed by \(\rho_{0,z}\) and retains the inhomogeneity of the diffusive layer, so that the initial perturbations are localized within this layer and their vertical correlation length is associated with its initial thickness. For the diffusive profile considered here, the vertical covariance factor is
+\begin{equation}
+    C_{00}^{z}(z,z')
+    =
+    \frac{4\,\Atw^{2}}{\pi\,\delta_0^{2}}
+    \exp\!\left(
+        -\frac{z^2+{z'}^2}{\delta_0^2}
+    \right).
+    \label{eq:vertical_covariance_factor_erf}
+\end{equation}
+The horizontal correlation \(C_{00}^{xy}\), on the other hand, carries the statistical information associated with the displacement of the interface and, although this correlation may be prescribed directly in physical space, perturbations imposed experimentally or numerically are often characterized more naturally through their spectral content; this is where we draw a direct connection between the statistical description of the perturbations and the classical spectra used to initialize direct numerical simulations \citep{rogallo-1981}.
+
+
+Since the perturbation field is homogeneous in the horizontal plane, we write
+\begin{equation}
+    \eta(\boldsymbol{x}_h)
+    =
+    \int_{\mathbb{R}^2}
+        \hat{\eta}(\boldsymbol{k}_h)
+        \exp(i\boldsymbol{k}_h\bcdot\boldsymbol{x}_h)
+    \,\mathrm{d}\boldsymbol{k}_h,
+    \qquad
+    \boldsymbol{k}_h=(k_x,k_y).
+    \label{eq:eta_fourier_transform}
+\end{equation}
+The corresponding spectral density \(\Phi_{00}^{xy}\) is defined by
+\begin{equation}
+    \mean{
+        \hat{\eta}(\boldsymbol{k}_h)
+        \hat{\eta}^{\ast}(\boldsymbol{k}'_h)
+    }
+    =
+    \Phi_{00}^{xy}(\boldsymbol{k}_h)
+    \delta(\boldsymbol{k}_h-\boldsymbol{k}'_h),
+    \label{eq:eta_spectral_density_definition}
+\end{equation}
+so that the physical-space correlation is obtained as the Fourier transform of the spectral density,
+\begin{equation}
+    C_{00}^{xy}(\boldsymbol{r}_h)
+    =
+    \int_{\mathbb{R}^2}
+        \Phi_{00}^{xy}(\boldsymbol{k}_h)
+        \exp(i\boldsymbol{k}_h\bcdot\boldsymbol{r}_h)
+    \,\mathrm{d}\boldsymbol{k}_h.
+    \label{eq:eta_correlation_spectral_density}
+\end{equation}
+Invoking the isotropy assumption introduced above, the correlation depends only on \(r=\lvert\boldsymbol{r}_h\rvert\), while the spectral density depends only on \(k=\lvert\boldsymbol{k}_h\rvert\), and therefore
+\begin{equation}
+    C_{00}^{xy}(r)
+    =
+    2\pi
+    \int_0^\infty
+        \Phi_{00}^{xy}(k)
+        J_0(kr)\,
+        k
+    \,\mathrm{d}k,
+    \label{eq:eta_correlation_hankel_phi}
+\end{equation}
+where
+\begin{equation}
+    J_0(kr)
+    =
+    \frac{1}{2\pi}
+    \int_0^{2\pi}
+        \exp(i k r\cos\theta)
+    \,\mathrm{d}\theta
+    \label{eq:bessel_j0}
+\end{equation}
+is the Bessel function of the first kind of order zero. The two-dimensional isotropic spectrum of the interface displacement is then defined as the circularly integrated spectral density
+\begin{equation}
+    E_{\eta}(k)
+    =
+    \pi k\,\Phi_{00}^{xy}(k),
+    \label{eq:eta_2d_spectrum_definition}
+\end{equation}
+with the normalization chosen such that
+\begin{equation}
+    \mean{\eta_0^2}
+    =
+    2
+    \int_0^\infty
+        E_{\eta}(k)
+    \,\mathrm{d}k.
+    \label{eq:eta_variance_spectrum}
+\end{equation}
+It is immediate to show that the in-plane correlation and the isotropic spectrum form the Hankel transform pair
+\begin{equation}
+    C_{00}^{xy}(r)
+    =
+    2
+    \int_0^\infty
+        E_{\eta}(k)
+        J_0(kr)
+    \,\mathrm{d}k,
+    \qquad
+    E_{\eta}(k)
+    =
+    \frac{k}{2}
+    \int_0^\infty
+        C_{00}^{xy}(r)
+        J_0(kr)\,
+        r
+    \,\mathrm{d}r.
+    \label{eq:eta_hankel_transform_pair}
+\end{equation}
+This equivalence provides the desired connection between the two descriptions, since prescribing the correlation \(C_{00}^{xy}(r)\) in physical space is equivalent to prescribing the spectrum \(E_{\eta}(k)\) in Fourier space, with both representing the same random displacement of the interface. Consequently, modelling the spatial correlation is equivalent to imposing the corresponding spectrum when initializing the perturbations in a numerical simulation or controlled experiment.
+
+\begin{figure}
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \input{figures/corr2D_plot.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \input{figures/spectra2D_plot.tex}
+    \end{minipage}
+    \caption{Two-dimensional isotropic spectra and correlations for the first three members of the family defined in \eqref{eq:eta_spectrum_family} and
+    \eqref{eq:eta_correlation_family}. (a) Physical-space correlation function
+    \(C_{00,n}^{xy}(r)\).
+    (b) Corresponding two-dimensional isotropic wavenumber spectrum \(E_{\eta,n}(k)\).}
+    \label{fig:eta_2d_family}
+\end{figure}
+To make this connection explicit, consider the family of isotropic spectra
+\begin{equation}
+    E_{\eta,n}(k)
+    =
+    \frac{2^n\mean{\eta_0^2}}{(n-1)!\,k_0}
+    \left(\frac{k}{k_0}\right)^{2n-1}
+    \exp\!\left[
+        -2\left(\frac{k}{k_0}\right)^2
+    \right],
+    \qquad
+    n=1,2,\ldots,
+    \label{eq:eta_spectrum_family}
+\end{equation}
+where \(k_0\) is the characteristic horizontal wavenumber of the perturbation field. Applying \eqref{eq:eta_hankel_transform_pair} gives the corresponding isotropic correlation function
+\begin{equation}
+    C_{00,n}^{xy}(r)
+    =
+    \mean{\eta_0^2}
+    \exp\!\left(-\frac{k_0^2 r^2}{8}\right)
+    L_{n-1}^{(0)}
+    \!\left(
+        \frac{k_0^2 r^2}{8}
+    \right),
+    \label{eq:eta_correlation_family}
+\end{equation}
+where \(L_n^{(0)}\) denotes the Laguerre polynomial of degree \(n\) and order zero. \Cref{fig:eta_2d_family} shows the spectrum \(E_{\eta,n}(k)\) together with its physical-space counterpart \(C_{00,n}^{xy}(r)\) for the first three members of this family. Defining the reference length scale
+\begin{equation}
+    \lambda_0
+    =
+    \frac{2\sqrt{2}}{k_0},
+    \label{eq:lambda0_k0_relation}
+\end{equation}
+the first three correlations are
+\begin{equation}
+\begin{aligned}
+    C_{00,1}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \exp\!\left(-\frac{r^2}{\lambda_0^2}\right),
+    \\
+    C_{00,2}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1-\frac{r^2}{\lambda_0^2}
+    \right)
+    \exp\!\left(-\frac{r^2}{\lambda_0^2}\right),
+    \\
+    C_{00,3}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1
+        -
+        2\frac{r^2}{\lambda_0^2}
+        +
+        \frac{1}{2}\frac{r^4}{\lambda_0^4}
+    \right)
+    \exp\!\left(-\frac{r^2}{\lambda_0^2}\right).
+\end{aligned}
+\label{eq:eta_correlation_family_examples}
+\end{equation}
+The first member of this family recovers the Gaussian correlation used by \citet{frame-towne-2024} to describe three-dimensional perturbation growth, but here it is tied directly to a physical quantity through the corresponding spectrum. The higher-order members produce correlations consisting of a Gaussian envelope multiplied by a polynomial, with the corresponding spectra distributing the initial variance differently across the horizontal wavenumbers.
+
+The subsequent analysis is restricted to the family of spectra introduced in \eqref{eq:eta_spectrum_family}, although this choice is not fundamental to the formulation. Whenever either a model for the spectrum or a physical-space correlation is available, the Hankel transform pair in \eqref{eq:eta_hankel_transform_pair} provides the corresponding representation in the other domain; casting the initial statistics in spectral space therefore does more than provide an equivalent description, as it gives the covariance model a direct physical interpretation in terms of an interface perturbation that can be imposed experimentally or numerically. We stress that relaxing the isotropy assumption the same connection can be drawn, however losing the immediate connection that practitioners have with homogeneous-isotropic fields.

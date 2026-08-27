@@ -1,0 +1,776 @@
+\section{Trace-estimation strategies and computational cost}
+\label{sec:appendix_main}
+In this appendix we discuss the practical computation of the mean energy growth introduced in
+\cref{subsec:mean_energy_growth} and in particular we focus on the verification of the methods against test cases for which solutions are available. The formula for the per-wavenumber mean energy growth is
+\begin{equation}
+  g(k,t)
+  =
+  \frac{
+    \tr\left\{\mathsfbi{T}_{t,k}\mathsfbi{C}_{00}^{z}\right\}
+  }{
+    \tr\left\{\mathsfbi{C}_{00}^{z}\mathsfbi{W}_{0,k}\right\}
+  },
+  \qquad
+  \mathsfbi{T}_{t,k}
+  =
+  \boldsymbol{\Phi}_{t,k}^{*}\mathsfbi{W}_{t,k}\boldsymbol{\Phi}_{t,k}.
+  \label{eq:appendix_modal_growth}
+\end{equation}
+To make the notation less cumbersome, we refer to this quantity with the wavenumber \(k\) held
+fixed and the time set to the final time \(T\), so that \(\boldsymbol{\Phi}_{T,k}\equiv\boldsymbol{\Phi}\),
+\(\mathsfbi{W}_{T,k}\equiv\mathsfbi{W}\), \(\mathsfbi{C}_{00}^{z}\equiv\mathsfbi{C}_{00}\), and
+\begin{equation}
+  g(T)
+  =
+  \frac{
+    \tr\left\{\mathsfbi{T}\mathsfbi{C}_{00}\right\}
+  }{
+    \tr\left\{\mathsfbi{C}_{00}\mathsfbi{W}\right\}
+  },
+  \qquad
+  \mathsfbi{T}
+  =
+  \boldsymbol{\Phi}^{*}\mathsfbi{W}\boldsymbol{\Phi}.
+  \label{eq:appendix_growth_functional}
+\end{equation}
+We verify the SSTE algorithm on canonical autonomous test cases and on an analytical non-autonomous problem. As a measure of error we define
+\begin{equation}
+  \varepsilon_{\mathrm{rel}}(T)
+  =
+  \frac{
+    \left|g(T)-g_{\mathrm{ref}}(T)\right|
+  }{
+    \left|g_{\mathrm{ref}}(T)\right|
+  },
+  \label{eq:verification_relative_error}
+\end{equation}
+where \(g_{\mathrm{ref}}\) denotes the reference value. The reference stays exact in every case considered, although its origin differs. For autonomous problems the linearized operators are constant in time, and the reference is therefore given by the trace evaluated from the exponential propagator. For the fully non-autonomous case we derive a closed-form solution, and the reference is the resulting analytical expression.
+
+In this appendix we analyze and compare two methodologies, the deterministic covariance truncation,
+which we abbreviate DCT and describe in \cref{sec:appendix_deterministic_truncation}, and the SSTE
+already described in \cref{subsec:randomized_trace_estimation}. In particular, we evaluate the
+computational cost of each method and discuss when DCT or SSTE must be preferred.
+
+We measure cost in stepper calls, since the time integration dominates every strategy considered
+here. The symbol \(\mathcal{C}_{X}(T)\) counts the forward integrations that strategy \(X\) needs to
+evaluate \(g(T)\) at a single target time, whereas the symbol \(\mathcal{W}_{X}\) counts the
+cumulative stepping work that the same strategy needs over a history of \(N_t\) target intervals.
+
+\subsection{Deterministic covariance truncation}
+\label{sec:appendix_deterministic_truncation}
+\label{sec:appendix_necessity_sste}
+
+The idea of deterministic truncation is to exploit the spectral structure of the initial covariance.
+The singular value decomposition of such a matrix is given by
+\begin{equation}
+  \mathsfbi{C}_{00}
+  =
+  \mathsfbi{U}\boldsymbol{\Sigma}\mathsfbi{U}^{*},
+  \qquad
+  \boldsymbol{\Sigma}
+  =
+  \operatorname{diag}
+  \left(
+    \sigma_1,\dots,\sigma_N
+  \right),
+  \qquad
+  \sigma_1\geq\dots\geq\sigma_N>0,
+  \label{eq:C00_eigendecomposition_sste_necessity}
+\end{equation}
+and, since \(\mathsfbi{C}_{00}\in\mathbb{C}^{N\times N}\) is Hermitian positive definite, this
+decomposition is also its eigendecomposition, which delivers the square-root factor
+\(\mathsfbi{L}\) in the form
+\begin{equation}
+  \mathsfbi{L}
+  =
+  \mathsfbi{U}\boldsymbol{\Sigma}^{1/2},
+  \qquad
+  \boldsymbol{\Sigma}^{1/2}
+  =
+  \operatorname{diag}
+  \left(
+    \sqrt{\sigma_1},\dots,\sqrt{\sigma_N}
+  \right),
+  \label{eq:C00_square_root_factor_sste_necessity}
+\end{equation}
+so that each eigenpair carries a single column of the factor into the dynamics.
+
+DCT replaces \(\mathsfbi{C}_{00}\) by the rank-\(r\) truncation \(\mathsfbi{C}_{00}^{(r)}\) that
+retains the leading \(r\) eigenpairs and propagates every retained column up to the target time
+\(T\), as reported in \cref{alg:deterministic_truncation}. The cost, in terms of time-stepper
+calls, is
+\begin{equation}
+  \mathcal{C}_{\mathrm{DCT}}(T)=r,
+  \label{eq:deterministic_fixed_time_cost}
+\end{equation}
+and, because we need to repeat this for all the \(N_t\) target times, the total cost is
+\begin{equation}
+  \mathcal{W}_{\mathrm{DCT}}=N_t\,r.
+  \label{eq:deterministic_history_cost}
+\end{equation}
+Whenever the covariance has rank one, or an exact rank that a modest \(r\) already captures, DCT
+returns \(g(T)\) exactly, and we prefer it to every alternative; whenever the spectrum extends
+beyond the retained rank, DCT introduces the error
+\begin{equation}
+  \varepsilon_r
+  =
+  \frac{1}{\tr\left\{\mathsfbi{W}\mathsfbi{C}_{00}\right\}}
+  \tr
+  \left\{
+    \mathsfbi{T}
+    \left(
+      \mathsfbi{C}_{00}
+      -
+      \mathsfbi{C}_{00}^{(r)}
+    \right)
+  \right\}
+  =
+  \frac{1}{\tr\left\{\mathsfbi{W}\mathsfbi{C}_{00}\right\}}
+  \sum_{j=r+1}^{N}
+  \sigma_j\,
+  \mathbf{u}_j^{*}\mathsfbi{T}\mathbf{u}_j.
+  \label{eq:trace_error_1}
+\end{equation}
+
+\begin{algorithm}[H]
+  \caption{Deterministic truncation (DCT) estimate of \(g(T)\)}
+  \label{alg:deterministic_truncation}
+
+  \begin{algorithmic}[1]
+    \Require Initial covariance \(\mathsfbi{C}_{00}\), truncation rank \(r\),
+             target time \(T\), operators \(\mathsfbi{A}(t)\) and \(\mathsfbi{B}(t)\),
+             energy weight \(\mathsfbi{W}\)
+    \Ensure Truncated growth functional \(g^{(r)}(T)\)
+
+    \State Compute \((\sigma_j,\mathbf{u}_j)\) of \(\mathsfbi{C}_{00}\)
+      and order them so that \(\sigma_1\geq\dots\geq\sigma_N\)
+
+    \State \(s\gets0\)
+      \Comment{Trace accumulator}
+
+    \For{\(j=1,\dots,r\)}
+      \State \(\hat{\mathbf{q}}_j(0)\gets\sqrt{\sigma_j}\,\mathbf{u}_j\)
+        \Comment{Retained column of \(\mathsfbi{L}\)}
+
+      \State Solve
+        \(\mathsfbi{B}(t)\,\partial_t\hat{\mathbf{q}}_j(t)
+        =
+        \mathsfbi{A}(t)\hat{\mathbf{q}}_j(t)\),
+        \(0\leq t\leq T\)
+        \Comment{Forward solve}
+
+      \State \(s\gets s+\hat{\mathbf{q}}_j^{*}(T)\mathsfbi{W}\hat{\mathbf{q}}_j(T)\)
+        \Comment{Energy of the propagated column}
+    \EndFor
+
+    \State \(g^{(r)}(T)\gets s/\tr\left\{\mathsfbi{C}_{00}\mathsfbi{W}\right\}\)
+      \Comment{Normalize by the initial energy}
+
+    \State \Return \(g^{(r)}(T)\)
+  \end{algorithmic}
+\end{algorithm}
+
+\Cref{eq:trace_error_1} shows that two mechanisms govern the relative error. The first one is that
+choosing \(r\) such that \(\sigma_r\simeq0\) makes the error small, while the second contribution
+comes from the amplification of the operator. In fact, \eqref{eq:trace_error_1} can be rearranged as
+\begin{equation}
+  \varepsilon_r
+  =
+  \frac{1}{\tr\left\{\mathsfbi{W}\mathsfbi{C}_{00}\right\}}
+  \sum_{j=r+1}^{N}
+  \sigma_j
+  \left\|\boldsymbol{\Phi}\mathbf{u}_j\right\|_{\mathsfbi{W}}^{2},
+  \label{eq:trace_error_phi_tail}
+\end{equation}
+which requires \(\left\|\boldsymbol{\Phi}\mathbf{u}_j\right\|_{\mathsfbi{W}}^{2}\) to be small as
+well.
+
+This suggests that small neglected eigenvalues guarantee little on their own, since a discarded
+eigendirection that aligns with a strongly amplified direction of the dynamics still contributes
+substantially to the error. Consider in fact the simple case where
+\begin{equation}
+  \boldsymbol{\Phi}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & \sqrt{\kappa/\epsilon}
+  \end{pmatrix},
+  \qquad
+  \mathsfbi{C}_{00}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & \epsilon
+  \end{pmatrix},
+  \qquad
+  \mathsfbi{C}_{00}^{(r)}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & 0
+  \end{pmatrix},
+  \qquad
+  \epsilon \ll 1 ,
+  \label{eq:low_rank_failure_example}
+\end{equation}
+with \(\kappa\) the gain ratio and \(\epsilon\) the small covariance eigenvalue. Being
+\(g^{(r)}\) the growth functional computed with \(\mathsfbi{C}_{00}^{(r)}\), the relative error is
+\begin{equation}
+  \frac{
+    g(T)-g^{(r)}(T)
+  }{
+    g(T)
+  }
+  =
+  \frac{\kappa}{\kappa+1}\sim O(1).
+  \label{eq:low_rank_failure_relative_error}
+\end{equation}
+The discarded covariance eigenvalue \(\epsilon\) stays small while its contribution to the
+propagated energy does not, precisely because the dynamics amplify the corresponding
+eigendirection.
+
+We therefore argue that a low-rank truncation of the initial covariance fails exactly when the
+low-energy directions of \(\mathsfbi{C}_{00}\) intersect the high-gain directions of the evolution
+operator, and that DCT delivers its substantial savings only when the covariance spectrum decays
+rapidly and the dynamics stay benign, namely for orthogonal operators. In this sense one does not
+know \emph{a priori} the value of \(r\) that must be chosen, and reaching a reasonable estimate for
+covariances with a slowly decaying spectrum may require \(r\sim N\), for which
+\begin{equation}
+  \mathcal{W}_{\mathrm{DCT}}=N\,N_t.
+  \label{eq:deterministic_full_rank_cost}
+\end{equation}
+
+Summarizing, DCT carries two advantages, namely that it requires no adjoint problem, and that a
+low-rank or rapidly decaying spectrum with \(\mathrm{rank}(\mathsfbi{C}_{00})\ll N\) keeps
+\(r\sim O(1)\). It carries one disadvantage, namely that a correlation with a broad or full
+spectrum, \(\mathrm{rank}(\mathsfbi{C}_{00})=N\), leads to large errors unless we choose the
+directions of large gain carefully, and those directions are in principle not known \emph{a priori}
+for non-orthogonal operators.
+\subsection{Stochastic stepping trace estimation}
+\label{sec:appendix_sste_method}
+
+SSTE has been described in \cref{subsec:randomized_trace_estimation} and is not repeated here. Let
+\(N_p\) be the number of probes used for the estimation, and let the cost account for the adjoint
+stepper as well, so that for a fixed time
+\begin{equation}
+  \mathcal{C}_{\mathrm{SSTE}}(T)=6N_p .
+  \label{eq:sste_fixed_time_cost}
+\end{equation}
+The real advantage at a single target time is then guaranteed whenever
+\(\mathcal{C}_{\mathrm{SSTE}}\ll\mathcal{C}_{\mathrm{DCT}}\), that is, whenever \(N_p\ll r/6\). We
+expect this in problems whose dynamics are non-orthogonal, because the sketch captures those
+directions through the action on random probes, and this is especially suited for fluid-dynamics
+applications, where the operators are known to be highly non-normal.
+
+One major bottleneck nevertheless remains for an evaluation across \(N_t\) intervals, where the
+cost grows as \(O(N_t^{2})\), because the backward loop must be performed several times over the
+same instants in time, as \cref{fig:sste_time_history_cost} reports. The cost in this case is given by
+\begin{equation}
+  \sum_{j=1}^{N_t} j
+  =
+  \frac{N_t(N_t+1)}{2}
+  \sim
+  \frac{1}{2}N_t^{2},
+  \label{eq:sste_backward_sum}
+\end{equation}
+which brings the total stepping work to
+\begin{equation}
+  \mathcal{W}_{\mathrm{SSTE}}\sim3N_pN_t^{2}.
+  \label{eq:sste_multiple_time_cost}
+\end{equation}
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[x=1.15cm, y=1cm, >=Stealth, line width=0.7pt]
+    % one row per target time: the forward sweep is stored once, while the
+    % adjoint loop restarts from every target time and repeats the same intervals
+    \foreach \row/\nback/\col in {0/1/blue, 1/2/green!55!black, 2/3/magenta}{%
+      \begin{scope}[yshift={-\row*2.0cm}]
+        \draw[black] (-0.3,0) -- (7.3,0);
+        \foreach \i in {0,...,7}{\fill (\i,0) circle (1.5pt);}
+        \foreach \i in {0,...,6}{\draw[orange,->] (\i,0) to[bend left=55] (\i+1,0);}
+        \node[anchor=south, font=\footnotesize] at (3.5,0.62)
+          {forward: solved once, \(\hat{\mathbf{q}}(t)\) stored};
+        \node[anchor=west, font=\footnotesize] at (7.6,0) {\(T_{\the\numexpr\row+1\relax}\)};
+      \end{scope}
+    }
+    \foreach \j in {1}{\draw[blue,->] (\j,-0.1) to[bend left=55] (\j-1,-0.1);}
+    \begin{scope}[yshift=-2.0cm]
+      \foreach \j in {1,2}{\draw[green!55!black,->] (\j,-0.1) to[bend left=55] (\j-1,-0.1);}
+    \end{scope}
+    \begin{scope}[yshift=-4.0cm]
+      \foreach \j in {1,2,3}{\draw[magenta,->] (\j,-0.1) to[bend left=55] (\j-1,-0.1);}
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Stepping work of SSTE over a history of target times. The forward solve is performed
+  once and stored, whereas the adjoint loop restarts from each target time \(T_j\) and traverses
+  the same intervals again, so that the total work grows as \(O(N_t^{2})\).}
+  \label{fig:sste_time_history_cost}
+\end{figure}
+
+The method must therefore always be preferred whenever
+\(\mathcal{W}_{\mathrm{SSTE}}\ll\mathcal{W}_{\mathrm{DCT}}\), that is, whenever
+\(3N_pN_t\ll r\). This can be useful when \(r\sim N\) and \(N_p\sim O(1)\), meaning for
+problems whose dynamics are low rank and whose initial disturbances carry a slowly decaying
+correlation spectrum. The metric that suggests which method to use over the other is therefore
+\begin{equation}
+  3N_pN_t\ll r ,
+  \label{eq:sste_vs_dct_criterion}
+\end{equation}
+which means that, with \(N_p\sim O(1)\) and \(N_t\sim O(10)\), we must prefer SSTE only when
+\(r>O(100)\). This holds particularly for large two- and three-dimensional problems, where the
+initial correlation carries a slowly decaying spectrum.
+
+What we show below is that \(N_p\sim O(1)\) for every case considered here, so that a small
+\(N_t\) makes SSTE preferable. The real advantage of SSTE is that it needs no \emph{a priori}
+knowledge of \(\mathsfbi{C}_{00}\), which makes it flexible over a large class of problems;
+for \(N_t\gg1\), however, the cost becomes very large and parallelization in time becomes
+necessary. Adjoint methods are known to carry this bottleneck and, as the structure of the problem
+shows, they are very amenable to parallelization in time, as discussed by
+\citet{skene-eggl-schmid-2021}; we do not discuss such strategies here.
+\subsection{Verification}
+\label{sec:appendix_verification}
+The verification cases are organized as follows. \Cref{sec:appendix_verification_gl} uses an autonomous complex Ginzburg--Landau problem, for which the exact matrix-exponential reference is available, and the same is done in \cref{sec:appendix_verification_poiseuille} for plane Poiseuille flow, providing a fluid-dynamical test of the same trace construction. \Cref{sec:appendix_verification_nonautonomous} uses a fully non-autonomous scalar problem with a closed-form trace reference as a final test for a fully non-autonomous problem.
+
+\subsubsection{Complex Ginzburg--Landau}
+\label{sec:appendix_verification_gl}
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/GL_eig_vs_hutch_slowSpectrum_mu0_0.39.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/GL_eig_vs_hutch_fastSpectrum_mu0_0.39.tex}
+    \end{minipage}
+    \caption{Ginzburg--Landau relative error versus stepper calls for \((a)\) slow and \((b)\) fast covariance-spectrum decay. (\solidlegend) deterministic truncation; (\dashlegend\circlegend) SSTE.}
+    \label{fig:GL_eig_vs_sste}
+\end{figure}
+We compare the cost of SSTE against the deterministic truncation strategy on the linear complex Ginzburg--Landau system used in the numerical experiments. In continuous form, the governing equation is
+\begin{equation}
+  \frac{\partial q}{\partial t}
+  =
+  -\nu\frac{\partial q}{\partial x}
+  +
+  \gamma\frac{\partial^2 q}{\partial x^2}
+  +
+  \mu(x)q,
+  \label{eq:GL_continuous_equation_sste_necessity}
+\end{equation}
+where \(q(x,t)\) is a complex amplitude, \(\nu\) is the convection coefficient, \(\gamma\) is the complex diffusion coefficient, and \(\mu(x)\) is a spatially varying growth-rate profile. In the present computations, the latter is taken in quadratic form,
+\begin{equation}
+  \mu(x)
+  =
+  \mu_0+\mu_2x^2,
+  \label{eq:GL_mu_profile_sste_necessity}
+\end{equation}
+with parameter values
+\begin{equation}
+  \nu = 2+0.4\mathrm{i},
+  \qquad
+  \gamma = 1-\mathrm{i},
+  \qquad
+  \mu_2 = -0.01,
+  \qquad
+  \mu_0 = 0.39.
+  \label{eq:GL_parameters_sste_necessity}
+\end{equation}
+We use \(n_x=80\), \(\Delta t=0.08\), and \(2\leq T\leq20\).
+The initial covariance is generated through
+\begin{equation}
+  \mathsfbi{C}_{00}^{z}
+  =
+  \mathsfbi{Q}
+  \operatorname{diag}
+  \left(
+    \lambda_1,\dots,\lambda_n
+  \right)
+  \mathsfbi{Q}^{*},
+  \label{eq:GL_covariance_construction_sste_necessity}
+\end{equation}
+where \(\mathsfbi{Q}\) is a fixed orthonormal basis and the eigenvalues \(\lambda_j\) are chosen to impose a prescribed spectral decay. We consider two representative cases. The first is a slow algebraic decay,
+\begin{equation}
+  \lambda_j
+  \propto
+  j^{-1/10},
+  \label{eq:GL_slow_covariance_decay}
+\end{equation}
+and the second is a fast exponential decay,
+\begin{equation}
+  \lambda_j
+  \propto
+  \exp
+  \left[
+    -0.25(j-1)
+  \right].
+  \label{eq:GL_fast_covariance_decay}
+\end{equation}
+Both spectra are chosen to have the same total variance.
+\subsubsection{Plane Poiseuille flow}
+\label{sec:appendix_verification_poiseuille}
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/Poiseuille_eig_vs_hutch_slowSpectrum.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/Poiseuille_eig_vs_hutch_fastSpectrum.tex}
+    \end{minipage}
+    \caption{Plane-Poiseuille relative error versus stepper calls for \((a)\) slow and \((b)\) fast covariance-spectrum decay. (\solidlegend) deterministic truncation; (\dashlegend\circlegend) SSTE.}
+    \label{fig:Poiseuille_eig_vs_sste}
+\end{figure}
+To demonstrate that the proposed framework applies to fluid-dynamical systems of practical relevance, we next consider plane Poiseuille flow. Plane Poiseuille flow is the steady laminar flow between two plates separated by a distance \(2h\) in the wall-normal direction. The details can be found in \citet{schmid-henningson-2001} and are not repeated here.
+The final operator is given by
+\begin{equation}
+  \frac{\partial}{\partial t}
+  \begin{bmatrix}
+    \hat{v}\\
+    \hat{\eta}
+  \end{bmatrix}
+  =
+  -i
+  \begin{bmatrix}
+    \mathcal{L}_{OS} & 0\\
+    \mathcal{L}_{C} & \mathcal{L}_{SQ}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat{v}\\
+    \hat{\eta}
+  \end{bmatrix},
+\end{equation}
+where \(\hat{\eta}\) denotes the wall-normal vorticity, \(\hat{v}\) the vertical velocity, and
+\begin{equation}
+  k^2 = k_x^2 + k_z^2,
+\end{equation}
+where \(k_x\) and \(k_z\) are the horizontal wavenumbers. The corresponding operators are given by
+\begin{align}
+  \mathcal{L}_{OS}
+  &=
+  -\left(
+    \frac{\partial^2}{\partial y^2}-k^2
+  \right)^{-1}
+  \left[
+    \frac{1}{i\Rey}
+    \left(
+      \frac{\partial^2}{\partial y^2}-k^2
+    \right)^2
+    - k_x U
+    \left(
+      \frac{\partial^2}{\partial y^2}-k^2
+    \right)
+    + k_x U''
+  \right], \\
+  \mathcal{L}_{C}
+  &= k_z U'', \\
+  \mathcal{L}_{SQ}
+  &= k_x U - \frac{1}{i\Rey}
+  \left(
+    \frac{\partial^2}{\partial y^2}-k^2
+  \right).
+\end{align}
+The disturbance energy in the velocity-vorticity variables is given by
+\begin{equation}
+  e
+  =
+  \frac{1}{4\pi^2}
+  \int_{-\infty}^{\infty}
+  \int_{-\infty}^{\infty}
+  \frac{1}{2k^2}
+  \int_{-1}^{1}
+  \left(
+    \left|\frac{\partial \hat{v}}{\partial y}\right|^2
+    +
+    k^2 |\hat{v}|^2
+    +
+    |\hat{\eta}|^2
+  \right)
+  dy\, dk_x\, dk_z.
+\end{equation}
+The Orr--Sommerfeld/Squire system is discretized with \(N=256\) wall-normal modes, the Reynolds number is set to \(R=1000\), the streamwise wavenumber is fixed to \(k_x=0\), and the spanwise wavenumber is set to \(k_z=2\). Chebyshev collocation differentiation matrices are used in the wall-normal direction, yielding the generalized semi-discrete system \(\mathsfbi{B}\dot{\mathbf{q}}=\mathsfbi{A}\mathbf{q}\). Since the coefficients are time independent, the reference propagator is computed as \(\boldsymbol{\Phi}(T)=\exp(-\ii\mathsfbi{B}^{-1}\mathsfbi{A}T)\).
+The initial covariance is chosen in the wall-normal direction from a Gaussian kernel of the form
+\begin{equation}
+  C_{00}^{z}(y,y')
+  \propto
+  \exp\!\left(
+    -\frac{(y-y')^2}{\lambda^2}
+  \right),
+\end{equation}
+with correlation length \(\lambda=1\). In the present example, only the Orr--Sommerfeld block of the covariance is populated, while the Squire block is initially set to zero. This choice provides a simple but meaningful test in which the initial perturbation statistics are smooth in the wall-normal direction and the subsequent evolution is entirely determined by the linearized Poiseuille dynamics. Results are reported in \cref{fig:Poiseuille_eig_vs_sste}.
+\subsubsection{Non-autonomous scalar problem}
+\label{sec:appendix_verification_nonautonomous}
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/nonautonomous_OU_scalar_B_trace.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/nonautonomous_OU_scalar_B_relative_error.tex}
+    \end{minipage}
+    \caption{Non-autonomous verification of the SSTE estimator. \((a)\) Normalized mean energy growth \(g(T)\) compared with the closed-form prediction. \((b)\) Relative error of the SSTE estimate as a function of final time.}
+    \label{fig:nonautonomous_hutchpp}
+\end{figure}
+We finally validate the SSTE construction against a fully non-autonomous linear problem for which \(g(T)\) is available in closed form. The model problem is
+\begin{equation}
+  b(t)\frac{\partial q}{\partial t}
+  =
+  a(t)\frac{\partial^2 q}{\partial z^2}
+  -
+  c(t)\frac{\partial q}{\partial z}
+  +
+  r(t)q .
+\end{equation}
+The initial covariance is chosen as
+\begin{equation}
+  C_{00}^{z}(z,z')
+  =
+  \exp\left(
+    -\frac{(z-z')^2}{\lambda^2}
+  \right).
+\end{equation}
+The normalized mean energy growth can be shown to be
+\begin{equation}
+  g(T)
+  =
+  \frac{\tr\left\{\mathsfbi{C}(T)\right\}}{\tr\left\{\mathsfbi{C}(0)\right\}}
+  =
+  \frac{
+    \exp\left(2S(T)\right)
+  }{
+    \sqrt{1+8\tau(T)/\lambda^2}
+  },
+  \qquad
+  \tau(T)=\int_0^T \frac{a(t)}{b(t)}\,dt,
+  \qquad
+  S(T)=\int_0^T \frac{r(t)}{b(t)}\,dt .
+\end{equation}
+This provides a direct reference for the matrix-free SSTE estimate. In the numerical test shown below, the interval is \(z\in[-64,64)\), discretized with \(N=256\) periodic grid points. The first and second spatial derivatives are approximated with eighth-order periodic finite-difference matrices, giving \(\mathsfbi{B}(t)=b(t)\mathsfbi{I}\) and \(\mathsfbi{A}(t)=a(t)\mathsfbi{D}_2-c(t)\mathsfbi{D}_1+r(t)\mathsfbi{I}\). The final time range is \(0\le T\le 2\), with time-step target \(\Delta t=0.01\), and the initial covariance length is \(\lambda=0.5\). The scalar coefficients are
+\begin{equation}
+  a(t)=0.2+0.8e^{-t/5},\qquad
+  c(t)=0.25+0.15\cos(1.3t),
+\end{equation}
+\begin{equation}
+  r(t)=0.5\sqrt{t}+0.04\sin(0.9t),\qquad
+  b(t)=1.0+0.2\sin(0.7t).
+\end{equation}
+The SSTE estimate uses \(50\) probes. The method recovers the true solution, verifying the implementation of the method.
+
+
+\subsubsection{Diagonal and cross-diagonal estimation}
+\label{sec:appendix_verification_diagonal}
+
+The estimator described so far returns a single scalar per target time, the trace of the
+covariance-weighted operator. In several cases the quantity of interest is not the total energy but
+its distribution: the pointwise variance profile across the inhomogeneous direction, or the
+correlation between two state components at the same location. Both are diagonal entries of the
+propagated covariance
+\begin{equation}
+  \mathsfbi{C}(T)
+  =
+  \boldsymbol{\Phi}(T)\,\mathsfbi{C}_{00}\,\boldsymbol{\Phi}^{*}(T)
+  =
+  \boldsymbol{\Phi}(T)\mathsfbi{L}
+  \left[\boldsymbol{\Phi}(T)\mathsfbi{L}\right]^{*},
+  \label{eq:diag_propagated_covariance}
+\end{equation}
+where \(\mathsfbi{C}_{00}=\mathsfbi{L}\mathsfbi{L}^{*}\) as in
+\cref{subsec:randomized_trace_estimation}. The same matrix-free machinery applies: the loop-adjoint
+procedure of \cref{alg:loop-adjoint} supplies the action
+\begin{equation}
+  \mathsfbi{D}(\mathbf{v})
+  =
+  \boldsymbol{\Phi}(T)\mathsfbi{L}
+  \left(
+    \mathsfbi{L}^{*}\boldsymbol{\Phi}^{*}(T)\mathsfbi{W}\mathbf{v}
+  \right)
+  =
+  \mathsfbi{C}(T)\mathsfbi{W}\mathbf{v},
+  \label{eq:diag_kernel}
+\end{equation}
+one adjoint sweep followed by one forward sweep per probe, without ever forming
+\(\boldsymbol{\Phi}(T)\). This plays the role that \(\mathsfbi{K}\) plays in
+\cref{alg:stochastic_stepping_trace_estimator}.
+
+The starting point is the stochastic diagonal estimator of
+\citet{bekas-kokiopoulou-saad-2007}. For probes \(\mathbf{g}_i\sim\mathcal{N}(\mathbf{0},\mathsfbi{I})\),
+the identity \(\mathbb{E}\left[\mathbf{g}\mathbf{g}^{*}\right]=\mathsfbi{I}\) gives
+\begin{equation}
+  \mathrm{diag}\left\{\mathsfbi{C}\right\}
+  =
+  \mathbb{E}\left[
+    \overline{\mathbf{g}}\odot\mathsfbi{D}(\mathbf{g})
+  \right]
+  \approx
+  \frac{1}{N_p}\sum_{i=1}^{N_p}
+  \overline{\mathbf{g}}_i\odot\mathsfbi{D}(\mathbf{g}_i),
+  \label{eq:diag_hutchinson}
+\end{equation}
+with \(\odot\) the elementwise product and the overbar the complex conjugate. This is the diagonal
+analogue of the Hutchinson estimator and converges at the same \(O(N_p^{-1/2})\) rate.
+
+The deflation of \cref{alg:stochastic_stepping_trace_estimator} carries over unchanged, and with the
+same three-stage split of the probe budget. Writing \(s=N_p/3\), a sketch
+\(\mathsfbi{S}=[\mathbf{g}_1\ \cdots\ \mathbf{g}_s]\) is propagated to give
+\(\mathsfbi{Y}=\mathsfbi{D}(\mathsfbi{S})\), whose thin QR factorization
+\(\mathsfbi{Y}=\mathsfbi{Q}\mathsfbi{R}\) spans the dominant range of \(\mathsfbi{C}\). The diagonal
+then splits into a deflated contribution evaluated exactly on that subspace and a stochastic
+remainder confined to its orthogonal complement,
+\begin{equation}
+  \mathrm{diag}\left\{\mathsfbi{C}\right\}
+  \approx
+  \underbrace{
+    \mathrm{diag}\left\{\mathsfbi{Q}\mathsfbi{B}\mathsfbi{Q}^{*}\right\}
+  }_{\mathbf{d}_d}
+  +
+  \underbrace{
+    \frac{1}{s}\sum_{i=1}^{s}
+    \overline{\mathbf{r}}_i\odot\mathsfbi{D}(\mathbf{r}_i)
+  }_{\mathbf{d}_r},
+  \qquad
+  \mathsfbi{B}=\mathsfbi{Q}^{*}\mathsfbi{D}(\mathsfbi{Q}),
+  \qquad
+  \mathbf{r}_i=\left(\mathsfbi{I}-\mathsfbi{Q}\mathsfbi{Q}^{*}\right)\mathbf{g}_i,
+  \label{eq:diag_hutchpp}
+\end{equation}
+in direct correspondence with the \(t_d\) and \(t_r\) contributions of the trace estimator. Because
+the probes \(\mathbf{r}_i\) carry no component along the leading subspace, the variance of
+\(\mathbf{d}_r\) is governed by the trailing spectrum of \(\mathsfbi{C}\), which is precisely the
+regime in which \eqref{eq:diag_hutchinson} is slowest.
+
+The complete procedure is summarized in
+\cref{alg:stochastic_stepping_diagonal_estimator}.
+
+\begin{algorithm}[H]
+  \caption{Stochastic stepping diagonal estimator for
+           \(\mathrm{diag}\left\{\mathsfbi{C}(T)\right\}\)}
+  \label{alg:stochastic_stepping_diagonal_estimator}
+
+  \begin{algorithmic}[1]
+    \Require Number of probes \(N_p\), loop-direct-adjoint action \(\LDA(\cdot)\),
+             factor \(\mathsfbi{L}\) s.t. \(\mathsfbi{C}_{00}=\mathsfbi{L}\mathsfbi{L}^{*}\)
+    \Ensure Diagonal estimate \(\widehat{\mathbf{d}}_{\mathrm{H++}}\)
+
+    \State Define kernel
+      \(\mathsfbi{D}(\mathbf{v})=\boldsymbol{\Phi}\mathsfbi{L}
+      \left(\mathsfbi{L}^{*}\LDA(\mathbf{v})\right)\)
+      \Comment{Action \(\mathsfbi{C}(T)\mathsfbi{W}\mathbf{v}\), one adjoint and one forward sweep}
+
+    \State Set \(s\gets N_p/3\)
+      \Comment{Number of probes per stage}
+
+    \For{\(i=1,\ldots,s\)}
+      \State Draw \(\mathbf{g}_i\sim\mathcal{N}(\mathbf{0},\mathsfbi{I})\)
+        \Comment{Gaussian probe}
+      \State \(\mathbf{y}_i\gets\mathsfbi{D}(\mathbf{g}_i)\)
+        \Comment{Sketch action}
+    \EndFor
+
+    \State Form \(\mathsfbi{Y}\gets[\,\mathbf{y}_1\ \cdots\ \mathbf{y}_s\,]\)
+      \Comment{Range sketch}
+
+    \State Compute \(\mathsfbi{Y}=\mathsfbi{Q}\mathsfbi{R}\)
+      \Comment{Thin QR factorization}
+
+    \For{\(j=1,\ldots,s\)}
+      \State \(\mathsfbi{B}(:,j)\gets\mathsfbi{Q}^{*}\mathsfbi{D}(\mathbf{q}_j)\)
+        \Comment{Compressed operator on the captured subspace}
+    \EndFor
+
+    \State \(\mathbf{d}_d\gets
+      \mathrm{diag}\left\{\mathsfbi{Q}\mathsfbi{B}\mathsfbi{Q}^{*}\right\}\)
+      \Comment{Deflated contribution}
+
+    \State \(\mathbf{d}_r\gets\mathbf{0}\)
+    \For{\(i=1,\ldots,s\)}
+      \State Draw \(\mathbf{g}_i\sim\mathcal{N}(\mathbf{0},\mathsfbi{I})\)
+        \Comment{Residual probe}
+      \State \(\mathbf{r}_i\gets(\mathsfbi{I}-\mathsfbi{Q}\mathsfbi{Q}^{*})\mathbf{g}_i\)
+        \Comment{Orthogonal projection}
+      \State \(\mathbf{d}_r\gets\mathbf{d}_r+
+        s^{-1}\,\overline{\mathbf{r}}_i\odot\mathsfbi{D}(\mathbf{r}_i)\)
+        \Comment{Stochastic residual contribution}
+    \EndFor
+
+    \State \(\widehat{\mathbf{d}}_{\mathrm{H++}}\gets\mathbf{d}_d+\mathbf{d}_r\)
+      \Comment{Hutch++ diagonal estimate}
+
+    \State \Return \(\widehat{\mathbf{d}}_{\mathrm{H++}}\)
+  \end{algorithmic}
+\end{algorithm}
+
+The algorithm returns the whole diagonal of \(\mathsfbi{C}(T)\), from which the individual blocks
+are read off afterwards: for a state vector partitioned into wall-normal velocity and wall-normal
+vorticity, the variances \(C_{ww}(z)\) and \(C_{\eta\eta}(z)\) are the two halves of
+\(\widehat{\mathbf{d}}_{\mathrm{H++}}\). The same sketch and residual probes also give the
+cross-covariance between two blocks at coincident points, obtained by pairing the entries of one
+block against those of the other in the last step instead of with themselves; for plane Poiseuille
+flow this is the velocity--vorticity correlation \(C_{w\eta}(z)\), and it requires no additional
+sweeps.
+
+The cost follows the same accounting as \eqref{eq:sste_fixed_time_cost}: every one of the \(N_p\)
+probes requires a full forward and adjoint sweep to the target time, so a diagonal estimate costs
+the same as a trace estimate at that time. The difference is that the result is now required at
+every grid point rather than as a single number, and the \(O(N_t^{2})\) growth of
+\eqref{eq:sste_multiple_time_cost} applies unchanged. For this reason the verification below fixes a
+small number of target times, \(N_t=5\), and overlays the resulting profiles rather than resolving a
+\((z,T)\) map.
+
+\Cref{fig:diag_verification} collects the four cases. Panel \((a)\) is the complex
+Ginzburg--Landau problem with the Gaussian initial covariance of
+\cref{sec:appendix_verification_gl}, using \(N_p=30\) probes; the estimate tracks the exact profile
+obtained from the matrix exponential at every sampled time, the two being indistinguishable at plot
+accuracy. Panels \((b)\)--\((d)\) show plane Poiseuille flow: the wall-normal velocity variance
+\(\mathsfbi{C}_{ww}(z)\), the wall-normal vorticity variance \(\mathsfbi{C}_{\eta\eta}(z)\), and the
+velocity--vorticity correlation \(\mathsfbi{C}_{w\eta}(z)\) at coincident wall-normal locations. The
+errors in \((b)\)--\((d)\) sit three to four orders of magnitude below \((a)\), because the leading
+spectrum of the propagated covariance is captured almost entirely by the deflation subspace, leaving
+very little for the stochastic residual to account for.
+
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \tikzfig{GL_diag_overlay_hutchpp}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \tikzfig{Poiseuille_diag_OS_overlay}
+    \end{minipage}
+
+    \vspace{1em}
+
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \tikzfig{Poiseuille_diag_SQ_overlay}
+    \end{minipage}\hfill
+    \begin{minipage}[t]{0.49\textwidth}
+        \centering
+        \vspace{0pt}
+        \tikzfig{Poiseuille_diag_cross_overlay}
+    \end{minipage}
+    \caption{Diagonal and cross-diagonal estimation at \(N_t=5\) fixed final times, exact profiles
+    from the matrix exponential (solid) against the Hutch++ estimate (markers), one colour per time.
+    \((a)\) complex Ginzburg--Landau, \(C(z)\); \((b)\) plane Poiseuille wall-normal velocity
+    variance \(C_{ww}(z)\); \((c)\) wall-normal vorticity variance \(C_{\eta\eta}(z)\);
+    \((d)\) velocity--vorticity correlation \(C_{w\eta}(z)\). The relative error integrated over the
+    domain, \(\|\widehat{\mathbf{d}}-\mathbf{d}\|_{2}/\|\mathbf{d}\|_{2}\), averaged over the five
+    times, is \(5.8\times10^{-4}\), \(6.2\times10^{-8}\), \(2.4\times10^{-7}\) and
+    \(5.1\times10^{-8}\) respectively. The legend of \((a)\) applies to all four panels.}
+    \label{fig:diag_verification}
+\end{figure}

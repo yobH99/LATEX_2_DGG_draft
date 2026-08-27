@@ -1,0 +1,96 @@
+\section{Continuous linearized operators}
+\label{app:operators}
+
+This appendix collects the continuous differential operators used in the linearized
+variable-density system~\eqref{eq:vd_lin_continuous}. These operators are defined
+before the vertical discretization described in \eqref{eq:semidiscrete_system}; after
+discretization they produce the matrices \(\mathsfbi{A}_{k}(t)\) and \(\mathsfbi{B}_{k}(t)\) that
+define the discrete propagator in \eqref{eq:discrete_propagator}.
+
+Primes denote derivatives with respect to \(z\), overdots denote derivatives with respect to time,
+and
+\begin{equation}
+  \nabla^2=\partial_{zz}+\nabla_{xy}^2,
+  \qquad
+  \nabla_{xy}^2=\partial_{xx}+\partial_{yy}.
+  \label{eq:appendix_laplacian_definitions}
+\end{equation}
+The base-state viscosity is
+\begin{equation}
+  \mu_0(z,t)
+  =
+  1+\Amu\,\erf\!\left(\frac{z}{\delta(t)}\right),
+  \label{eq:appendix_base_viscosity}
+\end{equation}
+and viscosity perturbations are related to density perturbations by
+\begin{equation}
+  \mu' = C_{\mu\rho}\rho',
+  \qquad
+  C_{\mu\rho}=\frac{\Amu}{\Atw}.
+  \label{eq:appendix_viscosity_density_coupling}
+\end{equation}
+The linearized divergence constraint entering the operators is
+\begin{equation}
+  \bnabla\bcdot\boldsymbol{u}
+  =
+  \mathscr{L}_{\rho}\,\rho,
+  \qquad
+  \mathscr{L}_{\rho}(\star)
+  =
+  -\Sch^{-1}\nabla^2\!\left(\frac{\star}{\rho_0}\right),
+  \label{eq:linearized_divergence}
+\end{equation}
+where \(\star\) denotes the argument on which the operator acts. We also define
+\begin{equation}
+  \dot{\mathscr{L}}_{\rho}(\star)
+  =
+  -\Sch^{-1}
+  \nabla^2
+  \left[
+    \frac{\partial}{\partial t}
+    \left(
+      \frac{\star}{\rho_0}
+    \right)
+  \right].
+  \label{eq:ldot_rho}
+\end{equation}
+With this notation, the operator blocks in \eqref{eq:vd_lin_continuous} are
+\begin{subequations}
+\label{eq:A_B_operators}
+\begin{align}
+  \mathscr{B}_{ww}
+  &=
+  -\Big(\rho_0'\,\partial_z+\rho_0\,\nabla^2\Big), \\
+  \mathscr{B}_{w\rho}
+  &=
+  \Big(\rho_0'+\rho_0\,\partial_z\Big)\mathscr{L}_{\rho}, \\
+  \mathscr{A}_{ww}
+  &=
+  -\mu_0\,\nabla^4
+  -2\,\mu_0'\,\partial_z\nabla^2
+  +\mu_0''\,\nabla^2
+  -2\,\mu_0''\,\partial_{zz}, \\
+  \mathscr{A}_{w_0 w}
+  &=
+  \Big(\rho_0 w_0'+\rho_0 w_0\,\partial_z\Big)\nabla^2
+  +w_0\rho_0'\,\partial_{zz}, \\
+  \mathscr{A}_{w\rho}
+  &=
+  \Big(\mu_0\,\partial_z\nabla^2+2\,\mu_0'\,\nabla^2+\mu_0''\,\partial_z\Big)
+  \mathscr{L}_{\rho}
+  -2\,\partial_z\!\left(w_0'C_{\mu\rho}\,\nabla_{xy}^2\star\right)
+  +\nabla_{xy}^2, \\
+  \mathscr{A}_{w_0\rho}
+  &=
+  -\Big((\rho_0 w_0)'\,\partial_z+\rho_0 w_0\,\partial_{zz}\Big)
+  \mathscr{L}_{\rho}
+  +\left(\dot{w}_0+w_0 w_0'\right)\nabla_{xy}^2
+  -\Big(\rho_0'+\rho_0\,\partial_z\Big)\dot{\mathscr{L}}_{\rho}, \\
+  \mathscr{A}_{\rho w}
+  &=
+  -\,\partial_z\rho_0, \\
+  \mathscr{A}_{\rho\rho}
+  &=
+  -\left(w_0\,\partial_z+w_0'\right)-\rho_0\,\mathscr{L}_{\rho}.
+\end{align}
+\end{subequations}

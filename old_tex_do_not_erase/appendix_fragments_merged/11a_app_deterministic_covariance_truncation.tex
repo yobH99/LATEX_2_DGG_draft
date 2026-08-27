@@ -1,0 +1,190 @@
+\subsection{Deterministic covariance truncation}
+\label{sec:appendix_deterministic_truncation}
+\label{sec:appendix_necessity_sste}
+
+Deterministic truncation exploits the spectral structure of the initial covariance, which the
+Hermitian positive-definite matrix \(\mathsfbi{C}_{00}\in\mathbb{C}^{N\times N}\) supplies through
+the eigendecomposition
+\begin{equation}
+  \mathsfbi{C}_{00}
+  =
+  \mathsfbi{U}\boldsymbol{\Sigma}\mathsfbi{U}^{*},
+  \qquad
+  \boldsymbol{\Sigma}
+  =
+  \operatorname{diag}
+  \left(
+    \sigma_1,\dots,\sigma_N
+  \right),
+  \qquad
+  \sigma_1\geq\dots\geq\sigma_N>0,
+  \label{eq:C00_eigendecomposition_sste_necessity}
+\end{equation}
+and which delivers the square-root factor \(\mathsfbi{L}\) in the form
+\begin{equation}
+  \mathsfbi{L}
+  =
+  \mathsfbi{U}\boldsymbol{\Sigma}^{1/2},
+  \qquad
+  \boldsymbol{\Sigma}^{1/2}
+  =
+  \operatorname{diag}
+  \left(
+    \sqrt{\sigma_1},\dots,\sqrt{\sigma_N}
+  \right),
+  \label{eq:C00_square_root_factor_sste_necessity}
+\end{equation}
+so that each eigenpair carries a single column of the factor into the dynamics.
+
+DCT replaces \(\mathsfbi{C}_{00}\) by the rank-\(r\) truncation \(\mathsfbi{C}_{00}^{(r)}\) that
+retains the leading \(r\) eigenpairs and propagates every retained column up to the target time
+\(T\). \Cref{alg:deterministic_truncation} reports the resulting algorithm. The cost, in terms of
+time-stepper calls, is
+\begin{equation}
+  \mathcal{C}_{\mathrm{DCT}}(T)=r,
+  \label{eq:deterministic_fixed_time_cost}
+\end{equation}
+and, because we need to repeat this for all the \(N_t\) target times, the total cost is
+\begin{equation}
+  \mathcal{W}_{\mathrm{DCT}}=N_t\,r.
+  \label{eq:deterministic_history_cost}
+\end{equation}
+Whenever the covariance has rank one, or an exact rank that a modest \(r\) already captures, DCT
+returns \(g(T)\) exactly, and we prefer it to every alternative; whenever the spectrum extends
+beyond the retained rank, DCT commits the error
+\begin{equation}
+  \varepsilon_r
+  =
+  \frac{1}{\tr\left\{\mathsfbi{W}\mathsfbi{C}_{00}\right\}}
+  \tr
+  \left\{
+    \mathsfbi{T}
+    \left(
+      \mathsfbi{C}_{00}
+      -
+      \mathsfbi{C}_{00}^{(r)}
+    \right)
+  \right\}
+  =
+  \frac{1}{\tr\left\{\mathsfbi{W}\mathsfbi{C}_{00}\right\}}
+  \sum_{j=r+1}^{N}
+  \sigma_j\,
+  \mathbf{u}_j^{*}\mathsfbi{T}\mathbf{u}_j.
+  \label{eq:trace_error_1}
+\end{equation}
+
+\begin{algorithm}[H]
+  \caption{Deterministic truncation (DCT) estimate of \(g(T)\)}
+  \label{alg:deterministic_truncation}
+
+  \begin{algorithmic}[1]
+    \Require Initial covariance \(\mathsfbi{C}_{00}\), truncation rank \(r\),
+             target time \(T\), operators \(\mathsfbi{A}(t)\) and \(\mathsfbi{B}(t)\),
+             energy weight \(\mathsfbi{W}\)
+    \Ensure Truncated growth functional \(g^{(r)}(T)\)
+
+    \State Compute the eigenpairs \((\sigma_j,\mathbf{u}_j)\) of \(\mathsfbi{C}_{00}\)
+      and order them so that \(\sigma_1\geq\dots\geq\sigma_N\)
+      \Comment{Eigendecomposition}
+
+    \State \(s\gets0\)
+      \Comment{Trace accumulator}
+
+    \For{\(j=1,\dots,r\)}
+      \State \(\hat{\mathbf{q}}_j(0)\gets\sqrt{\sigma_j}\,\mathbf{u}_j\)
+        \Comment{Retained column of \(\mathsfbi{L}\)}
+
+      \State Solve
+        \(\mathsfbi{B}(t)\,\partial_t\hat{\mathbf{q}}_j(t)
+        =
+        \mathsfbi{A}(t)\hat{\mathbf{q}}_j(t)\),
+        \(0\leq t\leq T\)
+        \Comment{Forward solve}
+
+      \State \(s\gets s+\hat{\mathbf{q}}_j^{*}(T)\mathsfbi{W}\hat{\mathbf{q}}_j(T)\)
+        \Comment{Energy of the propagated column}
+    \EndFor
+
+    \State \(g^{(r)}(T)\gets s/\tr\left\{\mathsfbi{C}_{00}\mathsfbi{W}\right\}\)
+      \Comment{Normalize by the initial energy}
+
+    \State \Return \(g^{(r)}(T)\)
+  \end{algorithmic}
+\end{algorithm}
+
+\Cref{eq:trace_error_1} shows that two mechanisms govern the relative error. Choosing \(r\) such
+that \(\sigma_r\simeq0\) makes the error small; a second mechanism nevertheless controls it, since
+we can rearrange \eqref{eq:trace_error_1} into
+\begin{equation}
+  \varepsilon_r
+  =
+  \frac{1}{\tr\left\{\mathsfbi{W}\mathsfbi{C}_{00}\right\}}
+  \sum_{j=r+1}^{N}
+  \sigma_j
+  \left\|\boldsymbol{\Phi}\mathbf{u}_j\right\|_{\mathsfbi{W}}^{2},
+  \label{eq:trace_error_phi_tail}
+\end{equation}
+which requires \(\left\|\boldsymbol{\Phi}\mathbf{u}_j\right\|_{\mathsfbi{W}}^{2}\) to be small as
+well.
+
+This suggests that small neglected eigenvalues guarantee little on their own, since a discarded
+eigendirection that aligns with a strongly amplified direction of the dynamics still contributes
+substantially to the error. Consider in fact the simple case where
+\begin{equation}
+  \boldsymbol{\Phi}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & \sqrt{\kappa/\epsilon}
+  \end{pmatrix},
+  \qquad
+  \mathsfbi{C}_{00}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & \epsilon
+  \end{pmatrix},
+  \qquad
+  \mathsfbi{C}_{00}^{(r)}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & 0
+  \end{pmatrix},
+  \qquad
+  \epsilon \ll 1 ,
+  \label{eq:low_rank_failure_example}
+\end{equation}
+with \(\kappa\) the gain ratio and \(\epsilon\) the small covariance eigenvalue. Being
+\(g^{(r)}\) the growth functional computed with \(\mathsfbi{C}_{00}^{(r)}\), the relative error is
+\begin{equation}
+  \frac{
+    g(T)-g^{(r)}(T)
+  }{
+    g(T)
+  }
+  =
+  \frac{\kappa}{\kappa+1}.
+  \label{eq:low_rank_failure_relative_error}
+\end{equation}
+The discarded covariance eigenvalue \(\epsilon\) stays small while its contribution to the
+propagated energy does not, precisely because the dynamics amplify the corresponding
+eigendirection.
+
+We therefore argue that a low-rank truncation of the initial covariance fails exactly when the
+low-energy directions of \(\mathsfbi{C}_{00}\) intersect the high-gain directions of the evolution
+operator, and that DCT delivers its substantial savings only when the covariance spectrum decays
+rapidly and the dynamics stay benign. In this sense one does not know \emph{a priori} the value of
+\(r\) that must be chosen, and reaching a reasonable estimate for covariances with a slowly
+decaying spectrum may require \(r\sim N\), which leads to
+\begin{equation}
+  \mathcal{W}_{\mathrm{DCT}}=N\,N_t.
+  \label{eq:deterministic_full_rank_cost}
+\end{equation}
+
+Summarizing, DCT carries two advantages, namely that it requires no adjoint problem, and that a
+low-rank or rapidly decaying spectrum with \(\mathrm{rank}(\mathsfbi{C}_{00})\ll N\) keeps
+\(r\sim O(1)\). It carries one disadvantage, namely that a correlation with a broad or full
+spectrum, \(\mathrm{rank}(\mathsfbi{C}_{00})=N\), leads to large errors unless we choose the
+directions of large gain carefully, and those directions are in principle not known \emph{a
+priori}.

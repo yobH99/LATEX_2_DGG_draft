@@ -1,0 +1,1013 @@
+\clearpage
+\begin{appendices}
+
+\section{Continuous linearized operators}
+\label{app:operators}
+
+This appendix collects the continuous differential operators used in the linearized
+variable-density system~\eqref{eq:vd_lin_continuous}. These operators are defined
+before the vertical discretization described in \eqref{eq:semidiscrete_system}; after
+discretization they produce the matrices \(\mathsfbi{A}_{k}(t)\) and \(\mathsfbi{B}_{k}(t)\) that
+define the discrete propagator in \eqref{eq:discrete_propagator}.
+
+Primes denote derivatives with respect to \(z\), overdots denote derivatives with respect to time,
+and
+\begin{equation}
+  \nabla^2=\partial_{zz}+\nabla_{xy}^2,
+  \qquad
+  \nabla_{xy}^2=\partial_{xx}+\partial_{yy}.
+  \label{eq:appendix_laplacian_definitions}
+\end{equation}
+The base-state viscosity is
+\begin{equation}
+  \mu_0(z,t)
+  =
+  1+\Amu\,\erf\!\left(\frac{z}{\delta(t)}\right),
+  \label{eq:appendix_base_viscosity}
+\end{equation}
+and viscosity perturbations are related to density perturbations by
+\begin{equation}
+  \mu' = C_{\mu\rho}\rho',
+  \qquad
+  C_{\mu\rho}=\frac{\Amu}{\Atw}.
+  \label{eq:appendix_viscosity_density_coupling}
+\end{equation}
+The linearized divergence constraint entering the operators is
+\begin{equation}
+  \bnabla\bcdot\boldsymbol{u}
+  =
+  \mathscr{L}_{\rho}\,\rho,
+  \qquad
+  \mathscr{L}_{\rho}(\star)
+  =
+  -\Sch^{-1}\nabla^2\!\left(\frac{\star}{\rho_0}\right),
+  \label{eq:linearized_divergence}
+\end{equation}
+where \(\star\) denotes the argument on which the operator acts. We also define
+\begin{equation}
+  \dot{\mathscr{L}}_{\rho}(\star)
+  =
+  -\Sch^{-1}
+  \nabla^2
+  \left[
+    \frac{\partial}{\partial t}
+    \left(
+      \frac{\star}{\rho_0}
+    \right)
+  \right].
+  \label{eq:ldot_rho}
+\end{equation}
+With this notation, the operator blocks in \eqref{eq:vd_lin_continuous} are
+\begin{subequations}
+\label{eq:A_B_operators}
+\begin{align}
+  \mathscr{B}_{ww}
+  &=
+  -\Big(\rho_0'\,\partial_z+\rho_0\,\nabla^2\Big), \\
+  \mathscr{B}_{w\rho}
+  &=
+  \Big(\rho_0'+\rho_0\,\partial_z\Big)\mathscr{L}_{\rho}, \\
+  \mathscr{A}_{ww}
+  &=
+  -\mu_0\,\nabla^4
+  -2\,\mu_0'\,\partial_z\nabla^2
+  +\mu_0''\,\nabla^2
+  -2\,\mu_0''\,\partial_{zz}, \\
+  \mathscr{A}_{w_0 w}
+  &=
+  \Big(\rho_0 w_0'+\rho_0 w_0\,\partial_z\Big)\nabla^2
+  +w_0\rho_0'\,\partial_{zz}, \\
+  \mathscr{A}_{w\rho}
+  &=
+  \Big(\mu_0\,\partial_z\nabla^2+2\,\mu_0'\,\nabla^2-\mu_0''\,\partial_z\Big)
+  \mathscr{L}_{\rho}
+  -2\,\partial_z\!\left(w_0'C_{\mu\rho}\,\nabla_{xy}^2\star\right)
+  +\nabla_{xy}^2, \\
+  \mathscr{A}_{w_0\rho}
+  &=
+  -\Big((\rho_0 w_0)'\,\partial_z+\rho_0 w_0\,\partial_{zz}\Big)
+  \mathscr{L}_{\rho}
+  +\left(\dot{w}_0+w_0 w_0'\right)\nabla_{xy}^2
+  -\Big(\rho_0'+\rho_0\,\partial_z\Big)\dot{\mathscr{L}}_{\rho}, \\
+  \mathscr{A}_{\rho w}
+  &=
+  -\,\partial_z\rho_0, \\
+  \mathscr{A}_{\rho\rho}
+  &=
+  -\left(w_0\,\partial_z+w_0'\right)-\rho_0\,\mathscr{L}_{\rho}.
+\end{align}
+\end{subequations}
+
+\section{Stochastic stepping trace estimator}
+\label{sec:appendix_main}
+
+\subsection{Necessity of the stochastic stepping trace estimator}
+\label{sec:appendix_necessity_sste}
+
+In this section, we explain why a purely deterministic low-rank truncation of the initial covariance is not, in general, a reliable substitute for the stochastic stepping trace estimator. Consider a Hermitian positive-definite covariance matrix
+\(\mathsfbi{C}_{00}\in\mathbb{C}^{m\times m}\), with Cholesky factorization
+\begin{equation}
+  \mathsfbi{C}_{00}
+  =
+  \mathsfbi{L}\mathsfbi{L}^{*}.
+  \label{eq:C00_cholesky_sste_necessity}
+\end{equation}
+Since \(\mathsfbi{C}_{00}\) is Hermitian positive definite, it also admits the eigendecomposition
+\begin{equation}
+  \mathsfbi{C}_{00}
+  =
+  \mathsfbi{U}\boldsymbol{\Sigma}\mathsfbi{U}^{*},
+  \label{eq:C00_eigendecomposition_sste_necessity}
+\end{equation}
+where
+\begin{equation}
+  \boldsymbol{\Sigma}
+  =
+  \operatorname{diag}
+  \left(
+    \sigma_1,\dots,\sigma_m
+  \right),
+  \qquad
+  \sigma_j>0 .
+  \label{eq:C00_eigenvalues_sste_necessity}
+\end{equation}
+Accordingly, a square-root factor of the covariance may be written as
+\begin{equation}
+  \mathsfbi{L}
+  =
+  \mathsfbi{U}\boldsymbol{\Sigma}^{1/2},
+  \label{eq:C00_square_root_factor_sste_necessity}
+\end{equation}
+with
+\begin{equation}
+  \boldsymbol{\Sigma}^{1/2}
+  =
+  \operatorname{diag}
+  \left(
+    \sqrt{\sigma_1},\dots,\sqrt{\sigma_m}
+  \right).
+  \label{eq:singular_values_sqrt}
+\end{equation}
+
+Let \(\mathsfbi{T}\) denote the linear operator introduced in the preceding sections, so that the quantity of interest is
+\(\tr\left\{\mathsfbi{T}\mathsfbi{C}_{00}\right\}\). A natural alternative to the stochastic approach is to replace \(\mathsfbi{C}_{00}\) by a low-rank truncation \(\mathsfbi{C}_{00}^{(r)}\), obtained by retaining only the first \(r\) eigenvalues and setting the remaining ones to zero in \eqref{eq:singular_values_sqrt}. This strategy is attractive because it restricts the action of the evolution operator to the leading eigenspace of the initial covariance, thereby reducing the number of operator evaluations.
+
+The error induced by this truncation is
+\begin{equation}
+  \varepsilon_r
+  =
+  \tr
+  \left\{
+    \mathsfbi{T}\mathsfbi{C}_{00}
+  \right\}
+  -
+  \tr
+  \left\{
+    \mathsfbi{T}\mathsfbi{C}_{00}^{(r)}
+  \right\}.
+  \label{eq:covariance_truncation_error_definition}
+\end{equation}
+Writing the discarded part of the covariance as
+\begin{equation}
+  \mathsfbi{C}_{00}
+  -
+  \mathsfbi{C}_{00}^{(r)}
+  =
+  \sum_{j=r+1}^{m}
+  \sigma_j\mathbf{u}_j\mathbf{u}_j^{*},
+  \label{eq:covariance_discarded_tail}
+\end{equation}
+one obtains
+\begin{equation}
+  \varepsilon_r
+  =
+  \tr
+  \left\{
+    \mathsfbi{T}
+    \left(
+      \mathsfbi{C}_{00}
+      -
+      \mathsfbi{C}_{00}^{(r)}
+    \right)
+  \right\}
+  =
+  \sum_{j=r+1}^{m}
+  \sigma_j
+  \mathbf{u}_j^{*}\mathsfbi{T}\mathbf{u}_j .
+  \label{eq:trace_error_1}
+\end{equation}
+Equation \eqref{eq:trace_error_1} shows that the truncation error is not controlled by the covariance spectrum alone. It also depends on how the discarded covariance modes are amplified by the operator \(\mathsfbi{T}\). In the particular case
+\begin{equation}
+  \mathsfbi{T}
+  =
+  \boldsymbol{\Phi}^{*}\boldsymbol{\Phi},
+  \label{eq:T_phi_phi_sste_necessity}
+\end{equation}
+where \(\boldsymbol{\Phi}\) is the propagator of the linear dynamics, \eqref{eq:trace_error_1} becomes
+\begin{equation}
+  \varepsilon_r
+  =
+  \sum_{j=r+1}^{m}
+  \sigma_j
+  \left\|
+    \boldsymbol{\Phi}\mathbf{u}_j
+  \right\|_2^2 .
+  \label{eq:trace_error_phi_tail}
+\end{equation}
+It follows that
+\begin{equation}
+  \sigma_{\min}^{2}
+  \left(
+    \boldsymbol{\Phi}
+  \right)
+  \sum_{j=r+1}^{m}\sigma_j
+  \le
+  \varepsilon_r
+  \le
+  \sigma_{\max}^{2}
+  \left(
+    \boldsymbol{\Phi}
+  \right)
+  \sum_{j=r+1}^{m}\sigma_j,
+  \label{eq:trace_error_bound}
+\end{equation}
+where \(\sigma_{\min}(\boldsymbol{\Phi})\) and \(\sigma_{\max}(\boldsymbol{\Phi})\) denote the smallest and largest singular values of \(\boldsymbol{\Phi}\), respectively.
+
+The estimate \eqref{eq:trace_error_bound} shows that the truncation error depends both on the decay of the spectrum of \(\mathsfbi{C}_{00}\) and on the amplification properties of the evolution operator. If \(\boldsymbol{\Phi}\) exhibits large gain, the upper bound may remain large even when the neglected eigenvalues of \(\mathsfbi{C}_{00}\) are small. Consequently, achieving a prescribed accuracy may require a truncation rank \(r\) much larger than what one would infer from the covariance spectrum alone.
+Even when the neglected eigenvalues are small, the truncation error can be substantial if the discarded eigendirections of \(\mathsfbi{C}_{00}\) align with directions that are strongly amplified by the dynamics. This effect can be illustrated by the following simple example. Let
+\begin{equation}
+  \boldsymbol{\Phi}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & \sqrt{\kappa/\epsilon}
+  \end{pmatrix},
+  \qquad
+  \mathsfbi{C}_{00}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & \epsilon
+  \end{pmatrix},
+  \qquad
+  \mathsfbi{C}_{00}^{(r)}
+  =
+  \begin{pmatrix}
+    1 & 0 \\
+    0 & 0
+  \end{pmatrix},
+  \qquad
+  \epsilon \ll 1 .
+  \label{eq:low_rank_failure_example}
+\end{equation}
+Then the relative error is
+\begin{equation}
+  \frac{
+    \tr
+    \left\{
+      \boldsymbol{\Phi}^{*}
+      \boldsymbol{\Phi}
+      \mathsfbi{C}_{00}
+    \right\}
+    -
+    \tr
+    \left\{
+      \boldsymbol{\Phi}^{*}
+      \boldsymbol{\Phi}
+      \mathsfbi{C}_{00}^{(r)}
+    \right\}
+  }{
+    \tr
+    \left\{
+      \boldsymbol{\Phi}^{*}
+      \boldsymbol{\Phi}
+      \mathsfbi{C}_{00}
+    \right\}
+  }
+  =
+  \frac{\kappa}{\kappa+1}.
+  \label{eq:low_rank_failure_relative_error}
+\end{equation}
+This relative error remains \(O(1)\) whenever \(\kappa=O(1)\). Thus, although the discarded covariance eigenvalue \(\epsilon\) is small, its contribution to the propagated energy is not negligible, because the corresponding eigendirection is strongly amplified by the dynamics.
+
+This example shows that a low-rank truncation of the initial covariance can fail precisely when low-energy directions of \(\mathsfbi{C}_{00}\) intersect directions of large gain of the evolution operator. Although truncation may provide substantial computational savings when the covariance spectrum decays rapidly and the dynamics are sufficiently benign, it can also lead to significant errors when amplification and covariance structure interact unfavorably.
+
+This is the regime in which the SSTE algorithm becomes necessary. The objective is to retain the matrix-free efficiency of operator-based methods while avoiding the uncontrolled loss of information associated with a purely deterministic low-rank truncation of \(\mathsfbi{C}_{00}\). In this sense, SSTE provides a computationally efficient alternative that minimizes, for a prescribed accuracy, the number of operator evaluations while remaining robust to the interaction between covariance structure and transient amplification.
+
+\subsection{Verification}
+\label{sec:appendix_verification}
+In this section we verify the SSTE algorithm on canonical autonomous test cases and on an analytical non-autonomous problem. For consistency with the main text, we use the normalized per-wavenumber mean energy growth defined in \eqref{eq:modal_energy_growth}, namely
+\begin{equation}
+  g(k,t)
+  =
+  \frac{
+    \tr
+    \left\{
+      \boldsymbol{\Phi}_{t,k}
+      \mathsfbi{C}_{00}^{z}
+      \boldsymbol{\Phi}_{t,k}^{*}
+      \mathsfbi{W}
+    \right\}
+  }{
+    \tr
+    \left\{
+      \mathsfbi{C}_{00}^{z}
+    \right\}
+  }.
+  \label{eq:verification_modal_energy_growth}
+\end{equation}
+The relative error is defined as
+\begin{equation}
+  \varepsilon_{\mathrm{rel}}(T)
+  =
+  \frac{
+    \left|\widehat{g}(T)-g_{\mathrm{ref}}(T)\right|
+  }{
+    \left|g_{\mathrm{ref}}(T)\right|
+  },
+  \label{eq:verification_relative_error}
+\end{equation}
+where \(g_{\mathrm{ref}}\) is the reference value and \(\widehat{g}\) is the corresponding SSTE estimate. The reference is exact in every case considered, but its origin differs. For autonomous problems the linearized operators are constant in time, so the procedure is unchanged except that the propagator can be formed and stored explicitly; the reference is then the trace evaluated from the exponential propagator. For the fully non-autonomous case we derive a closed-form solution, and the reference is the resulting analytical expression.
+
+The verification cases are organized as follows. Section~\ref{sec:appendix_verification_gl} uses an autonomous complex Ginzburg--Landau problem, so the exact matrix-exponential reference is available and the estimator can be tested without ambiguity from time-dependent coefficients. This case also provides the direct comparison between SSTE and the naive \(\mathsfbi{C}_{00}^{z}\) truncation discussed in Section~\ref{sec:appendix_necessity_sste}. Section~\ref{sec:appendix_verification_poiseuille} repeats the autonomous matrix-exponential verification for plane Poiseuille flow, providing a fluid-dynamical test of the same trace construction. Section~\ref{sec:appendix_verification_nonautonomous} uses a fully non-autonomous scalar problem with a closed-form trace reference, isolating the effect of time-dependent coefficients.
+
+\subsubsection{Complex Ginzburg--Landau}
+\label{sec:appendix_verification_gl}
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/GL_eig_vs_hutch_slowSpectrum_mu0_0.39.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/GL_eig_vs_hutch_fastSpectrum_mu0_0.39.tex}
+    \end{minipage}
+    \caption{
+    Relative error in the normalized mean energy growth \(g(T)\) for the linear complex Ginzburg--Landau system as a function of the number of stepper calls. 
+    \((a)\) Slow decay of the initial covariance spectrum. 
+    \((b)\) Fast decay of the initial covariance spectrum. 
+    Solid lines denote the deterministic truncated-eigen expansion, whereas dashed lines with symbols denote the SSTE estimate.
+    }
+    \label{fig:GL_eig_vs_sste}
+\end{figure}
+We compare the cost of SSTE against the deterministic truncation strategy on the linear complex Ginzburg--Landau system used in the numerical experiments. As discussed by \citet{frame-towne-2024}, this model provides a useful canonical setting for transient-growth and time-stepping studies. In continuous form, the governing equation is
+\begin{equation}
+  \frac{\partial q}{\partial t}
+  =
+  -\nu\frac{\partial q}{\partial x}
+  +
+  \gamma\frac{\partial^2 q}{\partial x^2}
+  +
+  \mu(x)q,
+  \label{eq:GL_continuous_equation_sste_necessity}
+\end{equation}
+where \(q(x,t)\) is a complex amplitude, \(\nu\) is the convection coefficient, \(\gamma\) is the complex diffusion coefficient, and \(\mu(x)\) is a spatially varying growth-rate profile. In the present computations, the latter is taken in quadratic form,
+\begin{equation}
+  \mu(x)
+  =
+  \mu_0+\mu_2x^2,
+  \label{eq:GL_mu_profile_sste_necessity}
+\end{equation}
+with parameter values
+\begin{equation}
+  \nu = 2+0.4\mathrm{i},
+  \qquad
+  \gamma = 1-\mathrm{i},
+  \qquad
+  \mu_2 = -0.01,
+  \qquad
+  \mu_0 = 0.39.
+  \label{eq:GL_parameters_sste_necessity}
+\end{equation}
+The spatial resolution is \(n_x=60\), the time step is \(\Delta t=0.08\), and the final times range from \(T=2\) to \(T=60\). The spatial operator is discretized by Hermite collocation differentiation matrices, producing a matrix \(\mathsfbi{A}\) such that the autonomous discrete evolution is \(\dot{\mathbf{q}}=\mathsfbi{A}\mathbf{q}\). The reference value of \(g(T)\) is therefore computed from \(\boldsymbol{\Phi}(T)=\exp(\mathsfbi{A}T)\) and normalized by \(\tr\!\left\{\mathsfbi{C}_{00}^{z}\right\}\).
+
+\begin{figure}
+  \centering
+  \begin{minipage}{0.8\textwidth}
+    \input{figures/GL_trace_true_vs_hutchpp_mu0_0.39.tex}
+  \end{minipage}
+  \caption{
+  Normalized mean energy growth \(g(T)\) for the linear complex Ginzburg--Landau system as a function of time.
+  The solid line denotes the exact value computed from the matrix exponential of the discretized linear operator, while the symbols denote the SSTE estimate.
+  }
+  \label{fig:GL_trace_true_vs_sste}
+\end{figure}
+The initial covariance is generated through
+\begin{equation}
+  \mathsfbi{C}_{00}^{z}
+  =
+  \mathsfbi{Q}
+  \operatorname{diag}
+  \left(
+    \lambda_1,\dots,\lambda_n
+  \right)
+  \mathsfbi{Q}^{*},
+  \label{eq:GL_covariance_construction_sste_necessity}
+\end{equation}
+where \(\mathsfbi{Q}\) is a fixed orthonormal basis and the eigenvalues \(\lambda_j\) are chosen to impose a prescribed spectral decay. We consider two representative cases. The first is a slow algebraic decay,
+\begin{equation}
+  \lambda_j
+  \propto
+  j^{-1/2},
+  \label{eq:GL_slow_covariance_decay}
+\end{equation}
+and the second is a fast exponential decay,
+\begin{equation}
+  \lambda_j
+  \propto
+  \exp
+  \left[
+    -0.25(j-1)
+  \right].
+  \label{eq:GL_fast_covariance_decay}
+\end{equation}
+The eigenvalues are normalized so that their sum is fixed. Hence, the total initial variance is the same in both cases, and only its spectral distribution is changed. These two covariance models are used to test how the performance of the estimator depends on the structure of the initial perturbation statistics.
+
+The quantity compared in figure~\ref{fig:GL_eig_vs_sste} is the relative error in \(g(T)\) as a function of computational cost, where cost is measured in terms of stepper calls. For the deterministic method, the cost is the number of propagated eigenvectors retained in the truncated expansion. For SSTE, the cost is the number of calls to the stepping routine required by the underlying randomized trace estimator.
+The main point of figure~\ref{fig:GL_eig_vs_sste} is that SSTE reaches a useful level of accuracy with substantially fewer stepper calls than the deterministic truncation strategy. This is especially clear when the covariance spectrum decays slowly, because the deterministic method then requires a large number of propagated eigenvectors before the truncation error becomes small. Even in the fast-decay case, where deterministic low-rank approximation is more favorable, SSTE remains competitive and reaches low error with a modest number of stepper calls. The comparison therefore supports the claim that, for a prescribed tolerance, the stochastic estimator can achieve comparable or better accuracy at substantially lower stepping cost, while remaining robust to the interaction between amplification and covariance structure.
+
+The discretized Ginzburg--Landau system is autonomous, so the loop-adjoint methodology applies without modification, the only difference being that the direct and adjoint operators are fixed in time; its interpretation as a stepping-based trace estimator is unchanged. Figure~\ref{fig:GL_trace_true_vs_sste} reports the normalized mean energy growth \(g(T)\) from the SSTE estimator alongside the matrix-exponential reference, providing a direct validation of the method at the level of the quantity of primary interest.
+
+
+
+\subsubsection{Plane Poiseuille flow}
+\label{sec:appendix_verification_poiseuille}
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/Poiseuille_trace_true_vs_sst.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/Poiseuille_trace_relative_error.tex}
+    \end{minipage}
+    \caption{Plane Poiseuille normalized mean-growth comparison for the fixed test case at \((k_x,k_z)=(0,2)\). \((a)\) \(g(T)\): (\solidlegend)\,exact value computed from the matrix exponential and \, (\dashlegend\circlegend) SSTE estimate. \((b)\) Relative error of the SSTE estimate as a function of time.}
+    \label{fig:Poiseuille_trace_compare}
+\end{figure}
+To demonstrate that the proposed framework applies to fluid-dynamical systems of practical relevance, we next consider plane Poiseuille flow. Plane Poiseuille flow is the steady laminar flow between two plates separated by a distance \(2h\) in the wall-normal direction. The flow is directed along the streamwise coordinate \(x\), while the plates are taken to be infinite in both the streamwise and spanwise directions. It is driven by a constant pressure gradient, and the base-flow velocity profile is
+\begin{equation}
+  U(y) = -\frac{1}{2\mu}\frac{dp}{dx}\left(h^2-y^2\right).
+\end{equation}
+The flow is non-dimensionalized using the channel half-height and the centerline velocity.
+
+Because the governing equations and the base flow are homogeneous in the streamwise and spanwise directions, it is convenient to represent perturbations in Fourier space with respect to \(x\) and \(z\), as in \citet{schmid-henningson-2001}. The associated streamwise and spanwise wavenumbers are denoted here by \(k_x\) and \(k_z\), respectively. For example, the transformed wall-normal velocity may be written as
+\begin{equation}
+  \hat{v}(y,k_x,k_z)
+  =
+  \int_{-\infty}^{\infty}
+  \int_{-\infty}^{\infty}
+  v(x,y,z)\,
+  \exp\!\left[-i(k_x x+k_z z)\right]
+  \,dx\,dz.
+\end{equation}
+Employing the standard velocity-vorticity formulation of the linearized Navier--Stokes equations yields the Orr--Sommerfeld/Squire system for the perturbation dynamics, following \citet{schmid-henningson-2001},
+\begin{equation}
+  \frac{\partial}{\partial t}
+  \begin{bmatrix}
+    \hat{v}\\
+    \hat{\eta}
+  \end{bmatrix}
+  =
+  -i
+  \begin{bmatrix}
+    \mathcal{L}_{OS} & 0\\
+    \mathcal{L}_{C} & \mathcal{L}_{SQ}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat{v}\\
+    \hat{\eta}
+  \end{bmatrix},
+\end{equation}
+where \(\hat{\eta}\) denotes the transformed wall-normal vorticity and
+\begin{equation}
+  k^2 = k_x^2 + k_z^2.
+\end{equation}
+The Orr--Sommerfeld, coupling, and Squire operators are
+\begin{align}
+  \mathcal{L}_{OS}
+  &=
+  -\left(
+    \frac{\partial^2}{\partial y^2}-k^2
+  \right)^{-1}
+  \left[
+    \frac{1}{i\Rey}
+    \left(
+      \frac{\partial^2}{\partial y^2}-k^2
+    \right)^2
+    - k_x U
+    \left(
+      \frac{\partial^2}{\partial y^2}-k^2
+    \right)
+    + k_x U''
+  \right], \\
+  \mathcal{L}_{C}
+  &= k_z U'', \\
+  \mathcal{L}_{SQ}
+  &= k_x U - \frac{1}{i\Rey}
+  \left(
+    \frac{\partial^2}{\partial y^2}-k^2
+  \right).
+\end{align}
+All quantities are non-dimensional, \(U=U(y)\) denotes the base flow, and \((\cdot)'\) indicates differentiation with respect to \(y\). The disturbance energy in the transformed velocity-vorticity variables is then given, in the standard formulation of \citet{schmid-henningson-2001}, by
+\begin{equation}
+  e
+  =
+  \frac{1}{4\pi^2}
+  \int_{-\infty}^{\infty}
+  \int_{-\infty}^{\infty}
+  \frac{1}{2k^2}
+  \int_{-1}^{1}
+  \left(
+    \left|\frac{\partial \hat{v}}{\partial y}\right|^2
+    +
+    k^2 |\hat{v}|^2
+    +
+    |\hat{\eta}|^2
+  \right)
+  dy\, dk_x\, dk_z.
+\end{equation}
+To further assess the proposed method on a fluid-dynamical system of direct relevance, we consider a simple plane Poiseuille test case. In the computations reported here, the Orr--Sommerfeld/Squire system is discretized with \(N=64\) wall-normal modes, the Reynolds number is set to \(R=1000\), the streamwise wavenumber is fixed to \(k_x=0\), and the spanwise wavenumber is set to \(k_z=2\). Chebyshev collocation differentiation matrices are used in the wall-normal direction, yielding the generalized semi-discrete system \(\mathsfbi{B}\dot{\mathbf{q}}=\mathsfbi{A}\mathbf{q}\). Since the coefficients are time independent, the reference propagator is computed as \(\boldsymbol{\Phi}(T)=\exp(-\ii\mathsfbi{B}^{-1}\mathsfbi{A}T)\). The time integration used by SSTE is carried out with time step \(\Delta t=0.01\) up to final time \(T=0.5\). Within this setting, the normalized mean energy growth \(g(T)\) is computed both exactly and through the SSTE estimator, so that a direct comparison can be made between the true value and its stochastic approximation.
+
+The initial covariance is chosen in the wall-normal direction from a Gaussian kernel of the form
+\begin{equation}
+  C_{00}^{z}(y,y')
+  \propto
+  \exp\!\left(
+    -\frac{(y-y')^2}{\lambda^2}
+  \right),
+\end{equation}
+with correlation length \(\lambda=1\). After normalization, this kernel is projected onto the discrete coefficient space and embedded into the full Orr--Sommerfeld/Squire state. In the present example, only the Orr--Sommerfeld block of the covariance is populated, while the Squire block is initially set to zero. This choice provides a simple but meaningful test in which the initial perturbation statistics are smooth in the wall-normal direction and the subsequent evolution is entirely determined by the linearized Poiseuille dynamics. In figure~\ref{fig:Poiseuille_trace_compare}, we compare the exact \(g(T)\) with the SSTE estimate, using Hutch++ as the underlying randomized trace estimator, and report the corresponding relative error as a function of time. These results show that the proposed estimator accurately reproduces the normalized mean energy growth while retaining the matrix-free structure of the algorithm.
+
+
+\subsubsection{Non-autonomous scalar problem}
+\label{sec:appendix_verification_nonautonomous}
+We finally validate the SSTE construction against a fully non-autonomous linear problem for which \(g(T)\) is available in closed form. The model problem is
+\begin{equation}
+  b(t)\frac{\partial q}{\partial t}
+  =
+  a(t)\frac{\partial^2 q}{\partial z^2}
+  -
+  c(t)\frac{\partial q}{\partial z}
+  +
+  r(t)q .
+\end{equation}
+The initial covariance is chosen as
+\begin{equation}
+  C_{00}^{z}(z,z')
+  =
+  \exp\left(
+    -\frac{(z-z')^2}{\lambda^2}
+  \right).
+\end{equation}
+For this model, the transport term only shifts the solution and does not affect the spatially integrated covariance. The normalized mean energy growth is therefore
+\begin{equation}
+  g(T)
+  =
+  \frac{\tr\left\{\mathsfbi{C}(T)\right\}}{\tr\left\{\mathsfbi{C}(0)\right\}}
+  =
+  \frac{
+    \exp\left(2S(T)\right)
+  }{
+    \sqrt{1+8\tau(T)/\lambda^2}
+  },
+  \qquad
+  \tau(T)=\int_0^T \frac{a(t)}{b(t)}\,dt,
+  \qquad
+  S(T)=\int_0^T \frac{r(t)}{b(t)}\,dt .
+\end{equation}
+This provides a direct reference for the matrix-free SSTE estimate. In the numerical test shown below, the interval is \(z\in[-64,64)\), discretized with \(N=256\) periodic grid points. The first and second spatial derivatives are approximated with eighth-order periodic finite-difference matrices, giving \(\mathsfbi{B}(t)=b(t)\mathsfbi{I}\) and \(\mathsfbi{A}(t)=a(t)\mathsfbi{D}_2-c(t)\mathsfbi{D}_1+r(t)\mathsfbi{I}\). The trace is evaluated with the uniform quadrature weight \(\Delta z\), which cancels in the normalized comparison. The final time range is \(0\le T\le 2\), with time-step target \(\Delta t=0.01\), and the initial covariance length is \(\lambda=0.5\). The scalar coefficients are
+\begin{equation}
+  a(t)=0.2+0.8e^{-t/5},\qquad
+  c(t)=0.25+0.15\cos(1.3t),
+\end{equation}
+\begin{equation}
+  r(t)=0.5\sqrt{t}+0.04\sin(0.9t),\qquad
+  b(t)=1.0+0.2\sin(0.7t).
+\end{equation}
+The SSTE estimate uses \(50\) probes.
+
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/nonautonomous_OU_scalar_B_trace.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/nonautonomous_OU_scalar_B_relative_error.tex}
+    \end{minipage}
+    \caption{Non-autonomous verification of the SSTE estimator. \((a)\) Normalized mean energy growth \(g(T)\) compared with the closed-form prediction. \((b)\) Relative error of the SSTE estimate as a function of final time.}
+    \label{fig:nonautonomous_hutchpp}
+\end{figure}
+
+
+\subsection{Loop-adjoint derivation}
+\label{sec:appendix_loop_adjoint}
+
+The purpose of this section is to construct the operator \(\mathsfbi{T}\) introduced abstractly in \S~\ref{sec:randomized_trace_estimation}. More precisely, we show that the action of
+\begin{equation}
+  \mathsfbi{T}
+  =
+  \boldsymbol{\Phi}^{*}\mathsfbi{W}\boldsymbol{\Phi}
+  \label{eq:loop_T_definition}
+\end{equation}
+can be evaluated through a forward-adjoint loop associated with the non-autonomous linearized dynamics. This provides a matrix-free realization of the operator action \(\mathsfbi{T}(\cdot)\), denoted \(\LDA(\cdot)\), and therefore supplies the missing ingredient required by the randomized trace-estimation procedure.
+
+Consider a generic non-autonomous linear system which, after spatial discretization, may be written as
+\begin{equation}
+  \mathsfbi{B}(t)\,\frac{\mathrm{d}\mathbf{q}}{\mathrm{d}t}
+  =
+  \mathsfbi{A}(t)\,\mathbf{q},
+  \qquad
+  \mathbf{q}(t)
+  =
+  \boldsymbol{\Phi}(t,0)\,\mathbf{q}_0,
+  \label{eq:loop_direct_system}
+\end{equation}
+where \(\boldsymbol{\Phi}(t,0)\) denotes the solution propagator from time \(0\) to time \(t\).
+
+Let
+\begin{equation}
+  J:\mathbb{C}^{n}\to\mathbb{R}
+  \label{eq:loop_functional_definition}
+\end{equation}
+be a real-valued scalar functional of the state. We introduce the Lagrangian
+\begin{equation}
+  \mathcal{L}(\mathbf{q},\boldsymbol{\psi},T)
+  =
+  J(\mathbf{q})
+  -
+  2\,\operatorname{Re}
+  \left\{
+    \int_{0}^{T}
+      \left(
+        \mathsfbi{B}(t)\,\frac{\mathrm{d}\mathbf{q}}{\mathrm{d}t}
+        -
+        \mathsfbi{A}(t)\,\mathbf{q}(t)
+      \right)^{*}
+      \mathsfbi{W}\boldsymbol{\psi}(t)
+    \,\mathrm{d}t
+  \right\},
+  \label{eq:loop_lagrangian}
+\end{equation}
+where \(\boldsymbol{\psi}\) is the adjoint variable. The weight matrix \(\mathsfbi{W}\) defines the weighted product
+\begin{equation}
+  (\mathbf{x},\mathbf{y})_{\mathsfbi{W}}
+  =
+  \mathbf{x}^{*}\mathsfbi{W}\mathbf{y},
+  \label{eq:loop_weighted_inner_product}
+\end{equation}
+where \(\mathsfbi{W}\) is associated with the chosen quadrature rule and norm, and \((\cdot)^{*}\) denotes the conjugate transpose. Below, this product is written explicitly in matrix form rather than with angle brackets. We assume throughout that \(\mathsfbi{W}\) is independent of time.
+
+Stationarity of the Lagrangian requires
+\begin{equation}
+  \delta \mathcal{L}
+  =
+  \frac{\delta \mathcal{L}}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  +
+  \frac{\delta \mathcal{L}}{\delta \boldsymbol{\psi}}\cdot\delta\boldsymbol{\psi}
+  =
+  0 .
+  \label{eq:loop_stationarity}
+\end{equation}
+The variation with respect to the state is understood in the directional sense,
+\begin{equation}
+  \frac{\delta \mathcal{L}}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  =
+  \lim_{\varepsilon\to 0}
+  \frac{
+    \mathcal{L}(\mathbf{q}+\varepsilon\,\delta\mathbf{q},\boldsymbol{\psi},T)
+    -
+    \mathcal{L}(\mathbf{q},\boldsymbol{\psi},T)
+  }{\varepsilon},
+  \label{eq:loop_directional_variation_q}
+\end{equation}
+with an analogous definition for variations with respect to \(\boldsymbol{\psi}\).
+
+Stationarity with respect to \(\boldsymbol{\psi}\) gives
+\begin{equation}
+  \frac{\delta \mathcal{L}}{\delta \boldsymbol{\psi}}\cdot\delta\boldsymbol{\psi}
+  =
+  2\,\operatorname{Re}
+  \left\{
+    \int_{0}^{T}
+      \left(
+        \mathsfbi{B}\,\frac{\mathrm{d}\mathbf{q}}{\mathrm{d}t}
+        -
+        \mathsfbi{A}\,\mathbf{q}
+      \right)^{*}
+      \mathsfbi{W}\delta\boldsymbol{\psi}
+    \,\mathrm{d}t
+  \right\}
+  =
+  0,
+  \qquad
+  \forall\,\delta\boldsymbol{\psi}.
+  \label{eq:loop_variation_psi}
+\end{equation}
+Since this condition must hold for arbitrary \(\delta\boldsymbol{\psi}\), we recover the direct equation
+\begin{equation}
+  \mathsfbi{B}\,\frac{\mathrm{d}\mathbf{q}}{\mathrm{d}t}
+  -
+  \mathsfbi{A}\,\mathbf{q}
+  =
+  \mathbf{0}.
+  \label{eq:loop_recovered_direct_equation}
+\end{equation}
+
+We next impose stationarity with respect to the state variable. The corresponding variation is
+\begin{equation}
+  \frac{\delta \mathcal{L}}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  =
+  \frac{\delta J}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  -
+  2\,\operatorname{Re}
+  \left\{
+  \int_{0}^{T}
+    \left(
+      \mathsfbi{B}\,\frac{\mathrm{d}\,\delta\mathbf{q}}{\mathrm{d}t}
+      -
+      \mathsfbi{A}\,\delta\mathbf{q}
+    \right)^{*}
+    \mathsfbi{W}\boldsymbol{\psi}
+  \,\mathrm{d}t
+  \right\}.
+  \label{eq:loop_variation_q_before_parts}
+\end{equation}
+The adjoint of a matrix with respect to the weighted product \eqref{eq:loop_weighted_inner_product} is defined by
+\begin{equation}
+  \mathsfbi{M}^{\dagger}
+  =
+  \mathsfbi{W}^{-1}\mathsfbi{M}^{*}\mathsfbi{W}.
+  \label{eq:loop_weighted_adjoint_definition}
+\end{equation}
+Thus,
+\begin{equation}
+  \mathsfbi{A}^{\dagger}(t)
+  =
+  \mathsfbi{W}^{-1}\mathsfbi{A}^{*}(t)\mathsfbi{W},
+  \qquad
+  \mathsfbi{B}^{\dagger}(t)
+  =
+  \mathsfbi{W}^{-1}\mathsfbi{B}^{*}(t)\mathsfbi{W}.
+  \label{eq:loop_weighted_adjoint_AB}
+\end{equation}
+Using these definitions and integrating the time-derivative term in \eqref{eq:loop_variation_q_before_parts} by parts, we obtain
+\begin{equation}
+\begin{aligned}
+  \frac{\delta \mathcal{L}}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  &=
+  \frac{\delta J}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  -
+  2\,\operatorname{Re}
+  \left\{
+  \left.
+    \left(
+      \mathsfbi{B}\,\delta\mathbf{q}
+    \right)^{*}
+    \mathsfbi{W}\boldsymbol{\psi}
+  \right|_{0}^{T}
+  \right\}
+  \\
+  &\quad
+  +
+  2\,\operatorname{Re}
+  \left\{
+  \int_{0}^{T}
+    \delta\mathbf{q}^{*}
+    \mathsfbi{W}
+    \left[
+      \frac{\mathrm{d}}{\mathrm{d}t}
+      \left(
+        \mathsfbi{B}^{\dagger}(t)\boldsymbol{\psi}
+      \right)
+      +
+      \mathsfbi{A}^{\dagger}(t)\boldsymbol{\psi}
+    \right]
+  \,\mathrm{d}t
+  \right\}.
+\end{aligned}
+\label{eq:loop_variation_q_after_parts}
+\end{equation}
+Since \(\delta\mathbf{q}\) is arbitrary in the interior of the time interval, stationarity gives the adjoint equation
+\begin{equation}
+  \frac{\mathrm{d}}{\mathrm{d}t}
+  \left(
+    \mathsfbi{B}^{\dagger}(t)\boldsymbol{\psi}
+  \right)
+  +
+  \mathsfbi{A}^{\dagger}(t)\boldsymbol{\psi}
+  =
+  \mathbf{0},
+  \label{eq:loop_adjoint_equation}
+\end{equation}
+to be integrated backward in time.
+
+The boundary term in \eqref{eq:loop_variation_q_after_parts} may be written as
+\begin{equation}
+  \left.
+    \left(
+      \mathsfbi{B}\,\delta\mathbf{q}
+    \right)^{*}
+    \mathsfbi{W}\boldsymbol{\psi}
+  \right|_{0}^{T}
+  =
+  \delta\mathbf{q}^{*}(T)
+  \mathsfbi{W}
+  \mathsfbi{B}^{\dagger}(T)\boldsymbol{\psi}(T)
+  -
+  \delta\mathbf{q}^{*}(0)
+  \mathsfbi{W}
+  \mathsfbi{B}^{\dagger}(0)\boldsymbol{\psi}(0).
+  \label{eq:loop_boundary_term}
+\end{equation}
+The remaining boundary contribution must balance the variation of the objective functional, namely
+\begin{equation}
+  \frac{\delta J}{\delta \mathbf{q}}\cdot\delta\mathbf{q}
+  =
+  2\,\operatorname{Re}
+  \left\{
+  \delta\mathbf{q}^{*}(T)
+  \mathsfbi{W}
+  \mathsfbi{B}^{\dagger}(T)\boldsymbol{\psi}(T)
+  -
+  \delta\mathbf{q}^{*}(0)
+  \mathsfbi{W}
+  \mathsfbi{B}^{\dagger}(0)\boldsymbol{\psi}(0)
+  \right\}.
+  \label{eq:loop_boundary_balance_general}
+\end{equation}
+
+The derivation above is general. In a standard adjoint-optimization setting, the functional \(J\) is prescribed and the adjoint equation, together with the associated boundary conditions, is used to compute sensitivities of \(J\). In the present work, the same formalism is instead used to construct the operator \(\mathsfbi{T}\) required by the stochastic trace estimator. More precisely, the action of \(\mathsfbi{T}\) on a vector is realized through a forward integration, a terminal projection, and a backward adjoint integration.
+
+To make this connection explicit, consider the terminal quadratic functional
+\begin{equation}
+  J(\mathbf{q}(T))
+  =
+  \mathbf{q}^{*}(T)\mathsfbi{W}\mathbf{q}(T).
+  \label{eq:loop_terminal_quadratic_functional}
+\end{equation}
+Its variation is
+\begin{equation}
+  \delta J
+  =
+  2\,\operatorname{Re}
+  \left\{
+    \delta\mathbf{q}^{*}(T)
+    \mathsfbi{W}
+    \mathbf{q}(T)
+  \right\}.
+  \label{eq:loop_terminal_quadratic_variation}
+\end{equation}
+If the initial condition is fixed while deriving the adjoint equation, so that
+\begin{equation}
+  \delta\mathbf{q}(0)=\mathbf{0},
+  \label{eq:loop_fixed_initial_variation}
+\end{equation}
+comparison of \eqref{eq:loop_boundary_balance_general} with \eqref{eq:loop_terminal_quadratic_variation} gives the terminal condition
+\begin{equation}
+  \mathsfbi{B}^{\dagger}(T)\boldsymbol{\psi}(T)
+  =
+  \mathbf{q}(T).
+  \label{eq:loop_adjoint_terminal_condition}
+\end{equation}
+The loop-adjoint procedure therefore consists of first integrating the direct system forward in time,
+\begin{equation}
+  \mathbf{q}(T)
+  =
+  \boldsymbol{\Phi}(T,0)\,\mathbf{q}_0,
+  \label{eq:loop_forward_solution}
+\end{equation}
+and then using the terminal state \(\mathbf{q}(T)\) to initialize the adjoint evolution through
+\begin{equation}
+  \mathsfbi{B}^{\dagger}(T)\boldsymbol{\psi}(T)
+  =
+  \mathbf{q}(T).
+  \label{eq:loop_terminal_projection}
+\end{equation}
+The adjoint system \eqref{eq:loop_adjoint_equation} is then integrated backward from \(T\) to \(0\). The value obtained at the initial time satisfies
+\begin{equation}
+  \mathbf{q}^{*}(T)\mathsfbi{W}\mathbf{q}(T)
+  =
+  \mathbf{q}^{*}(0)
+  \mathsfbi{W}
+  \mathsfbi{B}^{\dagger}(0)\boldsymbol{\psi}(0).
+  \label{eq:loop_inner_product_identity}
+\end{equation}
+Thus, the loop-adjoint technique allows weighted products at the final time to be evaluated through a forward-backward evolution.
+
+Equation \eqref{eq:loop_inner_product_identity} identifies the matrix-free action required by the stochastic trace estimator. In particular, we define
+\begin{equation}
+  \mathsfbi{T}\mathbf{q}_0
+  =
+  \mathsfbi{B}^{\dagger}(0)\boldsymbol{\psi}(0),
+  \label{eq:loop_T_action}
+\end{equation}
+where \(\boldsymbol{\psi}\) is obtained from the forward-adjoint loop. Hence
+\begin{equation}
+  \mathbf{q}_0^{*}
+  \mathsfbi{W}
+  \mathsfbi{T}\mathbf{q}_0
+  =
+  \mathbf{q}^{*}(T)\mathsfbi{W}\mathbf{q}(T).
+  \label{eq:loop_T_quadratic_form}
+\end{equation}
+This is precisely the matrix-free action needed to evaluate the quadratic forms required by Hutchinson-type estimators, or the operator-vector products required by Hutch++.
+
+It is often convenient to rewrite the backward adjoint integration using a forward time variable. Let
+\begin{equation}
+  \tau = T-t,
+  \qquad
+  \tilde{\boldsymbol{\psi}}(\tau)
+  =
+  \boldsymbol{\psi}(T-\tau).
+  \label{eq:loop_shifted_time_definition}
+\end{equation}
+Then \(\tau=0\) corresponds to the terminal time \(T\), while \(\tau=T\) corresponds to the initial time \(0\). In terms of \(\tau\), \eqref{eq:loop_adjoint_equation} becomes
+\begin{equation}
+  \frac{\mathrm{d}}{\mathrm{d}\tau}
+  \left(
+    \mathsfbi{B}^{\dagger}(T-\tau)\,
+    \tilde{\boldsymbol{\psi}}(\tau)
+  \right)
+  =
+  \mathsfbi{A}^{\dagger}(T-\tau)\,
+  \tilde{\boldsymbol{\psi}}(\tau),
+  \label{eq:loop_adjoint_shifted_time}
+\end{equation}
+with initial condition
+\begin{equation}
+  \mathsfbi{B}^{\dagger}(T)\,
+  \tilde{\boldsymbol{\psi}}(0)
+  =
+  \mathbf{q}(T).
+  \label{eq:loop_adjoint_shifted_initial_condition}
+\end{equation}
+The dependence on \(T-\tau\) must be retained. Introducing the shifted time variable allows the adjoint equation to be integrated forward in the artificial time \(\tau\), but it does not remove the non-autonomous character of the problem. A schematic representation of the procedure is shown in figure~\ref{fig:loop-adjoint}.
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[
+    font=\footnotesize,
+    block/.style={
+      draw,
+      rectangle,
+      minimum height=1.1cm,
+      minimum width=4.2cm,
+      align=center
+    },
+    arrow/.style={->, thick}
+  ]
+
+  \node (q0) {$\mathbf{q}_0$};
+
+  \node[block, right=1.0cm of q0] (forward)
+  {Forward solve\\
+   $\mathsfbi{B}(t)\,\dot{\mathbf{q}}(t) = \mathsfbi{A}(t)\,\mathbf{q}(t)$\\
+   $\mathbf{q}(0)=\mathbf{q}_0$};
+
+  \node[block, right=2.6cm of forward] (projT)
+  {Terminal projection\\
+   $\mathsfbi{B}^{\dagger}(T)\,\boldsymbol{\psi}(T)=\mathbf{q}(T)$};
+
+  \node[block, below=1.0cm of projT] (adjoint)
+  {Adjoint solve\\
+   $\dfrac{\mathrm{d}}{\mathrm{d}\tau}
+   \left(
+     \mathsfbi{B}^{\dagger}(T-\tau)\tilde{\boldsymbol{\psi}}(\tau)
+   \right)
+   =
+   \mathsfbi{A}^{\dagger}(T-\tau)\tilde{\boldsymbol{\psi}}(\tau)$\\
+   $\mathsfbi{B}^{\dagger}(T)\tilde{\boldsymbol{\psi}}(0)=\mathbf{q}(T)$};
+
+  \node[block, left=2.6cm of adjoint] (yblock)
+  {$\mathsfbi{T}\mathbf{q}_0
+  =
+  \mathsfbi{B}^{\dagger}(0)\tilde{\boldsymbol{\psi}}(T)$};
+
+  \node[left=1.0cm of yblock] (output) {$\mathsfbi{T}\mathbf{q}_0$};
+
+  \draw[arrow] (q0) -- (forward) node[midway,above] {$\mathbf{q}(t)$};
+  \draw[arrow] (forward) -- (projT) node[midway,above] {$\mathbf{q}(T)$};
+  \draw[arrow] (projT) -- (adjoint) node[midway,right] {$\boldsymbol{\psi}(T)$};
+  \draw[arrow] (adjoint) -- (yblock) node[midway,below] {$\tilde{\boldsymbol{\psi}}(T)$};
+  \draw[arrow] (yblock) -- (output);
+
+  \end{tikzpicture}
+  \caption{Schematic representation of the loop-adjoint procedure used to evaluate the matrix-free action of \(\mathsfbi{T}\).}
+  \label{fig:loop-adjoint}
+\end{figure}
+This construction is closely connected to the forward-backward structure that appears in Kolmogorov and Fokker--Planck formulations. The direct problem is evolved forward in time, whereas the adjoint problem is evolved backward in the physical time variable. The essential distinction from the autonomous setting is that the matrices \(\mathsfbi{A}(t)\) and \(\mathsfbi{B}(t)\) retain their explicit time dependence. Consequently, even after introducing the shifted time variable \(\tau=T-t\), the adjoint problem remains non-autonomous. The problem therefore cannot be reduced to a genuinely forward autonomous evolution.
+
+The two ingredients required by the matrix-free trace estimator have now been established. Hutchinson-type estimators require repeated evaluations of quadratic forms, or equivalently operator actions of the form \(\mathsfbi{T}\mathbf{q}\). The loop-adjoint procedure provides precisely this action through time stepping alone. This motivates the stochastic stepping trace estimator (SSTE), in which randomized trace estimation is combined with repeated forward and adjoint time integrations to estimate the mean energy growth without assembling either the propagator \(\boldsymbol{\Phi}\) or the operator \(\mathsfbi{T}\).
+\end{appendices}

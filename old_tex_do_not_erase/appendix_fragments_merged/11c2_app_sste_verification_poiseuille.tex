@@ -1,0 +1,113 @@
+\subsubsection{Plane Poiseuille flow}
+\label{sec:appendix_verification_poiseuille}
+\begin{figure}[t]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/Poiseuille_eig_vs_hutch_slowSpectrum.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/Poiseuille_eig_vs_hutch_fastSpectrum.tex}
+    \end{minipage}
+    \caption{Plane-Poiseuille relative error versus stepper calls for \((a)\) slow and \((b)\) fast covariance-spectrum decay. (\solidlegend) deterministic truncation; (\dashlegend\circlegend) SSTE; dotted line: \(\epsilon_{\mathrm{rel}}=10^{-2}\).}
+    \label{fig:Poiseuille_eig_vs_sste}
+\end{figure}
+To demonstrate that the proposed framework applies to fluid-dynamical systems of practical relevance, we next consider plane Poiseuille flow. Plane Poiseuille flow is the steady laminar flow between two plates separated by a distance \(2h\) in the wall-normal direction. The flow is directed along the streamwise coordinate \(x\), while the plates are taken to be infinite in both the streamwise and spanwise directions. It is driven by a constant pressure gradient, and the base-flow velocity profile is
+\begin{equation}
+  U(y) = -\frac{1}{2\mu}\frac{dp}{dx}\left(h^2-y^2\right).
+\end{equation}
+The flow is non-dimensionalized using the channel half-height and the centerline velocity.
+
+Because the governing equations and the base flow are homogeneous in the streamwise and spanwise directions, it is convenient to represent perturbations in Fourier space with respect to \(x\) and \(z\), as in \citet{schmid-henningson-2001}. The associated streamwise and spanwise wavenumbers are denoted here by \(k_x\) and \(k_z\), respectively. For example, the transformed wall-normal velocity may be written as
+\begin{equation}
+  \hat{v}(y,k_x,k_z)
+  =
+  \int_{-\infty}^{\infty}
+  \int_{-\infty}^{\infty}
+  v(x,y,z)\,
+  \exp\!\left[-i(k_x x+k_z z)\right]
+  \,dx\,dz.
+\end{equation}
+Employing the standard velocity-vorticity formulation of the linearized Navier--Stokes equations yields the Orr--Sommerfeld/Squire system for the perturbation dynamics, following \citet{schmid-henningson-2001},
+\begin{equation}
+  \frac{\partial}{\partial t}
+  \begin{bmatrix}
+    \hat{v}\\
+    \hat{\eta}
+  \end{bmatrix}
+  =
+  -i
+  \begin{bmatrix}
+    \mathcal{L}_{OS} & 0\\
+    \mathcal{L}_{C} & \mathcal{L}_{SQ}
+  \end{bmatrix}
+  \begin{bmatrix}
+    \hat{v}\\
+    \hat{\eta}
+  \end{bmatrix},
+\end{equation}
+where \(\hat{\eta}\) denotes the transformed wall-normal vorticity and
+\begin{equation}
+  k^2 = k_x^2 + k_z^2.
+\end{equation}
+The Orr--Sommerfeld, coupling, and Squire operators are
+\begin{align}
+  \mathcal{L}_{OS}
+  &=
+  -\left(
+    \frac{\partial^2}{\partial y^2}-k^2
+  \right)^{-1}
+  \left[
+    \frac{1}{i\Rey}
+    \left(
+      \frac{\partial^2}{\partial y^2}-k^2
+    \right)^2
+    - k_x U
+    \left(
+      \frac{\partial^2}{\partial y^2}-k^2
+    \right)
+    + k_x U''
+  \right], \\
+  \mathcal{L}_{C}
+  &= k_z U'', \\
+  \mathcal{L}_{SQ}
+  &= k_x U - \frac{1}{i\Rey}
+  \left(
+    \frac{\partial^2}{\partial y^2}-k^2
+  \right).
+\end{align}
+All quantities are non-dimensional, \(U=U(y)\) denotes the base flow, and \((\cdot)'\) indicates differentiation with respect to \(y\). The disturbance energy in the transformed velocity-vorticity variables is then given, in the standard formulation of \citet{schmid-henningson-2001}, by
+\begin{equation}
+  e
+  =
+  \frac{1}{4\pi^2}
+  \int_{-\infty}^{\infty}
+  \int_{-\infty}^{\infty}
+  \frac{1}{2k^2}
+  \int_{-1}^{1}
+  \left(
+    \left|\frac{\partial \hat{v}}{\partial y}\right|^2
+    +
+    k^2 |\hat{v}|^2
+    +
+    |\hat{\eta}|^2
+  \right)
+  dy\, dk_x\, dk_z.
+\end{equation}
+To further assess the proposed method on a fluid-dynamical system of direct relevance, we consider a simple plane Poiseuille test case. In the computations reported here, the Orr--Sommerfeld/Squire system is discretized with \(N=64\) wall-normal modes, the Reynolds number is set to \(R=1000\), the streamwise wavenumber is fixed to \(k_x=0\), and the spanwise wavenumber is set to \(k_z=2\). Chebyshev collocation differentiation matrices are used in the wall-normal direction, yielding the generalized semi-discrete system \(\mathsfbi{B}\dot{\mathbf{q}}=\mathsfbi{A}\mathbf{q}\). Since the coefficients are time independent, the reference propagator is computed as \(\boldsymbol{\Phi}(T)=\exp(-\ii\mathsfbi{B}^{-1}\mathsfbi{A}T)\). The time integration used by SSTE is carried out with time step \(\Delta t=0.01\) up to final time \(T=0.5\). Within this setting, the normalized mean energy growth \(g(T)\) is computed both exactly and through the SSTE estimator, so that a direct comparison can be made between the true value and its stochastic approximation.
+
+The initial covariance is chosen in the wall-normal direction from a Gaussian kernel of the form
+\begin{equation}
+  C_{00}^{z}(y,y')
+  \propto
+  \exp\!\left(
+    -\frac{(y-y')^2}{\lambda^2}
+  \right),
+\end{equation}
+with correlation length \(\lambda=1\). After normalization, this kernel is projected onto the discrete coefficient space and embedded into the full Orr--Sommerfeld/Squire state. In the present example, only the Orr--Sommerfeld block of the covariance is populated, while the Squire block is initially set to zero. This choice provides a simple but meaningful test in which the initial perturbation statistics are smooth in the wall-normal direction and the subsequent evolution is entirely determined by the linearized Poiseuille dynamics.
+
+For \cref{fig:Poiseuille_eig_vs_sste}, \(N=256\), \(T\leq20\), and \(\lambda_j\propto j^{-1/10}\) or \(\exp[-0.25(j-1)]\). In the slow case, deterministic truncation requires about 255 calls to reach \(10^{-2}\) error, compared with 18 calls for SSTE.

@@ -1,0 +1,119 @@
+\section{Variable-density effects}
+\label{sec:variable_density}
+
+\newcommand{\sigmarow}[3]{%
+  \begin{minipage}{0.32\linewidth}\centering\input{figures/#1_Amum0.90_#2_sigma.tex}\end{minipage}\hfill
+  \begin{minipage}{0.32\linewidth}\centering\input{figures/#1_Amup0.00_#2_sigma.tex}\end{minipage}\hfill
+  \begin{minipage}{0.32\linewidth}\centering\input{figures/#1_Amup0.90_#2_sigma.tex}\end{minipage}%
+}
+
+% --- Sc = 1 ---
+
+\begin{figure}[p]
+  \centering
+  \sigmarow{VD_P1_Sc1_At0p05}{full}{}
+  \caption{Instantaneous growth-rate fields $\sigma(k,t)$ for $\mathrm{Sc}=1$, $A_t=0.05$.
+           Columns correspond to $A_\mu=-0.90$ (left), $A_\mu=0$ (centre), and $A_\mu=0.90$ (right).}
+  \label{fig:VD_sigma_Sc1_At0p05}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \sigmarow{VD_P1_Sc1_At0p40}{full}{}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $A_t=0.40$.}
+  \label{fig:VD_sigma_Sc1_At0p40}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc1_At0p75_Amum0.90_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc1_At0p75_Amum0.90_zoom_sigma.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc1_At0p75_Amup0.00_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc1_At0p75_Amup0.00_zoom_sigma.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc1_At0p75_Amup0.90_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc1_At0p75_Amup0.90_zoom_sigma.tex}
+  \end{minipage}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $A_t=0.75$.
+           Rows show the early-time range $t\in[0,T_{\min}]$ (top) and the late-time range
+           $t\in[T_{\min},T_{\max}]$ (bottom).}
+  \label{fig:VD_sigma_Sc1_At0p75}
+\end{figure}
+
+% --- Sc = 5 ---
+
+\clearpage
+\begin{figure}[p]
+  \centering
+  \sigmarow{VD_P1_Sc5_At0p05}{full}{}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $\mathrm{Sc}=5$, $A_t=0.05$.}
+  \label{fig:VD_sigma_Sc5_At0p05}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \sigmarow{VD_P1_Sc5_At0p40}{full}{}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $\mathrm{Sc}=5$, $A_t=0.40$.}
+  \label{fig:VD_sigma_Sc5_At0p40}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc5_At0p75_Amum0.90_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc5_At0p75_Amum0.90_zoom_sigma.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc5_At0p75_Amup0.00_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc5_At0p75_Amup0.00_zoom_sigma.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc5_At0p75_Amup0.90_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc5_At0p75_Amup0.90_zoom_sigma.tex}
+  \end{minipage}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $\mathrm{Sc}=5$, $A_t=0.75$.
+           Rows show the early-time range $t\in[0,T_{\min}]$ (top) and the late-time range
+           $t\in[T_{\min},T_{\max}]$ (bottom).}
+  \label{fig:VD_sigma_Sc5_At0p75}
+\end{figure}
+
+% --- Sc = 40 ---
+
+\clearpage
+\begin{figure}[p]
+  \centering
+  \sigmarow{VD_P1_Sc40_At0p05}{full}{}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $\mathrm{Sc}=40$, $A_t=0.05$.}
+  \label{fig:VD_sigma_Sc40_At0p05}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+  \centering
+  \sigmarow{VD_P1_Sc40_At0p40}{full}{}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $\mathrm{Sc}=40$, $A_t=0.40$.}
+  \label{fig:VD_sigma_Sc40_At0p40}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+  \centering
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc40_At0p75_Amum0.90_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc40_At0p75_Amum0.90_zoom_sigma.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc40_At0p75_Amup0.00_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc40_At0p75_Amup0.00_zoom_sigma.tex}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.32\linewidth}\centering
+    \input{figures/VD_P1_Sc40_At0p75_Amup0.90_full_sigma.tex}\\[2pt]
+    \input{figures/VD_P1_Sc40_At0p75_Amup0.90_zoom_sigma.tex}
+  \end{minipage}
+  \caption{As figure~\ref{fig:VD_sigma_Sc1_At0p05} but for $\mathrm{Sc}=40$, $A_t=0.75$.
+           Rows show the early-time range $t\in[0,T_{\min}]$ (top) and the late-time range
+           $t\in[T_{\min},T_{\max}]$ (bottom).}
+  \label{fig:VD_sigma_Sc40_At0p75}
+\end{figure}

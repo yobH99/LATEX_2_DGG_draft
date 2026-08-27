@@ -1,0 +1,267 @@
+\section{Governing equations}%
+\label{sec:governing_equation}
+We consider the flow of two miscible fluids with reference densities \(\rho_1\) and \(\rho_2\)
+and dynamic viscosities \(\mu_1\) and \(\mu_2\). The governing equations are made dimensionless using reference quantities for density
+\(\rho_r\), length \(L_r\), velocity \(U_r\), dynamic viscosity \(\mu_r\), gravitational
+acceleration \(g\), and mass diffusivity \(\mathcal{D}\). From these, the Reynolds, Froude, and Schmidt numbers
+are defined as
+\begin{equation}
+    \label{eq:Re_Fr_definitions}
+    \Rey = \frac{\rho_r L_r U_r}{\mu_r}, \qquad \Frd = \frac{U_r}{\sqrt{g L_r}}, \qquad \Sch = \frac{\mu_r/\rho_r}{\mathcal{D}}.
+\end{equation}
+The present problem has no externally imposed length or velocity scale, so the reference length and velocity are set by the classical viscous-gravitational scales
+of~\citet{chandrasekhar-1961}. With this choice, the Reynolds and Froude numbers reduce to unity, and the reference scales become
+\begin{equation}
+    \label{eq:chandrasekhar_scaling}
+    U_r = (\nu_r g)^{1/3}, \qquad T_r = \left(\frac{\nu_r}{g^{2}}\right)^{1/3}, \qquad L_r = \left(\frac{\nu_r^{2}}{g}\right)^{1/3},
+\end{equation}
+where \(\nu_r=\mu_r/\rho_r\) is the reference kinematic viscosity. The reference density
+and dynamic viscosity are taken as the arithmetic means of the two fluids,
+\begin{equation}
+    \label{eq:reference_quantities}
+    \rho_r = \frac{\rho_1 + \rho_2}{2}, \qquad \mu_r = \frac{\mu_1 + \mu_2}{2},
+\end{equation}
+and the density and viscosity contrasts are measured by the density Atwood number \(\Atw\) and a corresponding viscosity Atwood number \(A_{\mu}\),
+\begin{equation}
+    \label{eq:atwood_numbers}
+    \Atw = \frac{\rho_2 - \rho_1}{\rho_2 + \rho_1}, \qquad A_{\mu} = \frac{\mu_2 - \mu_1}{\mu_2 + \mu_1}.
+\end{equation}
+In this work we consider two models for the Rayleigh--Taylor instability. The first, presented in \S\ref{sec:bq_equation}, is the Boussinesq formulation, valid for weak stratification, which offers the simplest setting in which to develop the statistical approach, understand the physics it predicts, and validate it against three-dimensional direct numerical simulation. The second, presented in \S\ref{sec:vd_equation}, is the full variable-density formulation, which retains non-Boussinesq effects during the transient instability.
+
+\subsection{Boussinesq approximation}
+\label{sec:bq_equation}
+The Boussinesq approximation for buoyant stratified flow is the simplest model that can be employed to analyze the effect of stratification on a fluid-dynamics system. In such a system the flow can be assumed to be incompressible, with small variations of density with respect to a reference state, such that any variation in the density affects solely the buoyant gravitational term \citep{gauthier-schneider-2015}. In this limit the density can be assumed to be a linear function of the local concentration of the mixture and the governing equations are expressed as
+\begin{subequations}
+    \label{eq:bq_nl_continuous}
+    \begin{align}
+        \label{eq:bq_nl_continuous_momentum}
+        \diff{\boldsymbol{u}}{t} + (\boldsymbol{u}\bcdot\bnabla)\boldsymbol{u} &= -\bnabla p + \nabla^{2}\boldsymbol{u} - 2\Atw\,c\,\boldsymbol{e}_{z}, \\
+        \label{eq:bq_nl_continuous_scalar}
+        \diff{c}{t} + \boldsymbol{u}\bcdot\bnabla c &= \Sch^{-1}\nabla^{2}c, \\
+        \label{eq:bq_nl_continuous_continuity}
+        \bnabla\bcdot\boldsymbol{u} &= 0,
+    \end{align}
+\end{subequations}
+where \(\boldsymbol{u}(\boldsymbol{x},t)\) is the velocity field, \(p(\boldsymbol{x},t)\) is the pressure field, and \(c(\boldsymbol{x},t)\) is the scalar concentration field. Although the Boussinesq approximation is formally the limit \(\Atw\to 0\), the Atwood number still appears in the buoyant force; here it does not measure a finite density contrast but simply sets the strength of buoyancy, and hence the characteristic timescale of the instability \citep{boffetta-mazzino-2017}. The viscosity is taken constant throughout the mixture by setting \(A_{\mu}=0\); the effect of viscosity stratification is deferred to the variable-density model of \S\ref{sec:vd_equation}, which recovers the Boussinesq approximation in the limit of weak stratification.
+
+Introducing the state vector \(\boldsymbol{Q}(\boldsymbol{x},t) = \left[ u, v, w, p, c \right]\), the nonlinear system can be written compactly as
+\begin{equation}
+    \label{eq:compact_nl_continuous}
+    \diff{\boldsymbol{Q}}{t} = \mathcal{N}\!\left( \boldsymbol{Q} \right).
+\end{equation}
+We introduce the perturbation expansion
+\begin{equation}
+    \label{eq:perturbation_expansion}
+    \boldsymbol{Q}(\boldsymbol{x},t) = \boldsymbol{Q}_0(\boldsymbol{x},t) + \epsilon\,\boldsymbol{Q}'(\boldsymbol{x},t) + O(\epsilon^2),
+    \qquad 0 < \epsilon \ll 1,
+\end{equation}
+where \(\boldsymbol{Q}_0\) is a solution of the nonlinear equations, hereafter referred to as the base state, and \(\boldsymbol{Q}'\) is the perturbation about this base state. Substituting this expansion into the compact form and collecting terms of equal order in \(\epsilon\), we obtain the governing equations
+\begin{subequations}
+    \label{eq:compact_lin_continuous}
+    \begin{align}
+        \label{eq:compact_lin_continuous_0th}
+        \diff{\boldsymbol{Q}_0}{t} &= \mathcal{N}\!\left( \boldsymbol{Q}_0 \right), \\
+        \label{eq:compact_lin_continuous_1th}
+        \diff{\boldsymbol{Q}'}{t} &= \mathcal{L}(\boldsymbol{Q}_0)\,\boldsymbol{Q}',
+    \end{align}
+\end{subequations}
+where \(\mathcal{L}\) is the Jacobian of the nonlinear Boussinesq operator.
+
+Since no intrinsic length or time scale is imposed on the system, the base-state evolution is assumed to depend only on the vertical coordinate and time~\citep{prathama-pantano-2021}, leading to \(\boldsymbol{u}_0=0\) and
+\begin{equation}
+    \label{eq:bq_base_state}
+    c_0(z,t) = \frac{1}{2}\erf\!\left(\frac{z}{\delta(t)}\right), \qquad \delta(t) = \sqrt{4t/\Sch}.
+\end{equation}
+The Boussinesq linearized equations can be further simplified by eliminating the pressure term; the resulting system for the reduced perturbation state \(\boldsymbol{q}=[w,c]^{\top}\) is
+\begin{equation}
+    \label{eq:bq_lin_continuous}
+    \begin{pmatrix}
+        \nabla^{2} & 0 \\
+        0 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+        \partial_t\, w \\[4pt]
+        \partial_t\, c
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \nabla^{4} & 2\Atw\,\nabla_{xy}^{2} \\[4pt]
+        -\partial_{z}c_{0} & \Sch^{-1}\nabla^{2}
+    \end{pmatrix}
+    \begin{pmatrix}
+        w \\[4pt]
+        c
+    \end{pmatrix}.
+\end{equation}
+The boundary conditions enforce vanishing vertical velocity and its vertical gradient at the
+domain boundaries, and require the concentration perturbation to vanish in the far field,
+\begin{equation}
+    \label{eq:bq_boundary_conditions}
+    w(\pm L_z) = 0, \qquad \left.\frac{\partial w}{\partial z}\right|_{\pm L_z} = 0, \qquad
+    c(\pm L_z) = 0.
+\end{equation}
+Assuming homogeneity in the horizontal directions \((x,y)\), the perturbation fields are decomposed into Fourier modes. Fourier-transforming the reduced system then yields, for the
+state vector \(\hat{\boldsymbol{q}}=[\hat{w},\hat{c}]^{\top}\),
+\begin{equation}
+    \label{eq:lti_dz_k_boussinesq}
+    \begin{pmatrix}
+        \partial_{zz}-k^{2} & 0 \\
+        0 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+        \partial_t\, \hat{w} \\[4pt]
+        \partial_t\, \hat{c}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \left(\partial_{zz}-k^{2}\right)^{2} & -2\Atw\,k^{2} \\[4pt]
+        -\partial_{z}c_{0} & \Sch^{-1}\left(\partial_{zz}-k^{2}\right)
+    \end{pmatrix}
+    \begin{pmatrix}
+        \hat{w} \\[4pt]
+        \hat{c}
+    \end{pmatrix},
+\end{equation}
+where \(\hat{w}(k,z,t)\) and \(\hat{c}(k,z,t)\) are the Fourier-transformed velocity and
+concentration perturbations. After discretizing the inhomogeneous vertical direction, the state associated with a given wavenumber is denoted by \(\hat{\mathbf{q}}_{k}(t)\in\mathbb{C}^{2N_z}\), where \(N_z\) is the number of vertical discretization points. The continuous differential operators then become the time-dependent matrices \(\mathsfbi{A}_{k}(t)\) and \(\mathsfbi{B}_{k}(t)\), and the linearized dynamics take the form
+\begin{equation}
+    \label{eq:semidiscrete_system}
+    \mathsfbi{B}_{k}(t)\,\difft{\hat{\mathbf{q}}_{k}}{t}
+    =
+    \mathsfbi{A}_{k}(t)\,\hat{\mathbf{q}}_{k},
+    \qquad
+    \hat{\mathbf{q}}_{k}(0)=\hat{\mathbf{q}}_{0,k}.
+\end{equation}
+This semi-discrete initial-value problem defines the discrete propagator
+\(\boldsymbol{\Phi}_{k}(t,0)\) through
+\begin{equation}
+    \label{eq:discrete_propagator}
+    \hat{\mathbf{q}}_{k}(t)
+    =
+    \boldsymbol{\Phi}_{k}(t,0)\,\hat{\mathbf{q}}_{0,k},
+    \qquad
+    \boldsymbol{\Phi}_{k}(0,0)=\mathsfbi{I}.
+\end{equation}
+The two-argument form \(\boldsymbol{\Phi}_{k}(t,0)\) is cumbersome for sustained use. We therefore adopt the condensed notation
+\begin{equation}
+    \label{eq:propagator_shorthand}
+    \boldsymbol{\Phi}_{t,k} \equiv \boldsymbol{\Phi}_{k}(t,0),
+\end{equation}
+so that the discrete propagator takes the concise form \(\hat{\mathbf{q}}_{k}(t)=\boldsymbol{\Phi}_{t,k}\,\hat{\mathbf{q}}_{0,k}\). This shorthand is used throughout the remainder of this work.
+
+\subsection{Variable-density formulation}
+\label{sec:vd_equation}
+The second model is the incompressible variable-density (IVD) formulation of \citet{sandoval-1995}, which applies in the low-Mach-number regime, where acoustic waves are suppressed and the energy equation decouples from the problem~\citep{livescu-ristorcelli-2007}. In this regime each of the two fluids remains individually incompressible while the flow as a whole is not divergence-free~\citep{livescu-2013}, and with the non-dimensionalization introduced above the governing equations read
+\begin{subequations}
+    \label{eq:vd_nl_continuous}
+    \begin{align}
+        \label{eq:vd_nl_continuous_continuity}
+        \partial_t \rho + \bnabla\bcdot(\rho \boldsymbol{u}) &= 0, \\
+        \label{eq:vd_nl_continuous_momentum}
+        \rho\,\partial_t \boldsymbol{u} + \rho\,(\boldsymbol{u}\bcdot\bnabla)\boldsymbol{u} &= -\,\bnabla p + \bnabla\bcdot\boldsymbol{\tau} - \rho\,\boldsymbol{e}_z, \\
+        \label{eq:vd_nl_continuous_divergence}
+        \bnabla \bcdot \boldsymbol{u} &= -\Sch^{-1}\,\nabla^2 \log\rho,
+    \end{align}
+\end{subequations}
+where \(\rho(\boldsymbol{x},t)\) is the mixture density, \(\boldsymbol{u}(\boldsymbol{x},t)\) is the
+velocity field, \(p(\boldsymbol{x},t)\) is the pressure, and \(\boldsymbol{e}_z\) points
+opposite to gravity. The viscous stress tensor \(\boldsymbol{\tau}\) is given by
+\begin{equation}
+    \label{eq:vd_stress_tensor}
+    \boldsymbol{\tau} =  2\,\mu\,\mathsfbi{S} - \frac{2}{3}\mu\,(\bnabla\bcdot\boldsymbol{u})\mathsfbi{I}, \qquad 2\,\mathsfbi{S} = \bnabla\boldsymbol{u} + (\bnabla\boldsymbol{u})^{\!\top},
+\end{equation}
+where \(\mu\) is the dynamic viscosity, \(\mathsfbi{S}\) is the strain-rate tensor, and
+\(\mathsfbi{I}\) is the identity tensor.
+
+
+
+Introducing the state vector \(\boldsymbol{Q}(\boldsymbol{x},t) = \left[ u, v, w, p, \rho \right]\), the nonlinear system can be written compactly as
+\begin{equation}
+    \label{eq:vd_compact_nl_continuous}
+    \diff{\boldsymbol{Q}}{t} = \mathcal{N}\!\left( \boldsymbol{Q} \right).
+\end{equation}
+We introduce the perturbation expansion
+\begin{equation}
+    \label{eq:vd_perturbation_expansion}
+    \boldsymbol{Q}(\boldsymbol{x},t) = \boldsymbol{Q}_0(\boldsymbol{x},t) + \epsilon\,\boldsymbol{Q}'(\boldsymbol{x},t) + O(\epsilon^2),
+    \qquad 0 < \epsilon \ll 1,
+\end{equation}
+where \(\boldsymbol{Q}_0\) is a solution of the nonlinear equations, hereafter referred to as the base state, and \(\boldsymbol{Q}'\) is the perturbation about this base state. Substituting this expansion into the compact form and collecting terms of equal order in \(\epsilon\), we obtain
+\begin{subequations}
+    \label{eq:vd_compact_lin_continuous}
+    \begin{align}
+        \label{eq:vd_compact_lin_continuous_0th}
+        \diff{\boldsymbol{Q}_0}{t} &= \mathcal{N}\!\left( \boldsymbol{Q}_0 \right), \\
+        \label{eq:vd_compact_lin_continuous_1th}
+        \diff{\boldsymbol{Q}'}{t} &= \mathcal{L}(\boldsymbol{Q}_0)\,\boldsymbol{Q}',
+    \end{align}
+\end{subequations}
+where \(\mathcal{L}\) is the Jacobian of the nonlinear variable-density Navier--Stokes operator.
+
+The base-state evolution and the linearized system were fully derived and characterized by \citet{kola-israel-towne-2026}; we report here only the results needed for the present analysis. The base state is a quiescent horizontal flow \(\boldsymbol{U}_0 = (0, 0, w_0)\) with density \(\rho_0\),
+\begin{subequations}\label{eq:vd_base_state}
+\begin{align}
+    \rho_{0}(z,t) &= 1 + \Atw\,\erf\!\left(\frac{z}{\delta}\right), \label{eq:vd_base_state_rho0} \\[4pt]
+    w_0(z,t) &= \frac{2\,\Atw}{\sqrt{\pi}\,\delta}\,
+               \frac{\exp\!\left(-z^2/\delta^2\right)}{\rho_0(z,t)},
+               \label{eq:vd_base_state_w0}
+\end{align}
+\end{subequations}
+with diffusive layer thickness \(\delta(t)=\sqrt{4t/\Sch}\). Linearizing about this base state and reducing to the two-component perturbation state \(\boldsymbol{q} = [w, \rho]^\top\) gives
+\begin{equation}
+    \label{eq:vd_lin_continuous}
+    \begin{pmatrix}
+        \mathscr{B}_{ww} & \mathscr{B}_{w\rho} \\
+        0 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+        \partial_t\, w \\[4pt]
+        \partial_t\,\rho
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \mathscr{A}_{w_0w}+\mathscr{A}_{ww} & \mathscr{A}_{w_0\rho}+\mathscr{A}_{w\rho} \\[4pt]
+        \mathscr{A}_{\rho w} & \mathscr{A}_{\rho\rho}
+    \end{pmatrix}
+    \begin{pmatrix}
+        w \\[4pt]
+        \rho
+    \end{pmatrix},
+\end{equation}
+where the operator blocks \(\mathscr{A}\) and \(\mathscr{B}\) are given in Appendix~\ref{app:operators}. The boundary conditions enforce vanishing vertical velocity and its vertical gradient at the domain boundaries, and require the density perturbation to vanish in the far field, so that the base-state stratification remains undisturbed away from the diffusive layer,
+\begin{equation}
+    \label{eq:vd_boundary_conditions}
+    w(\pm L_z) = 0, \qquad \left.\frac{\partial w}{\partial z}\right|_{\pm L_z} = 0, \qquad
+    \rho(\pm L_z) = 0.
+\end{equation}
+Assuming homogeneity in the horizontal directions \((x,y)\), the perturbation fields are decomposed into Fourier modes, and for the state vector \(\hat{\boldsymbol{q}}=[\hat{w},\hat{\rho}]^{\top}\) the reduced system becomes
+\begin{equation}
+    \label{eq:vd_lti_dz_k}
+    \begin{pmatrix}
+        \widehat{\mathscr{B}}_{ww} & \widehat{\mathscr{B}}_{w\rho} \\
+        0 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+        \partial_t\, \hat{w} \\[4pt]
+        \partial_t\,\hat{\rho}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \widehat{\mathscr{A}}_{w_0w}+\widehat{\mathscr{A}}_{ww} & \widehat{\mathscr{A}}_{w_0\rho}+\widehat{\mathscr{A}}_{w\rho} \\[4pt]
+        \widehat{\mathscr{A}}_{\rho w} & \widehat{\mathscr{A}}_{\rho\rho}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \hat{w} \\[4pt]
+        \hat{\rho}
+    \end{pmatrix},
+\end{equation}
+where \(\hat{w}(k,z,t)\) and \(\hat{\rho}(k,z,t)\) are the Fourier-transformed vertical velocity and density perturbations and the operator blocks now carry the horizontal wavenumber \(k\). Discretizing the inhomogeneous vertical direction with \(N_z\) points, the state at a given wavenumber is \(\hat{\mathbf{q}}_{k}(t)\in\mathbb{C}^{2N_z}\), the operators become the time-dependent matrices \(\mathsfbi{A}_{k}(t)\) and \(\mathsfbi{B}_{k}(t)\), and the linearized dynamics take the form
+\begin{equation}
+    \label{eq:vd_semidiscrete_system}
+    \mathsfbi{B}_{k}(t)\,\difft{\hat{\mathbf{q}}_{k}}{t}
+    =
+    \mathsfbi{A}_{k}(t)\,\hat{\mathbf{q}}_{k},
+    \qquad
+    \hat{\mathbf{q}}_{k}(0)=\hat{\mathbf{q}}_{0,k},
+\end{equation}
+which defines the discrete propagator \(\boldsymbol{\Phi}_{t,k}\) through \(\hat{\mathbf{q}}_{k}(t)=\boldsymbol{\Phi}_{t,k}\,\hat{\mathbf{q}}_{0,k}\), with the shorthand adopted previously.

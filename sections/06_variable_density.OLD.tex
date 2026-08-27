@@ -1,0 +1,264 @@
+\section{Variable-density results}
+\label{sec:variable_density}
+
+We now consider the full variable-density formulation. To isolate the effects of density and
+viscosity stratification, we fix \(\Sch=1\) and vary \(\Atw\) and \(\Amu\). We first group the
+weakly and moderately stratified cases, \(\Atw=0.05\) and \(0.5\), and compare the three viscosity
+contrasts \(\Amu=-0.9,0,0.9\). The strongly stratified case \(\Atw=0.75\) is treated separately.
+
+\subsection{Growth-rate maps across the parameter sweep}
+\label{sec:vd_sigma_maps}
+
+Before isolating individual effects, we survey the per-wavenumber mean growth rate
+\(\overline{\sigma}_{1D}(k,t)\) over the sweep. \Cref{fig:VD_sigma_map_Sc0p25,fig:VD_sigma_map_Sc1,fig:VD_sigma_map_Sc10}
+report it at \(\Sch=0.25\), \(1\), and \(10\), each covering three density contrasts and three
+viscosity contrasts at fixed \(\delta_0=1\). The \(\Sch=0.25\) case evolves an order of magnitude
+more slowly and amplifies roughly half as strongly as the others, so it is shown over a longer
+window and with a tighter colour range; the remaining two share a common scale.
+
+\begin{figure}[p]
+  \centering
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p1_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p1_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p1_Amu_0p9}
+  \end{minipage}
+  \\[2pt]
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p5_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p5_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p5_Amu_0p9}
+  \end{minipage}
+  \\[2pt]
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p75_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p75_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_0p25_d0_1_At_0p75_Amu_0p9}
+  \end{minipage}
+  \tikzfig{sigma_map_VD_colorbar_Sc_0p25}
+  \caption{Per-wavenumber mean growth rate \(\overline{\sigma}_{1D}(k,t)\) in the
+  variable-density regime at \(\Sch=0.25\) and \(\delta_0=1\). Rows correspond to
+  \(\Atw=0.1\), \(0.5\), and \(0.75\); columns correspond to \(\Amu=-0.9\), \(0\),
+  and \(0.9\), as labelled above each panel. The (\solidlegend) contour marks neutral
+  growth, \(\overline{\sigma}_{1D}=0\), and the (\dashlegend) curve identifies the most
+  amplified wavenumber \(k_\ast(t)\). Each panel insets the early-time window
+  \(t\leq8\). Color limits are \(\overline{\sigma}_{1D}\in\pm0.2\), shared across every
+  panel of this figure.}
+  \label{fig:VD_sigma_map_Sc0p25}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p1_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p1_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p1_Amu_0p9}
+  \end{minipage}
+  \\[2pt]
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p5_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p5_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p5_Amu_0p9}
+  \end{minipage}
+  \\[2pt]
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p75_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p75_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_1_d0_1_At_0p75_Amu_0p9}
+  \end{minipage}
+  \tikzfig{sigma_map_VD_colorbar_Sc_1}
+  \caption{Per-wavenumber mean growth rate \(\overline{\sigma}_{1D}(k,t)\) in the
+  variable-density regime at \(\Sch=1\) and \(\delta_0=1\). Rows correspond to
+  \(\Atw=0.1\), \(0.5\), and \(0.75\); columns correspond to \(\Amu=-0.9\), \(0\),
+  and \(0.9\), as labelled above each panel. The (\solidlegend) contour marks neutral
+  growth, \(\overline{\sigma}_{1D}=0\), and the (\dashlegend) curve identifies the most
+  amplified wavenumber \(k_\ast(t)\). Each panel insets the early-time window
+  \(t\leq2\). Color limits are \(\overline{\sigma}_{1D}\in\pm0.5\), shared across every
+  panel of this figure.}
+  \label{fig:VD_sigma_map_Sc1}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p1_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p1_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p1_Amu_0p9}
+  \end{minipage}
+  \\[2pt]
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p5_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p5_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p5_Amu_0p9}
+  \end{minipage}
+  \\[2pt]
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p75_Amu_m0p9}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p75_Amu_0}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \tikzfig{sigma_map_VD_Sc_10_d0_1_At_0p75_Amu_0p9}
+  \end{minipage}
+  \tikzfig{sigma_map_VD_colorbar_Sc_10}
+  \caption{Per-wavenumber mean growth rate \(\overline{\sigma}_{1D}(k,t)\) in the
+  variable-density regime at \(\Sch=10\) and \(\delta_0=1\). Rows correspond to
+  \(\Atw=0.1\), \(0.5\), and \(0.75\); columns correspond to \(\Amu=-0.9\), \(0\),
+  and \(0.9\), as labelled above each panel. The (\solidlegend) contour marks neutral
+  growth, \(\overline{\sigma}_{1D}=0\), and the (\dashlegend) curve identifies the most
+  amplified wavenumber \(k_\ast(t)\). Each panel insets the early-time window
+  \(t\leq2\). Color limits are \(\overline{\sigma}_{1D}\in\pm0.5\), shared across every
+  panel of this figure.}
+  \label{fig:VD_sigma_map_Sc10}
+\end{figure}
+
+\subsection{Low-to-moderate stratification}
+\label{sec:vd_low_moderate}
+
+As in the Boussinesq analysis, we begin with the per-wavenumber mean growth rate
+\(\overline{\sigma}_{1D}(k,t)\) defined in~\eqref{eq:sigma_1d}. \Cref{fig:VD_P1_sigma_map}
+shows its evolution for the six weakly and moderately stratified cases.
+
+\begin{figure}[p]
+  \centering
+  \tikzfig{VD_P1_Sc1_At005_At050_sigma_grid}
+  \caption{Per-wavenumber mean growth rate \(\overline{\sigma}_{1D}(k,t)\) in the
+  variable-density regime at \(\Sch=1\). The first and second rows correspond to
+  \(\Atw=0.05\) and \(0.5\), respectively; the columns correspond to \(\Amu=-0.9\), \(0\), and
+  \(0.9\). The (\solidlegend) contour marks neutral growth, \(\overline{\sigma}_{1D}=0\), and the (\dashlegend)
+  curve identifies the most amplified wavenumber \(k_\ast(t)\). Color limits are shared within
+  each row.}
+  \label{fig:VD_P1_sigma_map}
+\end{figure}
+
+Across all six cases in \cref{fig:VD_P1_sigma_map}, the evolution follows the same broad
+sequence found in the Boussinesq limit. The initial response is stable, the growth-rate field then
+crosses neutrality and reaches a positive maximum, and the instability subsequently weakens as
+the diffusive layer broadens. Finite density and viscosity contrasts therefore modify the strength
+of the response and the selected horizontal scale without changing this qualitative sequence.
+
+The effect of viscosity contrast is most apparent in the dashed locus marking \(k_\ast(t)\).
+At fixed \(\Atw\), increasing \(\Amu\) shifts this locus towards larger wavenumbers and increases
+the maximum value reached by \(k_\ast(t)\). Because \(\Atw>0\) identifies fluid 2 as the heavier
+fluid, \(\Amu<0\) implies that the lighter fluid is more viscous. The stronger viscous damping on
+the lighter-fluid side inhibits small-scale motion, leading to a smaller peak value of
+\(k_\ast(t)\) and hence a larger dominant horizontal scale, proportional to \(k_\ast^{-1}\).
+For \(\Amu>0\), the viscosity ordering is reversed. Smaller scales are less strongly damped, and
+the selected wavenumber reaches a larger maximum. The upward displacement of the neutral contour
+with increasing \(\Amu\) similarly shows that the unstable band extends to larger wavenumbers.
+
+The magnitude of the growth rate follows the same ordering once the neutral contour has been
+crossed. Relative to \(\Amu=0\), a negative viscosity contrast reduces the growth rate throughout
+the unstable stage, whereas a positive contrast produces larger values before the subsequent
+decay. This behaviour is consistent between the weakly stratified case \(\Atw=0.05\) and the
+moderately stratified case \(\Atw=0.5\), indicating that viscosity contrast controls both scale
+selection and amplification over this range of density contrasts.
+
+The value of the growth-rate field along the dashed locus defines
+\(\overline{\sigma}_\ast(t)=\overline{\sigma}_{1D}(k_\ast(t),t)\), consistently with
+\eqref{eq:maximum_growth_definitions}. We now test the proposed Atwood-number scaling for the
+selected wavenumber,
+\begin{equation}
+  k_\ast(t)\sim t^{-(1-\Atw)/2}.
+  \label{eq:vd_kstar_scaling}
+\end{equation}
+\Cref{fig:VD_P2_scaling} shows the compensated quantity for the same six cases considered
+above.
+
+\begin{figure}[p]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \tikzfig{VD_P2_Sc1_At005_scaling}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \tikzfig{VD_P2_Sc1_At050_scaling}
+  \end{minipage}
+  \caption{Compensated most amplified wavenumber \(k_\ast(t)t^{(1-\Atw)/2}\) at \(\Sch=1\).
+  Panels (a) and (b) correspond to \(\Atw=0.05\) and \(0.5\), respectively, and each compares
+  \(\Amu=-0.9,0,0.9\). An approximately flat interval identifies the time
+  range over which the scaling proposed in~\eqref{eq:vd_kstar_scaling} holds; no collapse is
+  implied outside that interval. The corresponding unscaled \(k_\ast(t)\) curves are the dashed
+  loci in \cref{fig:VD_P1_sigma_map}.}
+  \label{fig:VD_P2_scaling}
+\end{figure}

@@ -1,0 +1,281 @@
+\section{Perturbation energy}
+\label{sec:perturbation_energy}
+
+\subsection{Instantaneous perturbation energy}
+\label{subsec:instantaneous_perturbation_energy}
+
+The main quantity that we will analyze in this work is the energy of the perturbations. Having introduced the governing equations in \cref{sec:governing_equation} and the statistics of the initial perturbations in \cref{sec:statistics_of_the_initial_perturbations}, we now provide a formal definition of the instantaneous energy for both the Boussinesq and IVD formulations. We have shown that both formulations admit reduced linearized dynamics in terms of the vertical velocity and either the concentration or density fluctuations. However, in our definition of the energy, we wish to measure the kinetic energy associated with all three velocity components, namely
+\begin{equation}
+    \label{eq:bq_kinetic_energy_dz_k}
+    2\mathcal{K}_k(t) = \int_{-L_z}^{L_z}\left(|\hat{u}_k|^{2}+|\hat{v}_k|^{2}+|\hat{w}_k|^{2}\right)\mathrm{d}z.
+\end{equation}
+
+It is therefore necessary, once \(\hat{w}_k\) is known, to recover the horizontal velocity components \(\hat{u}_k\) and \(\hat{v}_k\). We will first derive the energy used for the Boussinesq equations, while the same arguments carry over to the incompressible variable-density formulation.
+
+Fourier transforming the incompressibility constraint in~\eqref{eq:bq_nl_continuous_continuity} in the horizontal directions gives the first relation,
+\begin{equation}
+    \label{eq:bq_divergence_dz_k}
+    ik_{x}\hat{u}_k+ik_{y}\hat{v}_k+\partial_{z}\hat{w}_k = 0.
+\end{equation}
+An additional condition is required to recover the horizontal velocity components, for which we impose vanishing vertical vorticity, \(ik_{x}\hat{v}_k-ik_{y}\hat{u}_k = 0\). Together with the incompressibility constraint, it is trivial to show that this condition is equivalent to seeking the horizontal velocity components \(\hat{u}_k\) and \(\hat{v}_k\), with \(\hat{w}_k\) prescribed by~\eqref{eq:lti_dz_k_boussinesq}, that solve the constrained optimization problem
+\begin{equation}
+    \label{eq:bq_kinetic_minimization}
+    \begin{gathered}
+        \min_{\hat{u}_k,\hat{v}_k}\left(|\hat{u}_k|^{2}+|\hat{v}_k|^{2}\right)\\
+        \text{subject to}\quad ik_{x}\hat{u}_k+ik_{y}\hat{v}_k+\partial_{z}\hat{w}_k = 0.
+    \end{gathered}
+\end{equation}
+Thus, \(\mathcal{K}_k^{BQ}(t)\) measures the lowest kinetic energy among all in-plane velocity perturbations compatible with a prescribed \(\hat{w}_k\). The kinetic energy is
+\begin{equation}
+    \label{eq:bq_kinetic_energy_reduced_dz_k}
+    2\mathcal{K}_k^{BQ}(t) = \int_{-L_z}^{L_z}\left(|\hat{w}_k|^{2} + \frac{1}{k^{2}}\left|\partial_{z}\hat{w}_k\right|^{2}\right)\mathrm{d}z.
+\end{equation}
+Having dealt with the kinetic energy, it is now necessary to consider the energy of the disturbance as a whole, meaning that we need to find a consistent way to define the contribution from the concentration fluctuation.
+
+The classical disturbance-energy norm of \citet{chu-1965}, which despite being a classical reference remains widely used~\citep{schmidt-et-al-2018,towne-schmidt-colonious-2018}, imposes two main requirements on the definition of a general disturbance energy in a flow, namely that it be a positive-definite quantity and that it decay in the absence of external forcing. For the RTI configuration, using the Boussinesq equations reported in~\eqref{eq:bq_nl_continuous}, the construction derived following the heuristic of \citet{hanifi-schmidt-henningson-1996} can be shown to remain positive definite only under stable stratification. No positive-definite quadratic energy norm exists for an unstably stratified flow, as established through several independent derivations~\citep{holliday-mcintyre-1981,shepherd-1993,winters-et-al-1995,roullet-klein-2009}. We therefore choose to represent the concentration contribution by a prescribed positive-definite quadratic measure of its amplitude~\citep{don-nils-amir-2013}. For a given horizontal wavenumber, the disturbance energy in the Boussinesq formulation is defined as
+\begin{equation}
+    \label{eq:bq_energy_norm_dz_k}
+    \mathcal{E}_k^{BQ}(t) = \int_{-L_z}^{L_z}\left(|\hat{w}_k|^{2}+\frac{1}{k^{2}}\left|\partial_{z}\hat{w}_k\right|^{2}+|\hat{c}_k|^{2}\right)\mathrm{d}z.
+\end{equation}
+
+The energy norm for the variable-density formulation follows from the same arguments. The only modification concerns the kinematic relation used to recover the horizontal velocity components from \(\hat{w}_k\). In place of the divergence-free condition~\eqref{eq:bq_divergence_dz_k}, the divergence constraint in~\eqref{eq:vd_nl_continuous_divergence}, once linearized and Fourier transformed, constrains these components according to
+\begin{equation}
+    \label{eq:vd_divergence_dz_k}
+    ik_{x}\hat{u}_k+ik_{y}\hat{v}_k+\partial_{z}\hat{w}_k = \widehat{\mathscr{L}}_{\rho}(t)\hat{\rho}_k.
+\end{equation}
+The operator \(\widehat{\mathscr{L}}_{\rho}(t)\) depends on time through the evolving base-state density \(\rho_0(z,t)\), and therefore changes as the diffusive layer evolves.
+Repeating the same constrained minimization with~\eqref{eq:vd_divergence_dz_k} in place of~\eqref{eq:bq_divergence_dz_k} as the divergence constraint yields
+\begin{equation}
+    \label{eq:vd_kinetic_energy_reduced_dz_k}
+    2\mathcal{K}_k^{IVD}(t) = \int_{-L_z}^{L_z}\left(|\hat{w}_k|^{2}+\frac{1}{k^{2}}\left|\partial_{z}\hat{w}_k-\widehat{\mathscr{L}}_{\rho}(t)\hat{\rho}_k\right|^{2}\right)\mathrm{d}z.
+\end{equation}
+The disturbance energy for the variable-density formulation is then
+\begin{equation}
+    \label{eq:vd_energy_norm_dz_k}
+    \mathcal{E}_k^{IVD}(t) = \int_{-L_z}^{L_z}\left(|\hat{w}_k|^{2}+\frac{1}{k^{2}}\left|\partial_{z}\hat{w}_k-\widehat{\mathscr{L}}_{\rho}(t)\hat{\rho}_k\right|^{2}+|\hat{\rho}_k|^{2}\right)\mathrm{d}z.
+\end{equation}
+After discretizing the vertical direction with \(N_z\) grid points, the continuous energy expressions in \eqref{eq:bq_energy_norm_dz_k} and \eqref{eq:vd_energy_norm_dz_k} are represented by Hermitian positive-definite weight matrices in \(\mathbb{C}^{2N_z\times 2N_z}\). For the Boussinesq formulation, this matrix is independent of time and is denoted by \(\mathsfbi{W}_{k}\). For the variable-density formulation, however, the time dependence of \(\widehat{\mathscr{L}}_{\rho}(t)\) makes the corresponding weight matrix a function of time, which we denote by \(\mathsfbi{W}_{t,k}\). Using \(\mathsfbi{W}_{t,k}\) below, with \(\mathsfbi{W}_{t,k}=\mathsfbi{W}_{k}\) for the Boussinesq formulation, the induced weighted inner product on the discrete state vector \(\hat{\mathbf{q}}_k(t)\in\mathbb{C}^{2N_z}\) is \(\left\langle\mathbf{a},\mathbf{b}\right\rangle_{W_{t,k}}=\mathbf{a}^{*}\mathsfbi{W}_{t,k}\mathbf{b}\), so that
+\begin{equation}
+    \mathcal{E}_k(t)
+    =
+    \left\langle\hat{\mathbf{q}}_k(t),\hat{\mathbf{q}}_k(t)\right\rangle_{W_{t,k}}
+    =
+    \hat{\mathbf{q}}_k^{*}(t)\mathsfbi{W}_{t,k}\hat{\mathbf{q}}_k(t).
+    \label{eq:instantaneous_energy}
+\end{equation}
+Throughout this work, the subscripted bracket \(\left\langle\cdot,\cdot\right\rangle_{W_{t,k}}\) denotes the \(\mathsfbi{W}_{t,k}\)-weighted inner product, while the unsubscripted bracket \(\langle\cdot\rangle\) denotes the ensemble average over random initial conditions.
+
+A final remark concerns the total perturbation energy injected into the system. Throughout the analysis, the variance of the interface displacement is held constant, which does not correspond to keeping the initial energy constant as the thickness of the diffusive layer is varied, since the total energy injected across the diffusive layer is
+\begin{equation}
+    E_0
+    =
+    \mean{\eta_0^2}
+    \int_{-\infty}^{\infty}
+        C_{00}^{z}(z,z)
+    \,\mathrm{d}z
+    =
+    \sqrt{\frac{8}{\pi}}\,
+    \frac{\Atw^2}{\delta_0}
+    \mean{\eta_0^2}.
+    \label{eq:integrated_initial_density_variance}
+\end{equation}
+Therefore, for a fixed interface variance, the initial energy scales as \(\delta_0^{-1}\), so that a thinner diffusive layer corresponds to a larger amount of energy injected into the system. As we will see, this choice does not influence the evolution during the linear stage because the energy tracked throughout the analysis is normalized by its initial value; it may, however, influence the weakly nonlinear and nonlinear stages of the evolution, which lie outside the scope of this work.
+
+\subsection{The mean energy growth}
+\label{subsec:mean_energy_growth}
+
+We now use the physical description of the initial correlations developed in \cref{sec:statistics_of_the_initial_perturbations} to define the mean energy growth introduced by \citet{frame-towne-2024}. This quantity measures perturbation amplification averaged over an ensemble of random initial conditions. With the linearized operators from \cref{sec:governing_equation}, the instantaneous disturbance energy defined above, and the initial statistics now specified, the mean energy growth at each wavenumber \(k\) is the ratio of the expected energy at time \(t\) to its initial value,
+\begin{equation}
+    \label{eq:mean_energy_growth_def}
+    g(k,t)
+    =
+    \frac{\mean{\mathcal{E}_k(t)}}{\mean{\mathcal{E}_k(0)}}.
+\end{equation}
+Because the initial statistics separate into a horizontal and a vertical factor, only the vertical covariance \(C_{00}^{z}\) enters at a given wavenumber, as the discrete matrix \(\mathsfbi{C}_{00}^{z}\in\mathbb{C}^{2N_z\times 2N_z}\). Using the cyclic invariance of the trace, the per-wavenumber mean energy growth is then
+\begin{equation}
+    g(k,t)
+    =
+    \frac{
+      \tr
+      \left\{
+        \mathsfbi{T}_{t,k}\mathsfbi{C}_{00}^{z}
+      \right\}
+    }{
+      \tr
+      \left\{
+        \mathsfbi{C}_{00}^{z}\mathsfbi{W}_{0,k}
+      \right\}
+    },
+    \qquad
+    \mathsfbi{T}_{t,k}
+    =
+    \boldsymbol{\Phi}_{t,k}^{*}\mathsfbi{W}_{t,k}\boldsymbol{\Phi}_{t,k}.
+    \label{eq:T_operator_definition}
+\end{equation}
+We define the corresponding one-dimensional growth rate associated with the per-wavenumber mean energy growth as
+\begin{equation}
+    \label{eq:sigma_1d}
+    \overline{\sigma}_{1D}(k,t)
+    =
+    \frac{1}{2}
+    \diff{
+        \log\!\left(g(k,t)\right)
+    }{t}.
+\end{equation}
+The three-dimensional mean energy growth follows by weighting this per-wavenumber growth with the horizontal spectral density \(\Phi_{00}^{xy}\) and integrating over all wavenumbers,
+\begin{equation}
+    \Gm(t)
+    =
+    \frac{
+      \displaystyle
+      \iint
+      g(k,t)\,
+      \Phi_{00}^{xy}(k_x,k_y)
+      \,\mathrm{d}k_x\,\mathrm{d}k_y
+    }{
+      \displaystyle
+      \iint
+      \Phi_{00}^{xy}(k_x,k_y)
+      \,\mathrm{d}k_x\,\mathrm{d}k_y
+    }.
+    \label{eq:gmean_continuous_fourier}
+\end{equation}
+Passing to polar coordinates gives
+\begin{equation}
+    \Gm(t)
+    =
+    \frac{2}{\mean{\eta_0^2}}
+    \int_0^\infty
+      g(k,t)\,
+      E_{\eta}(k)\,
+      \mathrm{d}k.
+    \label{eq:gmean_eta_spectrum}
+\end{equation}
+We define the corresponding mean growth rate of the full three-dimensional perturbation field as
+\begin{equation}
+    \label{eq:sigma_3d}
+    \overline{\sigma}_{3D}(t)
+    =
+    \frac{1}{2}
+    \difft{
+        \log\!\left(\Gm(t)\right)
+    }{t}.
+\end{equation}
+The per-wavenumber mean energy \(g(k,t)\) accounts for the vertical correlation of perturbations within the diffusive layer when a stochastic displacement is imposed at the interface. The spectrum \(E_{\eta}(k)\) determines how the initial interface variance is distributed across horizontal scales. The three-dimensional evolution is therefore obtained by weighting the mean energy at each wavenumber by its share of the initial variance.
+
+\subsection{Randomized trace estimation}
+\label{subsec:randomized_trace_estimation}
+The final expression in \eqref{eq:T_operator_definition} reduces the calculation of the per-wavenumber mean energy growth to the trace of the covariance-weighted operator \(\mathsfbi{T}_{t,k}\mathsfbi{C}_{00}^{z}\), normalized by the known initial energy. The difficulty is that the propagator \(\boldsymbol{\Phi}_{t,k}\) of the non-autonomous semi-discrete system \eqref{eq:semidiscrete_system} is defined through time integration and is not available as an explicitly formed matrix. Constructing it would require evolving a complete basis of initial conditions, after which both \(\mathsfbi{T}_{t,k}\) and its product with the covariance would have to be assembled. This calculation is precisely what we wish to avoid.
+
+Instead, we require only the action of \(\mathsfbi{T}_{t,k}\) on a vector. This action can be obtained through the loop-adjoint procedure used in matrix-free optimal-growth calculations~\citep{luchini-2000,luchini-bottaro-2014,barkeley-blackburn-sherwin-2008}. Given an initial perturbation, the direct equations are first integrated to the target time, the resulting state defines the terminal condition for the adjoint equations, and their backward integration returns the action of \(\mathsfbi{T}_{t,k}\) at the initial time. Here, this procedure is not used within an iteration that isolates the optimally amplified disturbance, but as the building block required to evaluate the covariance-weighted trace. The resulting action is summarized in \cref{alg:loop-adjoint}.
+\begin{algorithm}[H]
+  \caption{Matrix-free loop-direct-adjoint (LDA) action of \(\mathsfbi{T}_{T,k}\)}
+  \label{alg:loop-adjoint}
+
+  \begin{algorithmic}[1]
+    \Require Initial perturbation \(\hat{\mathbf{q}}_{0,k}\), final time \(T\),
+             operators \(\mathsfbi{A}(t)\) and \(\mathsfbi{B}(t)\)
+    \Ensure Matrix-free action
+      \(\LDA(\hat{\mathbf{q}}_{0,k})
+      :=
+      \mathsfbi{T}_{T,k}\hat{\mathbf{q}}_{0,k}
+      =
+      \mathsfbi{B}^{\dagger}(0)\boldsymbol{\psi}(0)\)
+
+    \State \(\hat{\mathbf{q}}(0)\gets\hat{\mathbf{q}}_{0,k}\)
+      \Comment{Initial condition}
+
+    \State Solve
+      \(\mathsfbi{B}(t)\,\partial_t\hat{\mathbf{q}}(t)
+      =
+      \mathsfbi{A}(t)\hat{\mathbf{q}}(t)\),
+      \(0\leq t\leq T\)
+      \Comment{Forward solve}
+
+    \State Define \(\boldsymbol{\psi}(T)\) by
+      \(\mathsfbi{B}^{\dagger}(T)\boldsymbol{\psi}(T)
+      =
+      \hat{\mathbf{q}}(T)\)
+      \Comment{Terminal adjoint condition}
+
+    \State Solve
+      \(\partial_t
+      \left[
+        \mathsfbi{B}^{\dagger}(t)\boldsymbol{\psi}(t)
+      \right]
+      =
+      -\mathsfbi{A}^{\dagger}(t)\boldsymbol{\psi}(t)\),
+      \(T\geq t\geq 0\)
+      \Comment{Backward adjoint solve}
+
+    \State \(\LDA(\hat{\mathbf{q}}_{0,k})
+      \gets
+      \mathsfbi{B}^{\dagger}(0)\boldsymbol{\psi}(0)\)
+      \Comment{Matrix-free action}
+
+    \State \Return \(\LDA(\hat{\mathbf{q}}_{0,k})\)
+  \end{algorithmic}
+\end{algorithm}
+
+Trace estimation has been studied extensively in randomized numerical linear algebra~\citep{haim-sivan-2011}. These methods replace explicit matrix construction with random probing, in which the operator is applied to a set of random vectors and the resulting quantities are combined to estimate global properties. Randomized numerical linear algebra now provides a standard framework for approximating large matrix quantities using only matrix-vector products, particularly when the operator is too large to form or factorize explicitly~\citep{martinsson-tropp-2020}. Related ideas have been used in fluid mechanics to reduce the cost of large-scale input-output calculations and modal decompositions. For example, \citet{ribeiro-yeh-taira-2020} introduced randomized resolvent analysis, in which random test matrices sketch the resolvent operator and approximate its dominant forcing-response subspace. More recently, \citet{farghadan-martini-towne-2025} combined randomized singular value decomposition with time stepping to compute resolvent modes in fully three-dimensional flows with reduced memory and computational cost.
+
+The randomization used here is related in spirit but different in purpose. Rather than constructing a low-rank approximation to recover dominant resolvent or propagator modes, we use random probes to estimate the trace of the covariance-weighted amplification operator. The Hutchinson estimator obtains this trace from random quadratic forms without explicitly constructing the matrix~\citep{hutchinson-1990}. Subsequent work has refined the theory and provided bounds on the number of samples required for a prescribed accuracy~\citep{khorasani-szekely-ascher-2015}. More recent algorithms such as Hutch++ reduce the sampling cost further by separating the trace into a low-rank contribution, which captures the dominant range of the operator, and a residual contribution estimated stochastically~\citep{meyer-et-al-2021}. Extensions from matrices to integral operators have also been proposed by \citet{zvonek-horning-townsend-2025}. Building on these algorithms, and using the loop-adjoint procedure to sketch the required operator, we propose the stochastic stepping trace estimator (SSTE) summarized in \cref{alg:stochastic_stepping_trace_estimator}.
+\begin{algorithm}[htbp]
+  \caption{Stochastic stepping trace estimator for \(\tr\left\{\mathsfbi{T}_{t,k}\mathsfbi{C}_{00}^{z}\right\}\)}
+  \label{alg:stochastic_stepping_trace_estimator}
+
+  \begin{algorithmic}[1]
+    \Require Number of samples \(m\), loop-direct-adjoint action \(\LDA(\cdot)\),
+             factor \(\mathsfbi{L}\) s.t.
+             \(\mathsfbi{C}_{00}^{z}=\mathsfbi{L}\mathsfbi{L}^{*}\)
+    \Ensure Trace estimate \(\widehat{t}_{\mathrm{H++}}\)
+
+    \State Define kernel
+      \(\mathsfbi{K}(\mathbf{g})
+      =
+      \mathsfbi{L}^{*}\LDA(\mathsfbi{L}\mathbf{g})\)
+      \Comment{Effective operator \(\mathsfbi{K}=\mathsfbi{L}^{*}\mathsfbi{T}_{t,k}\mathsfbi{L}\) acting on a vector \(\mathbf{g}\)}
+
+    \State Set \(s \gets m/3\)
+      \Comment{Number of probes per stage}
+
+    \For{\(i=1,\ldots,s\)}
+      \State Draw \(\mathbf{g}_i \sim \mathcal{N}(\mathbf{0},\mathsfbi{I})\)
+        \Comment{Gaussian probe}
+      \State \(\mathbf{y}_i \gets \mathsfbi{K}(\mathbf{g}_i)\)
+        \Comment{Sketch action}
+    \EndFor
+
+    \State Form
+      \(\mathsfbi{Y}
+      \gets
+      [\,\mathbf{y}_1\ \cdots\ \mathbf{y}_s\,]\)
+      \Comment{Range sketch}
+
+    \State Compute
+      \(\mathsfbi{Y}=\mathsfbi{Q}\mathsfbi{R}\)
+      \Comment{Thin QR factorization}
+
+    \State \(t_d \gets 0\)
+    \For{\(j=1,\ldots,s\)}
+      \State \(t_d \gets t_d + \mathbf{q}_j^{*}\mathsfbi{K}(\mathbf{q}_j)\)
+        \Comment{Low-rank trace contribution}
+    \EndFor
+
+    \State \(t_r \gets 0\)
+    \For{\(i=1,\ldots,s\)}
+      \State Draw \(\mathbf{g}_i \sim \mathcal{N}(\mathbf{0},\mathsfbi{I})\)
+        \Comment{Residual probe}
+      \State \(\mathbf{r}_i \gets (\mathsfbi{I}-\mathsfbi{Q}\mathsfbi{Q}^{*})\mathbf{g}_i\)
+        \Comment{Orthogonal projection}
+      \State \(t_r \gets t_r + s^{-1}\mathbf{r}_i^{*}\mathsfbi{K}(\mathbf{r}_i)\)
+        \Comment{Stochastic residual trace}
+    \EndFor
+
+    \State \(\widehat{t}_{\mathrm{H++}} \gets t_d+t_r\)
+      \Comment{Hutch++ estimate}
+
+    \State \Return \(\widehat{t}_{\mathrm{H++}}\)
+  \end{algorithmic}
+\end{algorithm}
+Extensive verification against analytical solutions and reference problems is reported in \Cref{sec:appendix_main}, \cref{sec:appendix_verification}. We also offer a detailed description of other methods that can be used and of where the stochastic trace estimation offers advantages over them.

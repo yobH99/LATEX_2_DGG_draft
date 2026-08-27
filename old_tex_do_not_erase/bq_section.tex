@@ -1,0 +1,239 @@
+\section{Boussinesq}
+\label{sec:boussinesq}
+
+In this section, we present the results of our analysis, beginning with the simplest
+stratification model, namely the Boussinesq limit. Given the novelty of the framework and its
+stochastic character, we first validate the formulation by comparing the predicted mean energy
+growth with ensembles of three-dimensional direct numerical simulations.
+
+For this comparison, we use the \(n=1\) spectrum defined in~\eqref{eq:eta_spectrum_family} and
+compare against the triperiodic pseudo-spectral solver
+PsDNS\footnote{\url{https://github.com/lanl/PsDNS.git}}, developed at LANL and designed to solve
+the incompressible Navier--Stokes equations with buoyant forcing. This model corresponds to the
+limit \(\Atw \to 0\) of the present formulation~\citep{livescu-ristorcelli-2007}. The results are
+reported in figure~\ref{fig:compare_dns}, showing good agreement between the mean energy growth
+predicted by the stochastic theory and the ensemble mean extracted from ten independent numerical
+simulations, across several values of the horizontal correlation length \(\lambda\).
+
+\begin{figure}
+    \centering
+    \input{figures/compare_finale_dns_predictions.tex}
+    \caption{Comparison between the DNS ensemble mean (solid lines) and the theoretical mean
+    energy growth \(\Gm(t)\) (circles) in the Boussinesq limit for \(\Atw=0.5\), \(\Sch=1\), and
+    several values of the horizontal correlation length \(\lambda\).}
+    \label{fig:compare_dns}
+\end{figure}
+
+\subsection{Per-wavenumber mean growth rate}
+Having validated the method and its numerical implementation, we next characterise the growth
+rates associated with this instability, still within the Boussinesq approximation. This provides
+the natural starting point of the analysis before considering the effects that arise from
+non-Boussinesq corrections, which will be addressed in~\S\ref{sec:variable_density}. In
+particular, in figure~\ref{fig:BQ_P1_sigma_map} we report the mean growth-rate field defined
+in~\eqref{eq:sigma_1d}.
+
+\begin{figure}[t]
+    \centering
+    \input{figures/BQ_P1_sigma_map.tex}
+    \caption{Instantaneous growth-rate field \(\sigma(k,t)\) for the Boussinesq case.}
+    \label{fig:BQ_P1_sigma_map}
+\end{figure}
+
+What emerges is that, at early times, the per-mode mean growth rate \(\overline{\sigma}_{1D}(k,t)\)
+defined in~\eqref{eq:sigma_1d} is negative for each mode considered. This indicates that the
+initial stage of the evolution is characterised by a stable response, which can be understood by
+noting that each mode within the same wavenumber shell is included in the initial response of the
+system. What clearly emerges, and is further supported by the numerical verification, is that when
+the initial perturbation is characterised by the Gaussian kernel in~\eqref{eq:gaussian_eta_correlation},
+together with the separable initial density covariance in~\eqref{eq:initial_density_covariance_separable},
+the corresponding \(n=1\) spectrum in~\eqref{eq:eta_spectrum_family} reproduces the DNS comparison
+in figure~\ref{fig:compare_dns}. A similar behaviour has been observed recently
+by~\citet{nixon-vieweg-2026} in the context of diffusion-driven shear flows, where the
+Kelvin--Helmholtz instability was analysed using a normal-mode ansatz with a time-dependent
+amplitude in self-similar coordinates. Although this type of analysis can recover part of the
+late-time behaviour observed here, it does not capture the early-time evolution associated with
+the stochastic character of the initial perturbation. Moreover, as we will show below, when
+non-Boussinesq effects are included, a normal-mode ansatz cannot capture the non-modal mechanisms
+that arise from the time-dependent and non-normal character of the governing operator.
+
+The growth rates then increase in time, cross the neutral value, and eventually become positive
+around \(t \sim 0.5\), reaching a maximum shortly thereafter. Beyond this maximum, the growth
+rate decreases, indicating that the flow remains unstable but that the instability weakens as the
+diffusive layer broadens. At later times the decay becomes considerably milder and the growth rate
+approaches an approximately constant regime.
+
+Having characterised this behaviour, we now propose a scaling argument to rationalise the
+time-dependence of the growth rate throughout this strongly non-stationary regime.
+
+We interpret the behaviour observed in figure~\ref{fig:BQ_P1_sigma_map} by focusing on the most
+amplified wavenumber \(k_\ast(t)\) and the corresponding mean growth rate
+\(\overline{\sigma}_\ast(k_\ast,t)\), reported as dashed curves. Let \(\delta(t)\) denote the
+characteristic thickness of the base-state density profile. Since the interface has a finite
+initial thickness, we take \(\delta(t) \sim (1+t)^{1/2}\), up to dimensional constants. During
+the initial stage, the amplification is controlled by the relative rate at which this layer
+broadens, which suggests the estimate
+\begin{equation}
+    \label{eq:bq_sigma_early}
+    \overline{\sigma}_\ast(k_\ast,t)
+    \sim
+    \int_{0}^{t}
+    \frac{\dot{\delta}(s)}{\delta(s)}\,\mathrm{d}s
+    \sim
+    \log\left(1+t/t_0\right).
+\end{equation}
+At these early times the most amplified wavenumber is small, since the instability has not yet
+developed across the full extent of the diffusive layer. Because the base state is still expanding
+and the growth rate is increasing, buoyancy does not yet control this initial stage directly. We
+therefore conjecture that, during this transient regime, the most amplified wavenumber \(k_\ast(t)\)
+remains locked to the growth rate estimated in~\eqref{eq:bq_sigma_early}, in the sense that
+\(\overline{\sigma}_\ast(k_\ast,t)/k_\ast(t)\) is approximately constant, giving
+\begin{equation}
+    \label{eq:bq_kstar_early}
+    k_\ast(t)
+    \sim
+    \overline{\sigma}_\ast(k_\ast,t)
+    \sim
+    \log\left(1+t\right).
+\end{equation}
+At later times, the diffusive layer has broadened sufficiently that the most amplified wavelength
+becomes comparable to its thickness. At this point we expect \(k_\ast(t)\,\delta(t) \sim 1\),
+which corresponds to the condition under which the mean growth rate reaches its maximum. Beyond
+this instant, the selected wavenumber decreases as the layer continues to diffuse. Since
+\(\delta(t) \sim t^{1/2}\), this gives
+\begin{equation}
+    \label{eq:bq_kstar_diffusive}
+    k_\ast(t) \sim t^{-1/2}.
+\end{equation}
+Using the corresponding diffusive-layer estimate for the growth rate together
+with~\eqref{eq:bq_kstar_diffusive} then yields
+\begin{equation}
+    \label{eq:bq_sigma_diffusive}
+    \overline{\sigma}_\ast(k_\ast,t) \sim t^{-1/4}.
+\end{equation}
+The estimates in~\eqref{eq:bq_sigma_early}--\eqref{eq:bq_sigma_diffusive} are compared with the
+numerical predictions in figure~\ref{fig:BQ_P1_scaling}, showing good agreement with the
+early-time locking between \(k_\ast(t)\) and \(\overline{\sigma}_\ast(k_\ast,t)\), and with the
+subsequent diffusion-controlled decay.
+
+\begin{figure}
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P1_kstar.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P1_sigmamax.tex}
+  \end{minipage}
+  \caption{Scaling of the most amplified wavenumber \(k_\ast\) and the corresponding mean growth
+  rate \(\overline{\sigma}_\ast(k_\ast,t)\).}
+  \label{fig:BQ_P1_scaling}
+\end{figure}
+
+\subsection{Three-dimensional perturbation growth}
+Among the family of spectra introduced in~\S\ref{sec:statistics_of_the_incoming_perturbations},
+we focus here on the \(n=1\) member as the simplest and most natural reference case: it
+corresponds to a Gaussian spatial correlation and involves a single length scale \(\lambda\). As
+shown later in figure~\ref{fig:BQ_P3_Gmean_analysis}, the qualitative behaviour described below
+extends to higher values of \(n\), so that the conclusions drawn from the \(n=1\) analysis carry
+over to the broader family of~\eqref{eq:eta_spectrum_family}.
+
+As discussed in~\S\ref{sec:statistics_of_the_incoming_perturbations}, the in-plane correlation of
+the interface displacement is modelled by an isotropic Gaussian, corresponding to the \(n=1\)
+member of the family defined in~\eqref{eq:eta_spectrum_family}. The parameter \(\lambda\)
+represents the horizontal correlation length in the \((x,y)\)-plane, i.e.\ the characteristic
+distance over which perturbations of the interface height remain statistically correlated. A small
+\(\lambda\) implies highly uncorrelated, white-noise-like perturbations, whereas a large \(\lambda\)
+produces coherent, long-wavelength undulations. Since the \(n=1\) spectrum~\eqref{eq:eta_spectrum_family}
+corresponds to the Gaussian correlation~\eqref{eq:gaussian_eta_correlation}, the mean energy
+growth defined in~\eqref{eq:gmean_eta_spectrum} reduces, after switching to polar coordinates
+\((k,\theta)\) and integrating by parts, to
+\begin{equation}
+    \label{eq:bq_gmean_isotropic}
+    \Gm(t)
+    =
+    g(0,t)
+    +
+    \int_{0}^{\infty}
+    \frac{\partial g(k,t)}{\partial k}
+    \exp\!\left(-\frac{\lambda^{2}k^{2}}{4}\right)\mathrm{d}k.
+\end{equation}
+
+\begin{figure}
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_Gmean.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_Gmean_modes.tex}
+  \end{minipage}
+  \caption{Temporal evolution of \(\Gm(t)\) in the Boussinesq limit for different horizontal
+  correlation lengths \(\lambda\). (a)~Single trajectory illustrating the characteristic
+  quantities: the minimum \(\Gm_{\min}(\lambda)\) and the critical time \(t_c\). (b)~Temporal
+  evolution for various \(\lambda\) values; the red dotted curve traces the locus of minima
+  \(\Gm_{\min}(\lambda)\).}
+  \label{fig:BQ_P3_Gmean}
+\end{figure}
+
+In figure~\ref{fig:BQ_P3_Gmean}(a), a representative evolution of \(\Gm(t)\) is shown for a
+fixed value of \(\lambda\). The mean energy initially decays, reflecting the dominance of stable
+eigenmodes at early times. This decay continues until the minimum \(\Gm_{\min}(\lambda)\) is
+reached. Beyond this point, the trajectory reverses and exhibits growth driven by the unstable
+modes present in the spectrum. A key feature of this behaviour is the time delay before the mean
+energy returns to its initial level, quantified by the \emph{critical time} \(t_c\), defined as
+the instant, distinct from the initial one, at which \(\Gm(t_c) = 1\). In
+figure~\ref{fig:BQ_P3_Gmean}(b), the temporal evolution of \(\Gm(t)\) is shown for several
+values of \(\lambda\). Lighter curves correspond to smaller values of \(\lambda\), whereas
+progressively darker tones indicate larger values. The ordering of the trajectories highlights the
+non-monotonic dependence of \(\Gm_{\min}\) on the correlation length, whose locus is traced by
+the red dotted curve.
+
+\begin{figure}
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_Gmin.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/BQ_P3_tc.tex}
+  \end{minipage}
+  \caption{Minimum values \(\Gm_{\min}\) and critical times \(t_c\) as functions of \(\lambda\)
+  in the Boussinesq limit, for spectral indices \(n=1,2,3\). (a)~Dependence of \(\Gm_{\min}\) on
+  \(\lambda\). (b)~Variation of \(t_c\) with \(\lambda\).}
+  \label{fig:BQ_P3_Gmean_analysis}
+\end{figure}
+
+The physical mechanisms responsible for the non-monotonic behaviour observed in
+figure~\ref{fig:BQ_P3_Gmean} can be understood directly from the structure
+of~\eqref{eq:bq_gmean_isotropic}. The exponential kernel acts as a low-pass filter on the
+wavenumber contributions to \(\Gm\). As \(\lambda\) increases from zero, large-\(k\) stable modes
+are progressively filtered out, causing \(\Gm_{\min}\) to increase until a maximum is reached.
+Beyond this optimal \(\lambda\), low-\(k\) unstable modes also begin to be suppressed, leading to
+a subsequent decrease. For small \(\lambda\), the kernel is nearly flat and all wavenumbers
+contribute equally, so the early-time dynamics are dominated by stable modes and \(\Gm_{\min}\)
+is correspondingly low. As \(\lambda\) grows, the influence of stable modes diminishes and
+\(\Gm_{\min}\) increases; once \(\lambda\) becomes sufficiently large, the suppression of unstable
+modes drives \(\Gm_{\min}\) back down. This behaviour reflects a transient stabilisation effect
+induced by small-scale roughness and highlights the sensitivity of the mean energy growth to the
+horizontal correlation length. The dependence of \(\Gm_{\min}\) and \(t_c\) on \(\lambda\) is
+further illustrated in figure~\ref{fig:BQ_P3_Gmean_analysis} for several values of the spectral
+index \(n\).
+
+To complete the picture, we characterise the evolution of the mean energy spectrum in wavenumber space which is given by the integrand of \textcolor{red}{\ref{eq:mean energy growth g(k,t)Eetak please add refernce for this guy}}
+as reported in figure~\ref{fig:BQ_gkt_weighted_panels}.
+what emerges from figure is a clear path to trnasition. the unweifghted mean mode energy unwieghted at the intiial time is relatively cosnnat across the different modes coehrently with the fact that the instbailit has nto yet evolved and as reported in the correpsidng b,c,d the intiial sepctrum is the one imposed by the case. As time moves it can be seen during the evolution the energy moves twords towar the scale assocaite with the must usntable eawvenummebr associated with the QSSA analysis. what matters however is that for the same final time the characertic of the spectrum dalye the amout fo energy that is passed down to the most ustbale mode. Its obivous that eventually all the neergy will ba trnasported eventua byt he ust usntbale mode but the intial sepctrum redistirbures
+\begin{figure}[t]
+  \centering
+  \resizebox{\textwidth}{!}{\input{figures/BQ_P4_gkt_panels.tex}}
+  \caption{Wavenumber-space structure of the Boussinesq mean-energy contribution. The top panel
+  shows the modal growth \(g(k,t)\), while the lower panels show the weighted contribution
+  \(g(k,t)\,E_{\eta}^{2D}(k)\) for three choices of \(k_0\). Dashed vertical lines indicate
+  \(k_{\max}^{\mathrm{QSSA}}\) and \(k_c^{\mathrm{QSSA}}\).}
+  \label{fig:BQ_gkt_weighted_panels}
+\end{figure}

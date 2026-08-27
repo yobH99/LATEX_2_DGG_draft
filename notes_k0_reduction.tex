@@ -1,0 +1,80 @@
+% Notes: reduction of (6.7b) to advection-reaction-diffusion form.
+% Not included by main.tex. Uses the manuscript macros \Sch, \Atw, \erf.
+
+% ---------------------------------------------------------------------------
+% Conservative form
+% ---------------------------------------------------------------------------
+\begin{equation}
+  \partial_t\rho
+  =
+  \Sch^{-1}\partial_{zz}\rho
+  -
+  \partial_z\!\left[
+    \left(w_0+\Sch^{-1}\left(\ln\rho_0\right)'\right)\rho
+  \right].
+\end{equation}
+
+% ---------------------------------------------------------------------------
+% Advection-reaction-diffusion form,  d_t rho = a d_zz rho - c d_z rho + r rho
+% ---------------------------------------------------------------------------
+\begin{equation}
+  \partial_t\rho
+  =
+  a\,\partial_{zz}\rho
+  -
+  c\,\partial_z\rho
+  +
+  r\,\rho,
+\end{equation}
+\begin{subequations}
+\begin{align}
+  a &= \Sch^{-1}, \\
+  c &= w_0+\Sch^{-1}\left(\ln\rho_0\right)'
+     = w_0+\Sch^{-1}\frac{\rho_0'}{\rho_0}, \\
+  r &= -\left[w_0'+\Sch^{-1}\left(\ln\rho_0\right)''\right]
+     = -c',
+  \qquad
+  \left(\ln\rho_0\right)''
+  =
+  \frac{\rho_0''}{\rho_0}-\left(\frac{\rho_0'}{\rho_0}\right)^{2}.
+\end{align}
+\end{subequations}
+
+% ---------------------------------------------------------------------------
+% With the base state (2.20): w_0 = rho_0'/rho_0 = (ln rho_0)'
+% ---------------------------------------------------------------------------
+\begin{equation}
+  \partial_t\rho
+  =
+  \Sch^{-1}\partial_{zz}\rho
+  -
+  \left(1+\Sch^{-1}\right)\partial_z\!\left(w_0\rho\right),
+\end{equation}
+\begin{equation}
+  a=\Sch^{-1},
+  \qquad
+  c=\left(1+\Sch^{-1}\right)w_0,
+  \qquad
+  r=-\left(1+\Sch^{-1}\right)w_0'.
+\end{equation}
+
+% ---------------------------------------------------------------------------
+% Explicit coefficients for rho_0 = 1 + At erf(z/delta), delta = sqrt(4t/Sc)
+% ---------------------------------------------------------------------------
+\begin{equation}
+  w_0
+  =
+  \frac{2\Atw}{\sqrt{\pi}\,\delta}
+  \frac{\exp\!\left(-z^{2}/\delta^{2}\right)}{\rho_0},
+  \qquad
+  w_0'
+  =
+  -\frac{2z}{\delta^{2}}w_0-w_0^{2},
+\end{equation}
+\begin{equation}
+  a=\Sch^{-1},
+  \qquad
+  c=\left(1+\Sch^{-1}\right)w_0,
+  \qquad
+  r=\left(1+\Sch^{-1}\right)w_0\left(\frac{2z}{\delta^{2}}+w_0\right).
+\end{equation}

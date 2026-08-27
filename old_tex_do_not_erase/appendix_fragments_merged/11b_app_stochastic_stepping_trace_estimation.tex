@@ -1,0 +1,68 @@
+\subsection{Stochastic stepping trace estimation}
+\label{sec:appendix_sste_method}
+
+SSTE has been described in \cref{subsec:randomized_trace_estimation} and is not repeated here. Let
+\(N_p\) be the number of probes used for the estimation, and let the cost account for the adjoint
+stepper as well, so that
+\begin{equation}
+  \mathcal{C}_{\mathrm{SSTE}}(T)=6N_p
+  \label{eq:sste_fixed_time_cost}
+\end{equation}
+for a fixed time. The real advantage at a single target time is then guaranteed whenever
+\(\mathcal{C}_{\mathrm{SSTE}}\ll\mathcal{C}_{\mathrm{DCT}}\), that is, whenever \(N_p\ll r/6\). We
+expect this in problems whose dynamics are low rank, because the sketch captures those directions
+through the action on random probes, and the examples reported below confirm it.
+
+One major bottleneck nevertheless remains for an evaluation across \(N_t\) intervals, where the
+cost grows as \(O(N_t^{2})\), because the backward loop must be performed several times over the
+same instants in time, as \cref{fig:sste_time_history_cost} reports. The cost is then
+\begin{equation}
+  \sum_{j=1}^{N_t} j
+  =
+  \frac{N_t(N_t+1)}{2}
+  \sim
+  \frac{1}{2}N_t^{2},
+  \label{eq:sste_backward_sum}
+\end{equation}
+which brings the total stepping work to
+\begin{equation}
+  \mathcal{W}_{\mathrm{SSTE}}=3N_pN_t^{2}.
+  \label{eq:sste_multiple_time_cost}
+\end{equation}
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[x=1.15cm, y=1cm, >=Stealth, line width=0.7pt]
+    % one row per target time: the forward sweep is stored once, while the
+    % adjoint loop restarts from every target time and repeats the same intervals
+    \foreach \row/\nback/\col in {0/1/blue, 1/2/green!55!black, 2/3/magenta}{%
+      \begin{scope}[yshift={-\row*2.0cm}]
+        \draw[black] (-0.3,0) -- (7.3,0);
+        \foreach \i in {0,...,7}{\fill (\i,0) circle (1.5pt);}
+        \foreach \i in {0,...,6}{\draw[orange,->] (\i,0) to[bend left=55] (\i+1,0);}
+        \node[anchor=south, font=\footnotesize] at (3.5,0.62)
+          {forward: solved once, \(\hat{\mathbf{q}}(t)\) stored};
+        \node[anchor=west, font=\footnotesize] at (7.6,0) {\(T_{\the\numexpr\row+1\relax}\)};
+      \end{scope}
+    }
+    \foreach \j in {1}{\draw[blue,->] (\j,-0.1) to[bend left=55] (\j-1,-0.1);}
+    \begin{scope}[yshift=-2.0cm]
+      \foreach \j in {1,2}{\draw[green!55!black,->] (\j,-0.1) to[bend left=55] (\j-1,-0.1);}
+    \end{scope}
+    \begin{scope}[yshift=-4.0cm]
+      \foreach \j in {1,2,3}{\draw[magenta,->] (\j,-0.1) to[bend left=55] (\j-1,-0.1);}
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Stepping work of SSTE over a history of target times. The forward solve is performed
+  once and stored, whereas the adjoint loop restarts from each target time \(T_j\) and traverses
+  the same intervals again, so that the \(j\)-th target time costs \(j\) backward steps and the
+  total work grows as \(O(N_t^{2})\).}
+  \label{fig:sste_time_history_cost}
+\end{figure}
+
+The method must therefore always be preferred whenever
+\(\mathcal{W}_{\mathrm{SSTE}}\ll\mathcal{W}_{\mathrm{DCT}}\), that is, whenever
+\(3N_pN_t^{2}\ll rN_t\), which reduces to \(3N_pN_t\ll r\). This can be useful only when
+\(r\sim N\) and \(N_p\sim O(1)\). Adjoint methods are known to carry this bottleneck and, as the
+structure of the problem shows, they are very amenable to parallelization in time, as discussed by
+\citet{skene-eggl-schmid-2021}; we do not discuss such strategies here.

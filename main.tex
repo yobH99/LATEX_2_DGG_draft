@@ -1,0 +1,203 @@
+\documentclass[11pt]{article}
+
+% arXiv/template formatting
+\usepackage[noblocks]{authblk}
+\usepackage[letterpaper, margin=1in]{geometry}
+\usepackage[title]{appendix}
+\usepackage{setspace}
+\usepackage{url}
+
+% Manuscript packages
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{flafter}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[authoryear, round]{natbib}
+\usepackage{xcolor}
+\usepackage{comment}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{mathrsfs}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{plotmarks, arrows.meta, positioning}
+\usepgfplotslibrary{patchplots}
+\usepackage{hyperref}
+\usepackage[noabbrev]{cleveref}
+\crefname{section}{\S}{\S\S}
+\Crefname{section}{Section}{Sections}
+
+% Print \label names in the margins while drafting, comment out for the final version.
+\usepackage[notref,notcite]{showkeys}
+
+\graphicspath{{./}{figures/}}
+
+\definecolor{darkblue}{rgb}{0,0,0.80}
+\hypersetup{
+    colorlinks=true,
+    linkcolor={darkblue},
+    citecolor={darkblue},
+    filecolor=black,
+    urlcolor={darkblue},
+    plainpages=false,
+}
+
+\makeatletter
+\newcommand\affiliation[1]{\gdef\@affiliation{\let\aff\aff@inst#1}}
+\gdef\@affiliation{}
+\def\email#1{Email address for correspondence: #1}
+\def\aff#1{\ignorespaces\textsuperscript{#1}}
+\def\corresp#1{\unskip\thanks{#1}}
+\makeatother
+\setlength{\abovecaptionskip}{8pt plus 0pt minus 2pt}
+\setlength{\bibsep}{2pt plus 0.3ex}
+\numberwithin{equation}{section}
+\renewcommand\Authsep{, }
+\renewcommand\Authands{, }
+\renewenvironment{abstract}
+{\begin{quote}
+\noindent \rule{\linewidth}{.5pt}\par{\bfseries \abstractname.}}
+{\medskip\noindent \rule{\linewidth}{.5pt}
+\end{quote}}
+
+% Custom fonts from the arXiv template
+\DeclareTextFontCommand\textsfi{\usefont{OT1}{cmss}{m}{sl}}
+\DeclareMathAlphabet\mathsfi{OT1}{cmss}{m}{sl}
+\DeclareTextFontCommand\textsfb{\usefont{OT1}{cmss}{bx}{n}}
+\DeclareMathAlphabet\mathsfb{OT1}{cmss}{bx}{n}
+\DeclareTextFontCommand\textsfbi{\usefont{OT1}{cmss}{m}{sl}}
+\DeclareMathAlphabet\mathsfbi{OT1}{cmss}{m}{sl}
+\IfFileExists{t1phv.fd}
+{\DeclareTextFontCommand\textsfbi{\usefont{T1}{phv}{b}{it}}
+\DeclareMathAlphabet\mathsfbi{T1}{phv}{b}{it}}
+{}
+\IfFileExists{ot1phv.fd}
+{\DeclareTextFontCommand\textsfbi{\usefont{OT1}{phv}{b}{it}}
+\DeclareMathAlphabet\mathsfbi{OT1}{phv}{b}{it}}
+{}
+
+\newcommand{\tc}[1]{\mathsfbi{#1}}
+\newcommand{\td}[1]{{\bf #1}}
+\newcommand{\vc}[1]{\boldsymbol{#1}}
+\newcommand{\vd}[1]{{\bf #1}}
+\newcommand{\ts}[1]{\mathsfi{#1}}
+\newcommand{\ii}{\mathrm{i}}
+
+
+\DeclareRobustCommand{\solidlegend}{%
+    \tikz[baseline=-0.6ex]\draw[line width=0.5pt] (0,0) -- (0.25,0);%
+}
+\DeclareRobustCommand{\dashlegend}{%
+    \tikz[baseline=-0.6ex]\draw[line width=0.5pt,dashed] (0,0) -- (0.25,0);%
+}
+\DeclareRobustCommand{\dottedlegend}{%
+    \tikz[baseline=-0.6ex]\draw[line width=0.5pt,dotted] (0,0) -- (0.25,0);%
+}
+\DeclareRobustCommand{\circlegend}{%
+    \tikz[baseline=-0.6ex]\draw[line width=0.5pt] (0.45,0) circle (0.11);%
+}
+\DeclareRobustCommand{\circlegendfilled}{%
+    \tikz[baseline=-0.6ex]\filldraw[line width=0.5pt] (0.45,0) circle (0.11);%
+}
+\DeclareRobustCommand{\squarelegend}{%
+    \tikz[baseline=-0.6ex]\draw[line width=0.5pt] (0.34,-0.11) rectangle (0.56,0.11);%
+}
+
+\newcommand{\diff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\difftwo}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\difft}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
+\newcommand{\diffp}[2]{\frac{\partial \left( #1 \right)}{\partial #2}}
+\newcommand{\divv}[1]{\nabla\!\cdot\!\mathbf{#1}}
+\newcommand{\mean}[1]{\left\langle #1 \right\rangle}
+\newcommand{\Gm}{\mathscr{G}^{\mathrm{mean}}}
+\newcommand{\kstar}{k_\ast(t)}
+\newcommand{\sigmastar}{\overline{\sigma}_\ast(t)}
+\newcommand{\Atw}{\mathrm{A_t}}
+\newcommand{\Sch}{\mathrm{Sc}}
+\newcommand{\figpath}{figures/}
+\newcommand{\Frd}{\mathrm{Fr}}
+\newcommand{\Pe}{\mathrm{Pe}}
+\newcommand{\Amu}{\mathrm{A}_{\mu}}
+\newcommand{\CO}{\mathrm{CO}_2}
+\newcommand{\bnabla}{\boldsymbol{\nabla}}
+\newcommand{\bcdot}{\boldsymbol{\cdot}}
+\newcommand{\Rey}{\mathit{Re}}
+\newcommand{\Real}{\operatorname{Re}}
+\newcommand{\Imag}{\operatorname{Im}}
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\LDA}{LDA}
+
+
+% Figure loading flag: comment out \loadfigtrue for fast caption-only compilation.
+\newif\ifloadfig
+\loadfigtrue
+\newcommand{\figfile}[1]{\ifloadfig\IfFileExists{#1}{\input{#1}}{}\fi}
+
+% Tikz figures are externalised: the first compile turns each picture into
+% figures_pdf/<name>.pdf, every later compile just includes that PDF. The
+% tracked figures_pdf/README.txt keeps this required directory present in
+% GitHub and Overleaf imports; do not remove that marker file.
+% Needs shell escape, so compile with
+%     pdflatex -shell-escape main.tex
+% A figure is rebuilt automatically when its source changes. To force the lot,
+% delete figures_pdf/ or run  pdflatex -shell-escape -jobname ...
+% Comment out \tikzexternalize to send everything back through pgfplots.
+\usetikzlibrary{external}
+\tikzexternalize[prefix=figures_pdf/]
+
+% \tikzfig{name} draws figures/name.tex and pins its cached PDF to that name
+\newcommand{\tikzfig}[1]{\tikzsetnextfilename{#1}\input{figures/#1.tex}}
+
+\title{\bf On the diffusion of Rayleigh--Taylor Instability}
+\author[1]{\bf Marildo Kola\corresp{\email{marildo@umich.edu}}}
+\author[2,3]{\bf Daniel Israel}
+\author[1]{\bf Aaron Towne}
+\affil[1]{\normalsize Department of Mechanical Engineering, University of Michigan, Ann Arbor, MI, USA}
+\affil[2]{\normalsize Los Alamos National Laboratory Michigan SPARC, Ann Arbor, MI, USA}
+\affil[3]{\normalsize Department of Aerospace Engineering, University of Michigan, Ann Arbor, MI, USA \vspace{-1cm}}
+\date{}
+\setcounter{Maxaffil}{0}
+
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+    abstract
+    \citet{dimonte-ramaprabhu-young-et-al-2005}
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_governing_equations}
+\input{sections/03_statistics_initial_perturbations}
+\input{sections/04_perturbation_energy}
+\input{sections/05_results_boussinesq}
+\clearpage
+\input{sections/06_variable_density}
+
+
+\clearpage
+\begin{appendices}
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\crefalias{section}{appendix}
+\input{sections/09_app_continuous_operators}
+\clearpage
+\input{sections/11_app_stochastic_trace_estimator}
+\clearpage
+\end{appendices}
+
+
+
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references,manual_references}
+
+
+\end{document}

@@ -1,0 +1,20 @@
+\subsection{Verification}
+\label{sec:appendix_verification}
+In this section we verify the SSTE algorithm on canonical autonomous test cases and on an analytical non-autonomous problem, and we measure every case through the growth functional \(g(T)\) of \eqref{eq:appendix_growth_functional}. We define the relative error as
+\begin{equation}
+  \varepsilon_{\mathrm{rel}}(T)
+  =
+  \frac{
+    \left|\widehat{g}(T)-g_{\mathrm{ref}}(T)\right|
+  }{
+    \left|g_{\mathrm{ref}}(T)\right|
+  },
+  \label{eq:verification_relative_error}
+\end{equation}
+where \(g_{\mathrm{ref}}\) is the reference value and \(\widehat{g}\) is the corresponding SSTE estimate. The reference is exact in every case considered, but its origin differs. For autonomous problems the linearized operators are constant in time, so the procedure is unchanged except that the propagator can be formed and stored explicitly; the reference is then the trace evaluated from the exponential propagator. For the fully non-autonomous case we derive a closed-form solution, and the reference is the resulting analytical expression.
+
+The verification cases are organized as follows. \Cref{sec:appendix_verification_gl} uses an autonomous complex Ginzburg--Landau problem, so the exact matrix-exponential reference is available and the estimator can be tested without ambiguity from time-dependent coefficients. This case also provides the direct comparison between SSTE and the naive \(\mathsfbi{C}_{00}^{z}\) truncation discussed in \Cref{sec:appendix_necessity_sste}. \Cref{sec:appendix_verification_poiseuille} repeats both the autonomous matrix-exponential verification and the convergence-cost comparison for plane Poiseuille flow, providing a fluid-dynamical test of the same trace construction. \Cref{sec:appendix_verification_nonautonomous} uses a fully non-autonomous scalar problem with a closed-form trace reference, isolating the effect of time-dependent coefficients.
+
+\input{sections/11c1_app_sste_verification_ginzburg_landau}
+\input{sections/11c2_app_sste_verification_poiseuille}
+\input{sections/11c3_app_sste_verification_nonautonomous}

@@ -1,0 +1,1425 @@
+\section{Statistics of the initial perturbations}
+\label{sec:statistics_of_the_incoming_perturbations}
+One contribution of this work is to establish a direct connection between the statistical approach used to describe the energy evolution and the physical structure of the initial perturbation. \citet{frame-towne-2024} introduced the statistical perspective for a Poiseuille flow and treated the initial correlation matrix as a mathematical construct, noting that it need not correspond to a correlation one would actually measure in an experiment. While this is a fair characterization for the simple problem they considered, we show here that the initial statistics are more than a theoretical device, at least for the Rayleigh--Taylor instability, where they can be tied directly to the initial condition imposed in a controlled setting such as an experiment or a numerical simulation.
+
+In physical space, the covariance of the initial perturbation field \(\boldsymbol{q}'=[w,\rho]^\top\) (the same argument applies to the Boussinesq state vector and is not reported for simplicity) is
+\begin{equation}
+    \mathsfbi{C}_{00}(\boldsymbol{x},\boldsymbol{r})
+    =
+    \mean{
+      \boldsymbol{q}'(\boldsymbol{x})\,
+      \boldsymbol{q}'(\boldsymbol{x}+\boldsymbol{r})
+    }
+    =
+    \begin{pmatrix}
+        C_{00}^{ww}(\boldsymbol{x},\boldsymbol{r}) & C_{00}^{w\rho}(\boldsymbol{x},\boldsymbol{r}) \\[4pt]
+        C_{00}^{\rho w}(\boldsymbol{x},\boldsymbol{r}) & C_{00}^{\rho\rho}(\boldsymbol{x},\boldsymbol{r})
+    \end{pmatrix}.
+    \label{eq:physical_covariance_general}
+\end{equation}
+In the Rayleigh--Taylor problem it is customary to initialize the perturbation by displacing the interface~\citep{cook-dimotakis-2001}, which perturbs the density alone and reduces the characterization of the initial statistics to that of \(C_{00}^{\rho\rho}\).
+
+\citet{frame-towne-2024} assumed implicitly that the correlation of the initial perturbation is separable between the horizontal and vertical directions, and explicitly that the horizontal statistics are homogeneous, so that the horizontal dependence enters only through the separation \(\boldsymbol{r}_h=(r_x,r_y)\). Although homogeneity may be a reasonable assumption for a stochastic field, separability is somewhat stronger and not guaranteed a priori. We show below that, for the Rayleigh--Taylor instability, separability need not be imposed externally; it instead emerges as a property of the initial disturbance itself.
+
+For a classical Rayleigh--Taylor instability, it is customary to think of the instability as being introduced at the interface between the two fluids. The initial perturbation can therefore be represented as a small displacement \(\eta(\boldsymbol{x}_h)\) of this interface at \(t=0\), with \(\boldsymbol{x}_h=(x,y)\) the horizontal coordinate, so that the density field at the instant the perturbation is imposed is
+\begin{equation}
+    \rho(\boldsymbol{x},0)
+    =
+    \rho_0(z-\eta)
+    =
+    \rho_0(z)
+    -
+    \rho_{0,z}(z,0)\,\eta(\boldsymbol{x}_h)
+    +
+    O\!\left(\eta^2\right).
+    \label{eq:initial_density_displacement}
+\end{equation}
+At leading order, the density perturbation is therefore obtained directly from the local displacement of the base profile,
+\begin{equation}
+    \rho'(\boldsymbol{x},0)
+    =
+    -
+    \rho_{0,z}(z,0)\,\eta(\boldsymbol{x}_h),
+    \label{eq:initial_density_perturbation_eta}
+\end{equation}
+where \(\rho_{0,z}=\mathrm{d}\rho_0/\mathrm{d}z\). For the base state used in this work, the initial density perturbation is
+\begin{equation}
+    \rho'(\boldsymbol{x},0)
+    =
+    -
+    \frac{2\,\Atw}{\sqrt{\pi}\,\delta_0}
+    \exp\!\left(-\frac{z^2}{\delta_0^2}\right)
+    \eta(\boldsymbol{x}_h),
+    \label{eq:initial_density_perturbation_erf}
+\end{equation}
+where \(\delta_0\) is the initial diffusive thickness. This expression exhibits the separation between the non-homogeneous vertical direction and the statistical description of the disturbance in the horizontal plane. The vertical structure of the initial density perturbation is fixed by the base state through \(\rho_{0,z}\), while the remaining spatial characterization is contained in the random interface displacement \(\eta(\boldsymbol{x}_h)\), assumed to be a zero-mean random field. It immediately follows
+\begin{equation}
+    C_{00}^{\rho\rho}(\boldsymbol{x}_h,\boldsymbol{r}_h,z,z')
+    =
+    \underbrace{\rho_{0,z}(z,0)\,\rho_{0,z}(z',0)}_{C_{00}^{z}(z,z')}\,
+    \underbrace{\mean{\eta(\boldsymbol{x}_h)\,\eta(\boldsymbol{x}_h+\boldsymbol{r}_h)}}_{C_{00}^{xy}(\boldsymbol{x}_h,\boldsymbol{r}_h)},
+    \label{eq:initial_density_covariance_separable}
+\end{equation}
+where the vertical factor \(C_{00}^{z}\) is fixed by the base state through \(\rho_{0,z}\) and retains the inhomogeneity of the diffusive layer, while the horizontal factor \(C_{00}^{xy}\) carries the statistics of the interface displacement. Assuming the displacement field to be homogeneous and isotropic, it reduces further to a function of the scalar separation \(r=|\boldsymbol{r}_h|\),
+\begin{equation}
+    C_{00}^{xy}(\boldsymbol{x}_h,\boldsymbol{r}_h)
+    =
+    C_{00}^{xy}(\boldsymbol{r}_h)
+    =
+    C_{00}^{xy}(r).
+    \label{eq:eta_correlation_homogeneous_isotropic}
+\end{equation}
+For the diffusive profile used here, the vertical covariance factor becomes
+\begin{equation}
+    C_{00}^{z}(z,z')
+    =
+    \frac{4\,\Atw^{2}}{\pi\,\delta_0^{2}}
+    \exp\!\left(
+        -\frac{z^2+{z'}^2}{\delta_0^2}
+    \right).
+    \label{eq:vertical_covariance_factor_erf}
+\end{equation}
+This form makes explicit how the non-homogeneous direction is treated in the statistical description. The vertical dependence is not prescribed as an additional modeling assumption, but follows from the diffusive base state. The only quantity that remains to be specified is the in-plane correlation of the initial interface displacement.
+
+In physical space, one could prescribe this correlation directly. For example, one possible choice is a Gaussian correlation,
+\begin{equation}
+    C_{00}^{xy}(r)
+    =
+    \mean{\eta_0^2}
+    \exp\!\left(-\frac{r^2}{\lambda^2}\right),
+    \label{eq:gaussian_eta_correlation}
+\end{equation}
+where \(\lambda\) is the horizontal correlation length and \(\mean{\eta_0^2}\) is the variance of the initial interface displacement. However, if the initial condition is imposed experimentally or numerically, the correlation in physical space is not always the most natural quantity to prescribe or measure. It is often more customary to describe a random perturbation through its spectral content. We therefore introduce the spectrum associated with the random field \(\eta(x,y)\) and show how it is related to the physical-space correlation used in the covariance formulation.
+
+We write the two-dimensional Fourier representation of the interface displacement as
+\begin{equation}
+    \eta(\boldsymbol{x}_h)
+    =
+    \int_{\mathbb{R}^2}
+    \hat{\eta}(\boldsymbol{k})
+    \exp(i\boldsymbol{k}\bcdot\boldsymbol{x}_h)
+    \,\mathrm{d}\boldsymbol{k},
+    \qquad
+    \boldsymbol{k}=(k_x,k_y),
+    \label{eq:eta_fourier_transform}
+\end{equation}
+and introduce the spectral density \(\Phi_{00}^{xy}\) through
+\begin{equation}
+    \mean{
+        \hat{\eta}(\boldsymbol{k})
+        \hat{\eta}^{\ast}(\boldsymbol{k}')
+    }
+    =
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    \delta(\boldsymbol{k}-\boldsymbol{k}').
+    \label{eq:eta_spectral_density_definition}
+\end{equation}
+With this convention, the physical-space correlation is the Fourier transform of the spectral density,
+\begin{equation}
+    C_{00}^{xy}(\boldsymbol{r})
+    =
+    \int_{\mathbb{R}^2}
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    \exp(i\boldsymbol{k}\bcdot\boldsymbol{r})
+    \,\mathrm{d}\boldsymbol{k}.
+    \label{eq:eta_correlation_spectral_density}
+\end{equation}
+For isotropic statistics in the horizontal plane, \(\Phi_{00}^{xy}\) depends only on \(k=|\boldsymbol{k}|\). Rewriting \eqref{eq:eta_correlation_spectral_density} in polar coordinates gives
+\begin{equation}
+    C_{00}^{xy}(r)
+    =
+    2\pi
+    \int_0^\infty
+    \Phi_{00}^{xy}(k)
+    J_0(kr)\,
+    k\,\mathrm{d}k,
+    \label{eq:eta_correlation_hankel_phi}
+\end{equation}
+where
+\begin{equation}
+    \label{eq:bessel_j0}
+    J_0(kr)
+    =
+    \frac{1}{2\pi}
+    \int_0^{2\pi}
+    \exp(i k r \cos\theta)\,
+    \mathrm{d}\theta
+\end{equation}
+is the Bessel function of the first kind of order zero. The two-dimensional isotropic spectrum of the interface displacement is then defined as the circularly integrated spectral density
+\begin{equation}
+    E_{\eta}^{2D}(k)
+    =
+    \pi k\,\Phi_{00}^{xy}(k),
+    \label{eq:eta_2d_spectrum_definition}
+\end{equation}
+chosen such that
+\begin{equation}
+    \mean{\eta_0^2}
+    =
+    C_{00}^{xy}(0)
+    =
+    2
+    \int_0^\infty
+    E_{\eta}^{2D}(k)\,
+    \mathrm{d}k.
+    \label{eq:eta_variance_spectrum}
+\end{equation}
+Therefore, the in-plane correlation and the isotropic spectrum form the Hankel transform pair
+\begin{equation}
+    C_{00}^{xy}(r)
+    =
+    2
+    \int_0^\infty
+    E_{\eta}^{2D}(k)
+    J_0(kr)\,
+    \mathrm{d}k,
+    \qquad
+    E_{\eta}^{2D}(k)
+    =
+    \frac{k}{2}
+    \int_0^\infty
+    C_{00}^{xy}(r)
+    J_0(kr)\,
+    r\,\mathrm{d}r.
+    \label{eq:eta_hankel_transform_pair}
+\end{equation}
+\begin{figure}
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/corr2D_plot.tex}
+  \end{minipage}
+  \hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \input{figures/spectra2D_plot.tex}
+  \end{minipage}
+  \caption{Two-dimensional isotropic spectra and correlations for the first three members
+  (\(n=1,2,3\)) of the family defined in \eqref{eq:eta_spectrum_family}--\eqref{eq:eta_correlation_family}.
+  (a) Physical-space correlation function \(C_{00,n}^{xy}(r)\) of the interface displacement
+  \(\eta(\boldsymbol{x}_h)\). (b) Corresponding two-dimensional isotropic wavenumber spectrum
+  \(E_{\eta,n}^{2D}(k)\). Panels (a) and (b) represent the same random field, related through
+  the Hankel transform pair \eqref{eq:eta_hankel_transform_pair}.}
+  \label{fig:eta_2d_family}
+\end{figure}
+This relation is the key point. Prescribing the initial correlation \(C_{00}^{xy}(r)\) in physical space is equivalent to prescribing the initial spectrum \(E_{\eta}^{2D}(k)\) in Fourier space. The two descriptions represent the same random interface displacement, but working with spectra in Fourier space is often simpler and more natural than working directly with correlations in physical space, especially when the initial field is generated or analyzed through its spectral content.
+
+In summary, a direct connection emerges between the initial conditions that one would impose in a numerical simulation or an experimental campaing and the statistical framework. The non-homogeneous vertical direction is carried by the deterministic factor \(\rho_{0,z}(z,0)\rho_{0,z}(z',0)\), which localizes the perturbation around the diffuse interface. The homogeneous horizontal directions are instead described statistically by the spectrum \(E_{\eta}^{2D}(k)\), which determines how the initial interface variance is distributed across horizontal length scales.
+
+Finally, to illustrate the argument presented above, consider the family of isotropic spectra
+\begin{equation}
+    E_{\eta,n}^{2D}(k)
+    =
+    \frac{2^n\mean{\eta_0^2}}{(n-1)!\,k_0}
+    \left(\frac{k}{k_0}\right)^{2n-1}
+    \exp\!\left[
+        -2\left(\frac{k}{k_0}\right)^2
+    \right],
+    \qquad n=1,2,\ldots ,
+    \label{eq:eta_spectrum_family}
+\end{equation}
+where \(k_0\) is the characteristic horizontal wavenumber of the initial perturbation field. Using \eqref{eq:eta_hankel_transform_pair}, the corresponding isotropic correlation function is
+\begin{equation}
+    C_{00,n}^{xy}(r)
+    =
+    \mean{\eta_0^2}
+    \exp\!\left(-\frac{k_0^2 r^2}{8}\right)
+    L_{n-1}^{(0)}
+    \!\left(
+        \frac{k_0^2 r^2}{8}
+    \right),
+    \label{eq:eta_correlation_family}
+\end{equation}
+where \(L_n^{(0)}\) denotes the Laguerre polynomial of degree \(n\) and order zero. Figure~\ref{fig:eta_2d_family} shows the spectrum \(E_{\eta,n}^{2D}(k)\) and its physical-space correlation counterpart \(C_{00,n}^{xy}(r)\) for the first three members of this family. Defining
+\begin{equation}
+    \lambda = \frac{2\sqrt{2}}{k_0},
+    \label{eq:lambda_k0_relation}
+\end{equation}
+the first few correlations are
+\begin{equation}
+\begin{aligned}
+    C_{00,1}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \exp\!\left(-\frac{r^2}{\lambda^2}\right),
+    \\
+    C_{00,2}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1-\frac{r^2}{\lambda^2}
+    \right)
+    \exp\!\left(-\frac{r^2}{\lambda^2}\right),
+    \\
+    C_{00,3}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1
+        -
+        2\frac{r^2}{\lambda^2}
+        +
+        \frac{1}{2}\frac{r^4}{\lambda^4}
+    \right)
+    \exp\!\left(-\frac{r^2}{\lambda^2}\right).
+\end{aligned}
+\label{eq:eta_correlation_family_examples}
+\end{equation}
+
+The Gaussian correlation used by \citet{frame-towne-2024} to describe the three-dimensional growth of the flow can be tied directly to a physical quantity, namely the spectrum of the first member of the family \eqref{eq:eta_spectrum_family}. Higher-order members produce correlations given by a Gaussian envelope multiplied by a polynomial, and correspond to spectra with different distributions of variance over horizontal wavenumbers. The choice of spectrum in \eqref{eq:eta_spectrum_family} is in principle arbitrary, and may take different forms depending on what one wishes to model. This freedom is the broader point. Recasting the initial statistics in spectral space does more than connect them to physical space; it gives the method a physical interpretation that extends well beyond the present setting. The same derivation carries over to a three-dimensional homogeneous and isotropic field, so that the relevant quantities can be related to a von K\'arm\'an--Pao spectrum of the kind used to model free turbulence. The more curious reader will also recognize that the two-dimensional family employed here is the counterpart of the three-dimensional initial spectrum used by \citet{rogallo-1981} in his seminal work on homogeneous isotropic turbulence.
+
+In this sense, the statistical formulation used here can be interpreted either in physical space, through the initial covariance, or in spectral space, through the initial interface-displacement spectrum. 
+
+
+
+\begin{comment}
+    \section{Isotropic spectra and correlation structure}
+\label{sec:isotropic_spectra_correlation_structure}
+
+\subsection{Summary}
+
+This part aims to establish a direct correspondence between isotropic spectra and the two-point correlation structure in physical space. Within the statistical framework considered here, specifying the two-point correlation function in physical space is equivalent to specifying the corresponding isotropic spectrum in Fourier space. The two descriptions are related through a Hankel transform pair. The precise form of this transform depends on the dimension of the homogeneous space.
+
+The three-dimensional case is first recalled because it is the most familiar setting in turbulence. In that case, an isotropic energy spectrum \(E(k)\) and the trace of the two-point correlation tensor \(C_{ii}(r)\) form a spherical Bessel transform pair,
+\begin{equation}
+  C_{ii}(r)
+  =
+  \int_0^\infty
+  E(k)\,
+  j_0(kr)\,
+  \mathrm{d}k,
+  \qquad
+  E(k)
+  =
+  \frac{2k}{\pi}
+  \int_0^\infty
+  C_{ii}(r)\,
+  \sin(kr)\,
+  r\,\mathrm{d}r,
+  \label{eq:summary_3d_transform_pair}
+\end{equation}
+where
+\begin{equation}
+  j_0(kr)
+  =
+  \frac{\sin(kr)}{kr}
+\end{equation}
+is the spherical Bessel function of order zero. This relation is useful to recall because it shows explicitly how a prescribed spectrum and a prescribed correlation are two equivalent descriptions of the same homogeneous isotropic random field.
+
+For the Rayleigh--Taylor initialization considered in the main text, however, the relevant homogeneous space is not three-dimensional. The base state is non-homogeneous in the vertical direction \(z\), and homogeneity is assumed only in the horizontal directions \((x,y)\). The random quantity to be described spectrally is therefore the interface displacement \(\eta(x,y)\), not a fully three-dimensional velocity field. In that case, the appropriate object is the two-dimensional isotropic spectrum \(E_{\eta}^{2D}(k)\), related to the interface correlation \(C_{00}^{xy}(r)\) by
+\begin{equation}
+  C_{00}^{xy}(r)
+  =
+  2
+  \int_0^\infty
+  E_{\eta}^{2D}(k)\,
+  J_0(kr)\,
+  \mathrm{d}k,
+  \qquad
+  E_{\eta}^{2D}(k)
+  =
+  \frac{k}{2}
+  \int_0^\infty
+  C_{00}^{xy}(r)\,
+  J_0(kr)\,
+  r\,\mathrm{d}r.
+  \label{eq:summary_2d_transform_pair_eta}
+\end{equation}
+Here \(J_0\) is the Bessel function of the first kind of order zero. The factor \(2\) appears because the interface spectrum is defined with the energy-like normalization
+\begin{equation}
+  \int_0^\infty
+  E_{\eta}^{2D}(k)\,
+  \mathrm{d}k
+  =
+  \frac{1}{2}
+  \mean{\eta_0^2} .
+  \label{eq:summary_eta_energy_like_normalization}
+\end{equation}
+
+The purpose of the derivation below is therefore twofold. First, the standard three-dimensional relation between \(C_{ii}(r)\) and \(E(k)\) is recalled. Second, the corresponding two-dimensional relation is derived for the interface displacement \(\eta(x,y)\), while the non-homogeneous vertical dependence is retained separately through the deterministic factor \(\rho_{0,z}(z,0)\rho_{0,z}(z',0)\).
+
+\section{Proof for the 3D case}
+\label{sec:proof_3d_case}
+
+We first recall the standard three-dimensional derivation. Defining the direct and inverse Fourier transforms of a field \(q_i(\boldsymbol{x})\) as
+\begin{equation}
+  q_i(\boldsymbol{x})
+  =
+  \int_{\mathbb{R}^3}
+  \hat{q}_i(\boldsymbol{k})\,
+  e^{i\boldsymbol{k}\bcdot\boldsymbol{x}}
+  \,\mathrm{d}\boldsymbol{k},
+  \qquad
+  \hat{q}_i(\boldsymbol{k})
+  =
+  \frac{1}{(2\pi)^3}
+  \int_{\mathbb{R}^3}
+  q_i(\boldsymbol{x})\,
+  e^{-i\boldsymbol{k}\bcdot\boldsymbol{x}}
+  \,\mathrm{d}\boldsymbol{x},
+  \label{eq:3d_fourier_transform}
+\end{equation}
+the two-point correlation tensor in physical space is defined as
+\begin{equation}
+  C_{ij}(\boldsymbol{r})
+  =
+  \mean{
+    q_i(\boldsymbol{x})\,
+    q_j(\boldsymbol{x}+\boldsymbol{r})
+  }.
+  \label{eq:3d_physical_correlation}
+\end{equation}
+The spectral correlation tensor is defined by
+\begin{equation}
+  \mean{
+    \hat{q}_{i}(\boldsymbol{k})\,
+    \hat{q}_j^{\ast}(\boldsymbol{k}')
+  }
+  =
+  \Phi_{ij}(\boldsymbol{k})\,
+  \delta(\boldsymbol{k}-\boldsymbol{k}').
+  \label{eq:3d_spectral_correlation}
+\end{equation}
+Substituting \eqref{eq:3d_fourier_transform} into \eqref{eq:3d_physical_correlation}, and using \eqref{eq:3d_spectral_correlation}, gives the Fourier transform pair
+\begin{equation}
+  C_{ij}(\boldsymbol{r})
+  =
+  \int_{\mathbb{R}^3}
+  \Phi_{ij}(\boldsymbol{k})\,
+  e^{i\boldsymbol{k}\bcdot\boldsymbol{r}}
+  \,\mathrm{d}\boldsymbol{k},
+  \qquad
+  \Phi_{ij}(\boldsymbol{k})
+  =
+  \frac{1}{(2\pi)^3}
+  \int_{\mathbb{R}^3}
+  C_{ij}(\boldsymbol{r})\,
+  e^{-i\boldsymbol{k}\bcdot\boldsymbol{r}}
+  \,\mathrm{d}\boldsymbol{r}.
+  \label{eq:3d_c_phi_pair}
+\end{equation}
+
+Assuming isotropy, the trace of the physical-space correlation tensor and the trace of the spectral correlation tensor depend only on
+\[
+  r = |\boldsymbol{r}|,
+  \qquad
+  k = |\boldsymbol{k}|.
+\]
+Writing \(\boldsymbol{k}\bcdot\boldsymbol{r}=kr\cos\theta\), the angular integral in \eqref{eq:3d_c_phi_pair} gives
+\begin{equation}
+  \int_{S^2}
+  e^{i\boldsymbol{k}\bcdot\boldsymbol{r}}
+  \,\mathrm{d}\Omega
+  =
+  4\pi j_0(kr),
+  \qquad
+  j_0(kr)
+  =
+  \frac{\sin(kr)}{kr}.
+  \label{eq:3d_spherical_bessel_angular}
+\end{equation}
+Therefore,
+\begin{equation}
+  C_{ii}(r)
+  =
+  \int_0^\infty
+  \Phi_{ii}(k)\,
+  j_0(kr)\,
+  4\pi k^2
+  \,\mathrm{d}k.
+  \label{eq:3d_Cii_Phii_forward_raw}
+\end{equation}
+Equivalently, using the inverse Fourier transform in \eqref{eq:3d_c_phi_pair},
+\begin{equation}
+  \Phi_{ii}(k)
+  =
+  \frac{1}{(2\pi)^3}
+  \int_0^\infty
+  C_{ii}(r)\,
+  j_0(kr)\,
+  4\pi r^2
+  \,\mathrm{d}r.
+  \label{eq:3d_Phii_Cii_inverse_raw}
+\end{equation}
+Equations \eqref{eq:3d_Cii_Phii_forward_raw} and \eqref{eq:3d_Phii_Cii_inverse_raw} give the spherical Bessel relation between \(C_{ii}\) and \(\Phi_{ii}\).
+
+At this point the energy spectrum is introduced. The turbulent kinetic energy of the field can be written as
+\begin{equation}
+  2\mathrm{KE}
+  =
+  \mean{q_i q_i}
+  =
+  C_{ii}(0).
+  \label{eq:3d_ke_cii0}
+\end{equation}
+Using \eqref{eq:3d_Cii_Phii_forward_raw} at \(r=0\), and since \(j_0(0)=1\), we have
+\begin{equation}
+  2\mathrm{KE}
+  =
+  \int_0^\infty
+  \Phi_{ii}(k)\,
+  4\pi k^2
+  \,\mathrm{d}k.
+  \label{eq:3d_ke_phi_integral}
+\end{equation}
+The three-dimensional isotropic energy spectrum is then defined as
+\begin{equation}
+  E(k)
+  =
+  4\pi k^2\,
+  \Phi_{ii}(k),
+  \label{eq:3d_energy_spectrum_definition}
+\end{equation}
+so that
+\begin{equation}
+  2\mathrm{KE}
+  =
+  \int_0^\infty
+  E(k)\,
+  \mathrm{d}k.
+  \label{eq:3d_energy_spectrum_normalization}
+\end{equation}
+Notice that the factors have been kept explicit. With the Fourier convention in \eqref{eq:3d_fourier_transform}, the factors of \((2\pi)^3\) are contained in the definition of \(\Phi_{ii}\) through \eqref{eq:3d_spectral_correlation} and \eqref{eq:3d_c_phi_pair}.
+
+Substituting \eqref{eq:3d_energy_spectrum_definition} into \eqref{eq:3d_Cii_Phii_forward_raw} gives
+\begin{equation}
+  C_{ii}(r)
+  =
+  \int_0^\infty
+  E(k)\,
+  j_0(kr)\,
+  \mathrm{d}k.
+  \label{eq:3d_Cii_E_forward}
+\end{equation}
+To obtain the inverse relation, we start from \eqref{eq:3d_Phii_Cii_inverse_raw} and use
+\begin{equation}
+  E(k)
+  =
+  4\pi k^2\,
+  \Phi_{ii}(k).
+\end{equation}
+Then
+\begin{align}
+  E(k)
+  &=
+  4\pi k^2
+  \left[
+  \frac{1}{(2\pi)^3}
+  \int_0^\infty
+  C_{ii}(r)\,
+  j_0(kr)\,
+  4\pi r^2
+  \,\mathrm{d}r
+  \right] \nonumber \\
+  &=
+  \frac{16\pi^2 k^2}{(2\pi)^3}
+  \int_0^\infty
+  C_{ii}(r)\,
+  \frac{\sin(kr)}{kr}\,
+  r^2
+  \,\mathrm{d}r \nonumber \\
+  &=
+  \frac{2k}{\pi}
+  \int_0^\infty
+  C_{ii}(r)\,
+  \sin(kr)\,
+  r
+  \,\mathrm{d}r.
+  \label{eq:3d_E_Cii_inverse}
+\end{align}
+Therefore, for three-dimensional homogeneous isotropic fields, the trace of the two-point correlation tensor and the isotropic energy spectrum form the spherical Bessel transform pair
+\begin{equation}
+  C_{ii}(r)
+  =
+  \int_0^\infty
+  E(k)\,
+  j_0(kr)\,
+  \mathrm{d}k,
+  \qquad
+  E(k)
+  =
+  \frac{2k}{\pi}
+  \int_0^\infty
+  C_{ii}(r)\,
+  \sin(kr)\,
+  r
+  \,\mathrm{d}r.
+  \label{eq:3d_transform_pair_final}
+\end{equation}
+
+\subsection{Application to a canonical family of three-dimensional spectra}
+\label{sec:3d_canonical_family}
+
+The previous discussion is general and holds for any isotropic correlation function or energy spectrum. To illustrate the correspondence, consider the family of three-dimensional isotropic spectra
+\begin{equation}
+  E_n(k)
+  =
+  C_n
+  \frac{U_0^2}{k_0}
+  \left(\frac{k}{k_0}\right)^n
+  \exp\!\left[
+    -2\left(\frac{k}{k_0}\right)^2
+  \right],
+  \label{eq:3d_spectrum_family}
+\end{equation}
+where \(k_0\) is the characteristic wavenumber and \(C_n\) is chosen so that
+\begin{equation}
+  \int_0^\infty
+  E_n(k)\,
+  \mathrm{d}k
+  =
+  3U_0^2.
+  \label{eq:3d_spectrum_family_normalization}
+\end{equation}
+Using \(s=k/k_0\), this normalization gives
+\begin{equation}
+  \int_0^\infty
+  E_n(k)\,
+  \mathrm{d}k
+  =
+  C_n U_0^2
+  \int_0^\infty
+  s^n e^{-2s^2}\,
+  \mathrm{d}s
+  =
+  3U_0^2.
+\end{equation}
+Since
+\begin{equation}
+  \int_0^\infty
+  s^n e^{-2s^2}\,
+  \mathrm{d}s
+  =
+  \frac{1}{2}
+  2^{-\frac{n+1}{2}}
+  \Gamma\!\left(\frac{n+1}{2}\right),
+\end{equation}
+the normalization constant is
+\begin{equation}
+  C_n
+  =
+  \frac{
+    3
+  }{
+    \frac{1}{2}
+    2^{-\frac{n+1}{2}}
+    \Gamma\!\left(\frac{n+1}{2}\right)
+  }
+  =
+  \frac{
+    3\,2^{\frac{n+3}{2}}
+  }{
+    \Gamma\!\left(\frac{n+1}{2}\right)
+  }.
+  \label{eq:3d_Cn}
+\end{equation}
+Here
+\begin{equation}
+  \Gamma(a)
+  =
+  \int_0^\infty
+  t^{a-1}e^{-t}\,\mathrm{d}t.
+\end{equation}
+
+For even \(n=2p\), with \(p\in\mathbb{N}\), the associated isotropic correlation function can be written in closed form as
+\begin{equation}
+  C_{ii}^{(2p)}(r)
+  =
+  3U_0^2
+  \frac{\sqrt{\pi}}{2}
+  \frac{
+    \Gamma(p)
+  }{
+    \Gamma\!\left(p+\frac{1}{2}\right)
+  }
+  L_{p-1}^{\left(\frac{1}{2}\right)}
+  \!\left(
+    \frac{k_0^2 r^2}{8}
+  \right)
+  \exp\!\left(
+    -\frac{k_0^2 r^2}{8}
+  \right),
+  \label{eq:3d_correlation_family}
+\end{equation}
+where \(L_n^{(\alpha)}(x)\) denotes the generalized Laguerre polynomial of degree \(n\) and order \(\alpha\). Defining
+\begin{equation}
+  \lambda
+  =
+  \frac{2\sqrt{2}}{k_0},
+  \label{eq:3d_lambda_k0}
+\end{equation}
+the first few members are
+\begin{align}
+  C_{ii}^{(2)}(r)
+  &=
+  3U_0^2
+  \exp\!\left(
+    -\frac{k_0^2 r^2}{8}
+  \right)
+  =
+  3U_0^2
+  \exp\!\left(
+    -\frac{r^2}{\lambda^2}
+  \right),
+  \\[6pt]
+  C_{ii}^{(4)}(r)
+  &=
+  3U_0^2
+  \left(
+    1-\frac{k_0^2 r^2}{12}
+  \right)
+  \exp\!\left(
+    -\frac{k_0^2 r^2}{8}
+  \right)
+  =
+  3U_0^2
+  \left(
+    1-\frac{2}{3}\frac{r^2}{\lambda^2}
+  \right)
+  \exp\!\left(
+    -\frac{r^2}{\lambda^2}
+  \right),
+  \\[6pt]
+  C_{ii}^{(6)}(r)
+  &=
+  3U_0^2
+  \left(
+    1-\frac{k_0^2 r^2}{6}
+    +\frac{k_0^4 r^4}{240}
+  \right)
+  \exp\!\left(
+    -\frac{k_0^2 r^2}{8}
+  \right)
+  =
+  3U_0^2
+  \left(
+    1-\frac{4}{3}\frac{r^2}{\lambda^2}
+    +\frac{4}{15}\frac{r^4}{\lambda^4}
+  \right)
+  \exp\!\left(
+    -\frac{r^2}{\lambda^2}
+  \right).
+  \label{eq:3d_first_correlations}
+\end{align}
+For \(p=1\), the isotropic correlation reduces to a purely Gaussian form. For \(p=2\), the associated spectrum is the Rogallo-type spectrum commonly used in spectral initializations \citep{rogallo-1981}.
+
+\begin{figure}
+    %\input{figures/corr3D_plot.tex}
+    %\input{figures/spectra3D_plot.tex}
+    \caption{Three-dimensional isotropic correlations and corresponding energy spectra for the first three members of the family defined in \eqref{eq:3d_spectrum_family}. On the left the correlations \(C_{ii}^{(n)}(r)\) are shown, while on the right the associated spectra \(E_n(k)\) are displayed.}
+    \label{fig:3d_correlations_spectra}
+\end{figure}
+
+\section{Proof for the 2D case relevant to RTI initialization}
+\label{sec:proof_2d_eta_case}
+
+We now derive the corresponding relation for the case used in the Rayleigh--Taylor initialization. Here the random field is the interface displacement \(\eta(x,y)\). Homogeneity is assumed only in the horizontal directions, while the vertical direction is non-homogeneous and is carried separately by the base-state factor \(\rho_{0,z}(z,0)\).
+
+\subsection{Discrete Fourier initialization}
+
+A common initialization used in direct numerical simulations is to represent the interface as a random combination of Fourier modes. If \(L_x\) and \(L_y\) are the horizontal dimensions of the numerical domain, one may write
+\begin{equation}
+    \eta(x,y)
+    =
+    \sum_{p}\sum_{q}
+    A_{pq}\,
+    \cos\!\left(
+        \frac{2\pi p}{L_x}x+\psi_{pq}
+    \right)
+    \cos\!\left(
+        \frac{2\pi q}{L_y}y+\phi_{pq}
+    \right),
+    \label{eq:eta_dns_fourier_initialization}
+\end{equation}
+where the phases \(\psi_{pq}\) and \(\phi_{pq}\) are independently drawn from a uniform distribution. The amplitudes \(A_{pq}\) are independent random variables with zero mean and covariance
+\begin{equation}
+    \mean{
+        A_{km}A_{pq}
+    }
+    =
+    \mean{
+        A_{km}^{2}
+    }
+    \delta_{kp}\delta_{mq}.
+    \label{eq:amplitude_covariance_discrete}
+\end{equation}
+The correlation of the interface displacement is obtained from the ensemble average
+\begin{align}
+    \mean{
+        \eta(x,y)\eta(x',y')
+    }
+    &=
+    \mean{
+    \sum_{k,m}
+    \sum_{p,q}
+    A_{km}A_{pq}
+    \cos\!\left(
+        \frac{2\pi k}{L_x}x+\psi_{km}
+    \right)
+    \cos\!\left(
+        \frac{2\pi m}{L_y}y+\phi_{km}
+    \right)
+    \right. \nonumber \\
+    &\qquad \left.
+    \times
+    \cos\!\left(
+        \frac{2\pi p}{L_x}x'+\psi_{pq}
+    \right)
+    \cos\!\left(
+        \frac{2\pi q}{L_y}y'+\phi_{pq}
+    \right)
+    } .
+    \label{eq:eta_discrete_correlation_expanded}
+\end{align}
+Using the independence of the amplitudes and phases, only terms with \(k=p\) and \(m=q\) contribute to the ensemble average. Applying the standard trigonometric identities and averaging over the random phases gives a correlation that depends only on the separations \(x-x'\) and \(y-y'\),
+\begin{equation}
+    C_{00}^{xy}(x-x',y-y')
+    =
+    \sum_{p,q}
+    \mean{A_{pq}^{2}}
+    \cos\!\left(
+        \frac{2\pi p}{L_x}(x-x')
+    \right)
+    \cos\!\left(
+        \frac{2\pi q}{L_y}(y-y')
+    \right).
+    \label{eq:eta_discrete_correlation_final}
+\end{equation}
+Here \(\mean{A_{pq}^{2}}\) represents the variance assigned to each Fourier mode. Introducing
+\begin{equation}
+    k_{xp}
+    =
+    \frac{2\pi p}{L_x},
+    \qquad
+    k_{yq}
+    =
+    \frac{2\pi q}{L_y},
+    \label{eq:discrete_wavenumbers_eta}
+\end{equation}
+the discrete spectral content of the interface displacement may be denoted as
+\begin{equation}
+    S_{\eta}(k_{xp},k_{yq})
+    =
+    \mean{A_{pq}^{2}}.
+    \label{eq:discrete_eta_spectrum}
+\end{equation}
+This shows directly that the Fourier amplitudes used to initialize the interface determine the two-point correlation of the initial displacement field.
+
+\subsection{Continuous two-dimensional Fourier representation}
+
+We now write the continuous analogue of the same construction. The interface displacement is represented as
+\begin{equation}
+    \eta(\boldsymbol{x}_h)
+    =
+    \int_{\mathbb{R}^2}
+    \hat{\eta}(\boldsymbol{k})
+    e^{i\boldsymbol{k}\bcdot\boldsymbol{x}_h}
+    \,\mathrm{d}\boldsymbol{k},
+    \qquad
+    \boldsymbol{x}_h=(x,y),
+    \qquad
+    \boldsymbol{k}=(k_x,k_y),
+    \label{eq:eta_fourier_representation_appendix}
+\end{equation}
+with inverse transform
+\begin{equation}
+    \hat{\eta}(\boldsymbol{k})
+    =
+    \frac{1}{(2\pi)^2}
+    \int_{\mathbb{R}^2}
+    \eta(\boldsymbol{x}_h)
+    e^{-i\boldsymbol{k}\bcdot\boldsymbol{x}_h}
+    \,\mathrm{d}\boldsymbol{x}_h.
+    \label{eq:eta_inverse_fourier_appendix}
+\end{equation}
+The spectral density \(\Phi_{00}^{xy}\) is defined by
+\begin{equation}
+    \mean{
+        \hat{\eta}(\boldsymbol{k})
+        \hat{\eta}^{\ast}(\boldsymbol{k}')
+    }
+    =
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    \delta(\boldsymbol{k}-\boldsymbol{k}').
+    \label{eq:eta_spectral_density_appendix}
+\end{equation}
+The physical-space correlation is
+\begin{equation}
+    C_{00}^{xy}(\boldsymbol{r})
+    =
+    \mean{
+        \eta(\boldsymbol{x}_h)
+        \eta(\boldsymbol{x}_h+\boldsymbol{r})
+    },
+    \qquad
+    \boldsymbol{r}=(x-x',y-y').
+    \label{eq:eta_correlation_appendix}
+\end{equation}
+Substituting \eqref{eq:eta_fourier_representation_appendix} into \eqref{eq:eta_correlation_appendix} gives
+\begin{align}
+    C_{00}^{xy}(\boldsymbol{r})
+    &=
+    \mean{
+    \int_{\mathbb{R}^2}
+    \hat{\eta}(\boldsymbol{k})
+    e^{i\boldsymbol{k}\bcdot\boldsymbol{x}_h}
+    \,\mathrm{d}\boldsymbol{k}
+    \int_{\mathbb{R}^2}
+    \hat{\eta}^{\ast}(\boldsymbol{k}')
+    e^{-i\boldsymbol{k}'\bcdot(\boldsymbol{x}_h+\boldsymbol{r})}
+    \,\mathrm{d}\boldsymbol{k}'
+    } \nonumber \\
+    &=
+    \int_{\mathbb{R}^2}
+    \int_{\mathbb{R}^2}
+    \mean{
+        \hat{\eta}(\boldsymbol{k})
+        \hat{\eta}^{\ast}(\boldsymbol{k}')
+    }
+    e^{i(\boldsymbol{k}-\boldsymbol{k}')\bcdot\boldsymbol{x}_h}
+    e^{-i\boldsymbol{k}'\bcdot\boldsymbol{r}}
+    \,\mathrm{d}\boldsymbol{k}\,
+    \mathrm{d}\boldsymbol{k}'.
+    \label{eq:eta_correlation_derivation_1}
+\end{align}
+Using \eqref{eq:eta_spectral_density_appendix},
+\begin{align}
+    C_{00}^{xy}(\boldsymbol{r})
+    &=
+    \int_{\mathbb{R}^2}
+    \int_{\mathbb{R}^2}
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    \delta(\boldsymbol{k}-\boldsymbol{k}')
+    e^{i(\boldsymbol{k}-\boldsymbol{k}')\bcdot\boldsymbol{x}_h}
+    e^{-i\boldsymbol{k}'\bcdot\boldsymbol{r}}
+    \,\mathrm{d}\boldsymbol{k}\,
+    \mathrm{d}\boldsymbol{k}' \nonumber \\
+    &=
+    \int_{\mathbb{R}^2}
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    e^{-i\boldsymbol{k}\bcdot\boldsymbol{r}}
+    \,\mathrm{d}\boldsymbol{k}.
+    \label{eq:eta_correlation_phi_negative}
+\end{align}
+Since the correlation is even in \(\boldsymbol{r}\), the sign in the exponential is immaterial, and we may write
+\begin{equation}
+    C_{00}^{xy}(\boldsymbol{r})
+    =
+    \int_{\mathbb{R}^2}
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    e^{i\boldsymbol{k}\bcdot\boldsymbol{r}}
+    \,\mathrm{d}\boldsymbol{k}.
+    \label{eq:eta_correlation_phi_appendix}
+\end{equation}
+The inverse relation is
+\begin{equation}
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    =
+    \frac{1}{(2\pi)^2}
+    \int_{\mathbb{R}^2}
+    C_{00}^{xy}(\boldsymbol{r})
+    e^{-i\boldsymbol{k}\bcdot\boldsymbol{r}}
+    \,\mathrm{d}\boldsymbol{r}.
+    \label{eq:eta_phi_correlation_appendix}
+\end{equation}
+
+\subsection{Reduction to a two-dimensional isotropic spectrum}
+
+If the horizontal statistics are isotropic, then
+\begin{equation}
+    C_{00}^{xy}(\boldsymbol{r})
+    =
+    C_{00}^{xy}(r),
+    \qquad
+    \Phi_{00}^{xy}(\boldsymbol{k})
+    =
+    \Phi_{00}^{xy}(k),
+\end{equation}
+with
+\begin{equation}
+    r=|\boldsymbol{r}|,
+    \qquad
+    k=|\boldsymbol{k}|.
+\end{equation}
+Using polar coordinates in wavenumber space,
+\[
+    \boldsymbol{k}\bcdot\boldsymbol{r}
+    =
+    kr\cos\theta,
+    \qquad
+    \mathrm{d}\boldsymbol{k}
+    =
+    k\,\mathrm{d}k\,\mathrm{d}\theta,
+\]
+equation \eqref{eq:eta_correlation_phi_appendix} gives
+\begin{align}
+    C_{00}^{xy}(r)
+    &=
+    \int_0^\infty
+    \int_0^{2\pi}
+    \Phi_{00}^{xy}(k)
+    e^{ikr\cos\theta}
+    k\,\mathrm{d}\theta\,\mathrm{d}k \nonumber \\
+    &=
+    2\pi
+    \int_0^\infty
+    \Phi_{00}^{xy}(k)
+    J_0(kr)
+    k\,\mathrm{d}k,
+    \label{eq:eta_correlation_hankel_phi_appendix}
+\end{align}
+where
+\begin{equation}
+    J_0(kr)
+    =
+    \frac{1}{2\pi}
+    \int_0^{2\pi}
+    e^{ikr\cos\theta}
+    \,\mathrm{d}\theta
+\end{equation}
+is the Bessel function of the first kind of order zero. Similarly, using polar coordinates in \eqref{eq:eta_phi_correlation_appendix},
+\begin{equation}
+    \Phi_{00}^{xy}(k)
+    =
+    \frac{1}{(2\pi)^2}
+    \int_0^\infty
+    \int_0^{2\pi}
+    C_{00}^{xy}(r)
+    e^{-ikr\cos\theta}
+    r\,\mathrm{d}\theta\,\mathrm{d}r.
+    \label{eq:eta_phi_inverse_polar_1}
+\end{equation}
+The angular integral gives \(2\pi J_0(kr)\), hence
+\begin{equation}
+    \Phi_{00}^{xy}(k)
+    =
+    \frac{1}{(2\pi)^2}
+    \int_0^\infty
+    C_{00}^{xy}(r)
+    2\pi J_0(kr)
+    r\,\mathrm{d}r.
+    \label{eq:eta_phi_inverse_polar_2}
+\end{equation}
+That is,
+\begin{equation}
+    \Phi_{00}^{xy}(k)
+    =
+    \frac{1}{2\pi}
+    \int_0^\infty
+    C_{00}^{xy}(r)
+    J_0(kr)
+    r\,\mathrm{d}r.
+    \label{eq:eta_phi_inverse_hankel_appendix}
+\end{equation}
+
+The two-dimensional isotropic spectrum of the interface displacement is defined with the energy-like normalization used in the main text,
+\begin{equation}
+    E_{\eta}^{2D}(k)
+    =
+    \pi k\,
+    \Phi_{00}^{xy}(k).
+    \label{eq:eta_spectrum_definition_appendix}
+\end{equation}
+Using \eqref{eq:eta_correlation_hankel_phi_appendix} at \(r=0\), with \(J_0(0)=1\), gives
+\begin{equation}
+    C_{00}^{xy}(0)
+    =
+    2\pi
+    \int_0^\infty
+    \Phi_{00}^{xy}(k)
+    k\,\mathrm{d}k.
+    \label{eq:eta_variance_phi}
+\end{equation}
+Therefore,
+\begin{align}
+    \int_0^\infty
+    E_{\eta}^{2D}(k)
+    \,\mathrm{d}k
+    &=
+    \int_0^\infty
+    \pi k\,
+    \Phi_{00}^{xy}(k)
+    \,\mathrm{d}k \nonumber \\
+    &=
+    \frac{1}{2}
+    \left[
+    2\pi
+    \int_0^\infty
+    \Phi_{00}^{xy}(k)
+    k\,\mathrm{d}k
+    \right] \nonumber \\
+    &=
+    \frac{1}{2}
+    C_{00}^{xy}(0)
+    =
+    \frac{1}{2}
+    \mean{\eta_0^2}.
+    \label{eq:eta_spectrum_normalization_appendix}
+\end{align}
+This is the convention used in the main text.
+
+Combining \eqref{eq:eta_correlation_hankel_phi_appendix} and \eqref{eq:eta_spectrum_definition_appendix}, we obtain
+\begin{align}
+    C_{00}^{xy}(r)
+    &=
+    2\pi
+    \int_0^\infty
+    \Phi_{00}^{xy}(k)
+    J_0(kr)
+    k\,\mathrm{d}k \nonumber \\
+    &=
+    2
+    \int_0^\infty
+    \pi k\Phi_{00}^{xy}(k)
+    J_0(kr)
+    \,\mathrm{d}k \nonumber \\
+    &=
+    2
+    \int_0^\infty
+    E_{\eta}^{2D}(k)
+    J_0(kr)
+    \,\mathrm{d}k.
+    \label{eq:eta_correlation_from_spectrum_appendix}
+\end{align}
+Similarly, combining \eqref{eq:eta_phi_inverse_hankel_appendix} and \eqref{eq:eta_spectrum_definition_appendix},
+\begin{align}
+    E_{\eta}^{2D}(k)
+    &=
+    \pi k\,
+    \Phi_{00}^{xy}(k) \nonumber \\
+    &=
+    \pi k
+    \left[
+    \frac{1}{2\pi}
+    \int_0^\infty
+    C_{00}^{xy}(r)
+    J_0(kr)
+    r\,\mathrm{d}r
+    \right] \nonumber \\
+    &=
+    \frac{k}{2}
+    \int_0^\infty
+    C_{00}^{xy}(r)
+    J_0(kr)
+    r\,\mathrm{d}r.
+    \label{eq:eta_spectrum_from_correlation_appendix}
+\end{align}
+Therefore,
+\begin{equation}
+    C_{00}^{xy}(r)
+    =
+    2
+    \int_0^\infty
+    E_{\eta}^{2D}(k)
+    J_0(kr)
+    \,\mathrm{d}k,
+    \qquad
+    E_{\eta}^{2D}(k)
+    =
+    \frac{k}{2}
+    \int_0^\infty
+    C_{00}^{xy}(r)
+    J_0(kr)
+    r\,\mathrm{d}r.
+    \label{eq:eta_transform_pair_final_appendix}
+\end{equation}
+
+\subsection{Treatment of the non-homogeneous vertical direction}
+
+The derivation above concerns only the random interface displacement \(\eta(x,y)\). In the Rayleigh--Taylor problem, the initial density perturbation is obtained from
+\begin{equation}
+    \rho'(\boldsymbol{x}_h,z,0)
+    =
+    -
+    \rho_{0,z}(z,0)\eta(\boldsymbol{x}_h).
+    \label{eq:rho_prime_eta_appendix}
+\end{equation}
+The corresponding density covariance is
+\begin{align}
+    C_{00}^{\rho\rho}(\boldsymbol{r},z,z')
+    &=
+    \mean{
+        \rho'(\boldsymbol{x}_h,z,0)
+        \rho'(\boldsymbol{x}_h+\boldsymbol{r},z',0)
+    } \nonumber \\
+    &=
+    \mean{
+        \left[
+        -\rho_{0,z}(z,0)\eta(\boldsymbol{x}_h)
+        \right]
+        \left[
+        -\rho_{0,z}(z',0)\eta(\boldsymbol{x}_h+\boldsymbol{r})
+        \right]
+    } \nonumber \\
+    &=
+    \rho_{0,z}(z,0)
+    \rho_{0,z}(z',0)
+    \mean{
+        \eta(\boldsymbol{x}_h)
+        \eta(\boldsymbol{x}_h+\boldsymbol{r})
+    } \nonumber \\
+    &=
+    \rho_{0,z}(z,0)
+    \rho_{0,z}(z',0)
+    C_{00}^{xy}(r).
+    \label{eq:density_covariance_eta_appendix}
+\end{align}
+Using \eqref{eq:eta_correlation_from_spectrum_appendix}, this may also be written as
+\begin{equation}
+    C_{00}^{\rho\rho}(\boldsymbol{r},z,z')
+    =
+    2
+    \rho_{0,z}(z,0)
+    \rho_{0,z}(z',0)
+    \int_0^\infty
+    E_{\eta}^{2D}(k)
+    J_0(kr)
+    \,\mathrm{d}k.
+    \label{eq:density_covariance_spectrum_appendix}
+\end{equation}
+This expression makes explicit that the horizontal spectral content and the vertical non-homogeneous structure are separated. The random part is contained in \(E_{\eta}^{2D}(k)\), while the vertical dependence is fixed by the base density profile through \(\rho_{0,z}\).
+
+For the diffusive base state used in the main text,
+\begin{equation}
+    \rho_{0,z}(z,0)
+    =
+    \frac{2\,\Atw}{\sqrt{\pi}\,\delta_0}
+    \exp\!\left(
+        -\frac{z^2}{\delta_0^2}
+    \right),
+    \label{eq:rho0z_erf_appendix}
+\end{equation}
+so that
+\begin{equation}
+    C_{00}^{\rho\rho}(\boldsymbol{r},z,z')
+    =
+    \frac{4\,\Atw^2}{\pi\,\delta_0^2}
+    \exp\!\left(
+        -\frac{z^2+{z'}^2}{\delta_0^2}
+    \right)
+    C_{00}^{xy}(r).
+    \label{eq:density_covariance_erf_appendix}
+\end{equation}
+Equivalently,
+\begin{equation}
+    C_{00}^{\rho\rho}(\boldsymbol{r},z,z')
+    =
+    2
+    \frac{4\,\Atw^2}{\pi\,\delta_0^2}
+    \exp\!\left(
+        -\frac{z^2+{z'}^2}{\delta_0^2}
+    \right)
+    \int_0^\infty
+    E_{\eta}^{2D}(k)
+    J_0(kr)
+    \,\mathrm{d}k.
+    \label{eq:density_covariance_erf_spectrum_appendix}
+\end{equation}
+
+\subsection{Application to a canonical family of two-dimensional spectra}
+
+The previous discussion is general and applies to any isotropic correlation function or isotropic spectrum in two dimensions. To illustrate the correspondence, let \(k_0\) denote the characteristic horizontal wavenumber of the initial interface displacement and consider
+\begin{equation}
+    E_{\eta,n}^{2D}(k)
+    =
+    \frac{
+        2^n
+        \mean{\eta_0^2}
+    }{
+        (n-1)!\,k_0
+    }
+    \left(
+        \frac{k}{k_0}
+    \right)^{2n-1}
+    \exp\!\left[
+        -2
+        \left(
+            \frac{k}{k_0}
+        \right)^2
+    \right],
+    \qquad
+    n=1,2,\ldots .
+    \label{eq:eta_spectrum_family_appendix}
+\end{equation}
+The normalization follows from
+\begin{align}
+    \int_0^\infty
+    E_{\eta,n}^{2D}(k)\,
+    \mathrm{d}k
+    &=
+    \int_0^\infty
+    \frac{
+        2^n
+        \mean{\eta_0^2}
+    }{
+        (n-1)!\,k_0
+    }
+    \left(
+        \frac{k}{k_0}
+    \right)^{2n-1}
+    \exp\!\left[
+        -2
+        \left(
+            \frac{k}{k_0}
+        \right)^2
+    \right]
+    \mathrm{d}k.
+\end{align}
+Setting \(s=k/k_0\), so that \(\mathrm{d}k=k_0\,\mathrm{d}s\), gives
+\begin{align}
+    \int_0^\infty
+    E_{\eta,n}^{2D}(k)\,
+    \mathrm{d}k
+    &=
+    \frac{
+        2^n
+        \mean{\eta_0^2}
+    }{
+        (n-1)!
+    }
+    \int_0^\infty
+    s^{2n-1}
+    e^{-2s^2}
+    \,\mathrm{d}s.
+    \label{eq:eta_family_normalization_step}
+\end{align}
+Using
+\begin{equation}
+    \int_0^\infty
+    s^{2n-1}
+    e^{-2s^2}
+    \,\mathrm{d}s
+    =
+    \frac{(n-1)!}{2^{n+1}},
+    \label{eq:eta_family_integral_identity}
+\end{equation}
+one obtains
+\begin{equation}
+    \int_0^\infty
+    E_{\eta,n}^{2D}(k)\,
+    \mathrm{d}k
+    =
+    \frac{1}{2}
+    \mean{\eta_0^2}.
+    \label{eq:eta_spectrum_family_normalization_appendix}
+\end{equation}
+
+The associated correlation is obtained from the transform pair,
+\begin{equation}
+    C_{00,n}^{xy}(r)
+    =
+    2
+    \int_0^\infty
+    E_{\eta,n}^{2D}(k)
+    J_0(kr)
+    \,\mathrm{d}k.
+    \label{eq:eta_family_correlation_integral_appendix}
+\end{equation}
+Using the Hankel transform identity for this Gaussian-weighted family gives
+\begin{equation}
+    C_{00,n}^{xy}(r)
+    =
+    \mean{\eta_0^2}
+    \exp\!\left(
+        -\frac{k_0^2 r^2}{8}
+    \right)
+    L_{n-1}^{(0)}
+    \!\left(
+        \frac{k_0^2 r^2}{8}
+    \right),
+    \label{eq:eta_family_correlation_appendix}
+\end{equation}
+where \(L_n^{(0)}\) denotes the Laguerre polynomial of degree \(n\) and order zero. Defining
+\begin{equation}
+    \lambda
+    =
+    \frac{2\sqrt{2}}{k_0},
+    \label{eq:eta_lambda_k0_appendix}
+\end{equation}
+the first few members of the family are
+\begin{equation}
+\begin{aligned}
+    C_{00,1}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \exp\!\left(
+        -\frac{k_0^2 r^2}{8}
+    \right)
+    =
+    \mean{\eta_0^2}
+    \exp\!\left(
+        -\frac{r^2}{\lambda^2}
+    \right),
+    \\
+    C_{00,2}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1-\frac{k_0^2 r^2}{8}
+    \right)
+    \exp\!\left(
+        -\frac{k_0^2 r^2}{8}
+    \right)
+    =
+    \mean{\eta_0^2}
+    \left(
+        1-\frac{r^2}{\lambda^2}
+    \right)
+    \exp\!\left(
+        -\frac{r^2}{\lambda^2}
+    \right),
+    \\
+    C_{00,3}^{xy}(r)
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1
+        -
+        2\frac{k_0^2 r^2}{8}
+        +
+        \frac{1}{2}
+        \frac{k_0^4 r^4}{64}
+    \right)
+    \exp\!\left(
+        -\frac{k_0^2 r^2}{8}
+    \right)
+    \\
+    &=
+    \mean{\eta_0^2}
+    \left(
+        1
+        -
+        2\frac{r^2}{\lambda^2}
+        +
+        \frac{1}{2}
+        \frac{r^4}{\lambda^4}
+    \right)
+    \exp\!\left(
+        -\frac{r^2}{\lambda^2}
+    \right).
+\end{aligned}
+\label{eq:eta_family_first_members_appendix}
+\end{equation}
+Each member satisfies
+\begin{equation}
+    C_{00,n}^{xy}(0)
+    =
+    \mean{\eta_0^2},
+\end{equation}
+and, consistently with the chosen spectrum normalization,
+\begin{equation}
+    \int_0^\infty
+    E_{\eta,n}^{2D}(k)\,
+    \mathrm{d}k
+    =
+    \frac{1}{2}
+    \mean{\eta_0^2}.
+\end{equation}
+
+\begin{figure}
+  %\input{figures/corr2D_plot.tex}
+  %\input{figures/spectra2D_plot.tex}
+  \caption{Two-dimensional isotropic correlations and corresponding interface-displacement spectra for the first three members of the family defined in \eqref{eq:eta_spectrum_family_appendix}. On the left the correlations \(C_{00,n}^{xy}(r)\) are shown, while on the right the associated spectra \(E_{\eta,n}^{2D}(k)\) are displayed.}
+  \label{fig:eta_2d_spectra_correlations}
+  \end{figure}
+\end{comment}

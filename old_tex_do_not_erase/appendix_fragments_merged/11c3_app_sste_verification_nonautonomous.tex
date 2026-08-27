@@ -1,0 +1,62 @@
+\subsubsection{Non-autonomous scalar problem}
+\label{sec:appendix_verification_nonautonomous}
+\begin{figure}[!b]
+    \centering
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/nonautonomous_OU_scalar_B_trace.tex}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t]{0.48\textwidth}
+        \centering
+        \vspace{0pt}
+        \input{figures/nonautonomous_OU_scalar_B_relative_error.tex}
+    \end{minipage}
+    \caption{Non-autonomous verification of the SSTE estimator. \((a)\) Normalized mean energy growth \(g(T)\) compared with the closed-form prediction. \((b)\) Relative error of the SSTE estimate as a function of final time.}
+    \label{fig:nonautonomous_hutchpp}
+\end{figure}
+We finally validate the SSTE construction against a fully non-autonomous linear problem for which \(g(T)\) is available in closed form. The model problem is
+\begin{equation}
+  b(t)\frac{\partial q}{\partial t}
+  =
+  a(t)\frac{\partial^2 q}{\partial z^2}
+  -
+  c(t)\frac{\partial q}{\partial z}
+  +
+  r(t)q .
+\end{equation}
+The initial covariance is chosen as
+\begin{equation}
+  C_{00}^{z}(z,z')
+  =
+  \exp\left(
+    -\frac{(z-z')^2}{\lambda^2}
+  \right).
+\end{equation}
+For this model, the transport term only shifts the solution and does not affect the spatially integrated covariance. The normalized mean energy growth is therefore
+\begin{equation}
+  g(T)
+  =
+  \frac{\tr\left\{\mathsfbi{C}(T)\right\}}{\tr\left\{\mathsfbi{C}(0)\right\}}
+  =
+  \frac{
+    \exp\left(2S(T)\right)
+  }{
+    \sqrt{1+8\tau(T)/\lambda^2}
+  },
+  \qquad
+  \tau(T)=\int_0^T \frac{a(t)}{b(t)}\,dt,
+  \qquad
+  S(T)=\int_0^T \frac{r(t)}{b(t)}\,dt .
+\end{equation}
+This provides a direct reference for the matrix-free SSTE estimate. In the numerical test shown below, the interval is \(z\in[-64,64)\), discretized with \(N=256\) periodic grid points. The first and second spatial derivatives are approximated with eighth-order periodic finite-difference matrices, giving \(\mathsfbi{B}(t)=b(t)\mathsfbi{I}\) and \(\mathsfbi{A}(t)=a(t)\mathsfbi{D}_2-c(t)\mathsfbi{D}_1+r(t)\mathsfbi{I}\). The trace is evaluated with the uniform quadrature weight \(\Delta z\), which cancels in the normalized comparison. The final time range is \(0\le T\le 2\), with time-step target \(\Delta t=0.01\), and the initial covariance length is \(\lambda=0.5\). The scalar coefficients are
+\begin{equation}
+  a(t)=0.2+0.8e^{-t/5},\qquad
+  c(t)=0.25+0.15\cos(1.3t),
+\end{equation}
+\begin{equation}
+  r(t)=0.5\sqrt{t}+0.04\sin(0.9t),\qquad
+  b(t)=1.0+0.2\sin(0.7t).
+\end{equation}
+The SSTE estimate uses \(50\) probes.
